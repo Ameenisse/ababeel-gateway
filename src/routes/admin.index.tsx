@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Shield, ArrowLeft } from "lucide-react";
 import { getMyRole } from "@/lib/auth.functions";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/")({
   head: () => ({
     meta: [
       { title: "Admin Login — Ababeel Quran Class" },
