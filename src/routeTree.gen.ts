@@ -9,38 +9,127 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as StudentLoginRouteImport } from './routes/student-login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StaffIndexRouteImport } from './routes/staff.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as StudentDashboardRouteImport } from './routes/student.dashboard'
+import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 
+const StudentLoginRoute = StudentLoginRouteImport.update({
+  id: '/student-login',
+  path: '/student-login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaffIndexRoute = StaffIndexRouteImport.update({
+  id: '/staff/',
+  path: '/staff/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentDashboardRoute = StudentDashboardRouteImport.update({
+  id: '/student/dashboard',
+  path: '/student/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffDashboardRoute = StaffDashboardRouteImport.update({
+  id: '/staff/dashboard',
+  path: '/staff/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/admin/dashboard',
+  path: '/admin/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/student-login': typeof StudentLoginRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/dashboard': typeof StudentDashboardRoute
+  '/admin/': typeof AdminIndexRoute
+  '/staff/': typeof StaffIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/student-login': typeof StudentLoginRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/dashboard': typeof StudentDashboardRoute
+  '/admin': typeof AdminIndexRoute
+  '/staff': typeof StaffIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/student-login': typeof StudentLoginRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
+  '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/dashboard': typeof StudentDashboardRoute
+  '/admin/': typeof AdminIndexRoute
+  '/staff/': typeof StaffIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/student-login'
+    | '/admin/dashboard'
+    | '/staff/dashboard'
+    | '/student/dashboard'
+    | '/admin/'
+    | '/staff/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/student-login'
+    | '/admin/dashboard'
+    | '/staff/dashboard'
+    | '/student/dashboard'
+    | '/admin'
+    | '/staff'
+  id:
+    | '__root__'
+    | '/'
+    | '/student-login'
+    | '/admin/dashboard'
+    | '/staff/dashboard'
+    | '/student/dashboard'
+    | '/admin/'
+    | '/staff/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  StudentLoginRoute: typeof StudentLoginRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
+  StaffDashboardRoute: typeof StaffDashboardRoute
+  StudentDashboardRoute: typeof StudentDashboardRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  StaffIndexRoute: typeof StaffIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/student-login': {
+      id: '/student-login'
+      path: '/student-login'
+      fullPath: '/student-login'
+      preLoaderRoute: typeof StudentLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +137,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/staff/': {
+      id: '/staff/'
+      path: '/staff'
+      fullPath: '/staff/'
+      preLoaderRoute: typeof StaffIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student/dashboard': {
+      id: '/student/dashboard'
+      path: '/student/dashboard'
+      fullPath: '/student/dashboard'
+      preLoaderRoute: typeof StudentDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/dashboard': {
+      id: '/staff/dashboard'
+      path: '/staff/dashboard'
+      fullPath: '/staff/dashboard'
+      preLoaderRoute: typeof StaffDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  StudentLoginRoute: StudentLoginRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
+  StaffDashboardRoute: StaffDashboardRoute,
+  StudentDashboardRoute: StudentDashboardRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  StaffIndexRoute: StaffIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
