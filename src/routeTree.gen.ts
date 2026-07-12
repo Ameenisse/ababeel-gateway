@@ -13,6 +13,7 @@ import { Route as StudentLoginRouteImport } from './routes/student-login'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StaffIndexRouteImport } from './routes/staff.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 
 const StudentLoginRoute = StudentLoginRouteImport.update({
   id: '/student-login',
@@ -34,16 +35,23 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/admin/dashboard',
+  path: '/admin/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/student-login': typeof StudentLoginRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/': typeof AdminIndexRoute
   '/staff/': typeof StaffIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/student-login': typeof StudentLoginRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin': typeof AdminIndexRoute
   '/staff': typeof StaffIndexRoute
 }
@@ -51,20 +59,28 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/student-login': typeof StudentLoginRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/': typeof AdminIndexRoute
   '/staff/': typeof StaffIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/student-login' | '/admin/' | '/staff/'
+  fullPaths: '/' | '/student-login' | '/admin/dashboard' | '/admin/' | '/staff/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/student-login' | '/admin' | '/staff'
-  id: '__root__' | '/' | '/student-login' | '/admin/' | '/staff/'
+  to: '/' | '/student-login' | '/admin/dashboard' | '/admin' | '/staff'
+  id:
+    | '__root__'
+    | '/'
+    | '/student-login'
+    | '/admin/dashboard'
+    | '/admin/'
+    | '/staff/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   StudentLoginRoute: typeof StudentLoginRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
   AdminIndexRoute: typeof AdminIndexRoute
   StaffIndexRoute: typeof StaffIndexRoute
 }
@@ -99,12 +115,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/admin/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   StudentLoginRoute: StudentLoginRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
   AdminIndexRoute: AdminIndexRoute,
   StaffIndexRoute: StaffIndexRoute,
 }
