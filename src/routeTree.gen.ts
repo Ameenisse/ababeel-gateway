@@ -13,6 +13,7 @@ import { Route as StudentLoginRouteImport } from './routes/student-login'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StaffIndexRouteImport } from './routes/staff.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as StudentDashboardRouteImport } from './routes/student.dashboard'
 import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 
@@ -36,6 +37,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentDashboardRoute = StudentDashboardRouteImport.update({
+  id: '/student/dashboard',
+  path: '/student/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffDashboardRoute = StaffDashboardRouteImport.update({
   id: '/staff/dashboard',
   path: '/staff/dashboard',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/student-login': typeof StudentLoginRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/dashboard': typeof StudentDashboardRoute
   '/admin/': typeof AdminIndexRoute
   '/staff/': typeof StaffIndexRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/student-login': typeof StudentLoginRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/dashboard': typeof StudentDashboardRoute
   '/admin': typeof AdminIndexRoute
   '/staff': typeof StaffIndexRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/student-login': typeof StudentLoginRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/dashboard': typeof StudentDashboardRoute
   '/admin/': typeof AdminIndexRoute
   '/staff/': typeof StaffIndexRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/student-login'
     | '/admin/dashboard'
     | '/staff/dashboard'
+    | '/student/dashboard'
     | '/admin/'
     | '/staff/'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/student-login'
     | '/admin/dashboard'
     | '/staff/dashboard'
+    | '/student/dashboard'
     | '/admin'
     | '/staff'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/student-login'
     | '/admin/dashboard'
     | '/staff/dashboard'
+    | '/student/dashboard'
     | '/admin/'
     | '/staff/'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   StudentLoginRoute: typeof StudentLoginRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   StaffDashboardRoute: typeof StaffDashboardRoute
+  StudentDashboardRoute: typeof StudentDashboardRoute
   AdminIndexRoute: typeof AdminIndexRoute
   StaffIndexRoute: typeof StaffIndexRoute
 }
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/student/dashboard': {
+      id: '/student/dashboard'
+      path: '/student/dashboard'
+      fullPath: '/student/dashboard'
+      preLoaderRoute: typeof StudentDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/staff/dashboard': {
       id: '/staff/dashboard'
       path: '/staff/dashboard'
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   StudentLoginRoute: StudentLoginRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   StaffDashboardRoute: StaffDashboardRoute,
+  StudentDashboardRoute: StudentDashboardRoute,
   AdminIndexRoute: AdminIndexRoute,
   StaffIndexRoute: StaffIndexRoute,
 }
