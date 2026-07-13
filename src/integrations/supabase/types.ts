@@ -30,6 +30,7 @@ export type Database = {
           id: string
           identity_number: string
           island: string | null
+          linked_student_id: string | null
           medical_notes: string | null
           mobile: string
           photo_url: string | null
@@ -60,6 +61,7 @@ export type Database = {
           id?: string
           identity_number: string
           island?: string | null
+          linked_student_id?: string | null
           medical_notes?: string | null
           mobile: string
           photo_url?: string | null
@@ -90,6 +92,7 @@ export type Database = {
           id?: string
           identity_number?: string
           island?: string | null
+          linked_student_id?: string | null
           medical_notes?: string | null
           mobile?: string
           photo_url?: string | null
@@ -106,6 +109,13 @@ export type Database = {
           submitted_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "admission_requests_linked_student_id_fkey"
+            columns: ["linked_student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "admission_requests_preferred_class_fkey"
             columns: ["preferred_class"]
@@ -982,6 +992,7 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["app_role"]
       }
+      generate_student_number: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
