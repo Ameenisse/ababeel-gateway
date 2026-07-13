@@ -1,91 +1,102 @@
 
-# Ababeel Quran Class — Build Plan
+# Academic Progress, Targets & Reports — Build Plan
 
-This is a large spec. I'll deliver it in phases so each is testable before moving on. All phases use Lovable Cloud (Supabase) for auth, database, storage, and RLS.
+This is a very large spec (13 new tables, 6 new modules, 3 role workflows). I'll ship it in phases so each is testable before moving on. All work respects the existing Phase 1 foundation (roles, RLS, `has_role`, `_authenticated` layout) and the still-pending Phase 2 admissions module from the original plan.
 
-## Design direction
-- Mobile-first, Islamic educational feel
-- Palette: soft sky-blue primary, white surfaces, subtle gold accents; semantic tokens in `src/styles.css`
-- Rounded cards, clear status badges (amber/green/red/blue/gray), large readable typography
-- Distinctive display font (e.g. Amiri or Fraunces) + clean sans body (e.g. Plus Jakarta Sans) — not default Inter
+Because the spec depends on admission approval creating a student, **Phase A wraps the outstanding admission-approval workflow first** — otherwise there is no student to target.
 
-## Roles & auth model
-- Three roles via a separate `user_roles` table + `has_role()` SECURITY DEFINER function (no role columns on profiles)
-- Admin/Staff login: email + password on hidden URLs `/admin`, `/staff`
-- Student login: username + numeric PIN. Implemented as a server function that looks up `student_accounts` by username, verifies bcrypt PIN hash, then signs the user in via a paired synthetic email (`<username>@students.ababeel.local`) whose password is rotated on each PIN reset. This keeps everything inside Supabase Auth so RLS `auth.uid()` works uniformly.
-- Route guards under `_authenticated/` layout + nested role-gated layouts (`_admin`, `_staff`, `_student`) redirecting mismatched roles
+## Phase A — Approved admission → student (spec §1, §25)
 
-## Phase 1 — Foundation (this phase, first build)
-1. Enable Lovable Cloud
-2. Design tokens in `src/styles.css` (sky-blue/white/gold), typography via `<link>` in `__root.tsx`
-3. Database migrations for all tables in section 22 + `user_roles` + `app_role` enum, with GRANTs and RLS policies
-4. Seed rows: default `admission_settings`, empty website settings, suggested classes
-5. Auth scaffolding: `_authenticated` layout, role sub-layouts, `has_role` RPC, server fns
-6. Public landing page shell (header/hero/footer, only Student Login visible)
-7. `/admin`, `/staff`, `/student-login` login pages with proper redirects
-8. Admin dashboard shell + sidebar with all module links (empty pages stubbed)
+Server-side approval RPC (`approve_admission_request`) runs in one transaction:
+- guard: request must be `pending` and not already linked
+- create auth user (synthetic email), row in `students` (copying admission fields), `student_accounts` (username + hashed PIN via `pgcrypto`), `user_roles`
+- write `linked_student_id` on the admission request to enforce single-use
+- return generated username + one-time PIN for the admin UI to copy/print
 
-## Phase 2 — Admissions
-- Admission settings page (admin)
-- Public admission form with rules gate, checkbox, validation, duplicate detection
-- Admin admission requests table: filters, search, view/edit/notes, approve/reject/waitlist, CSV export, print
-- Approval workflow: auto-create `students` + `student_accounts` + Supabase auth user, generate username + numeric PIN, show/edit credentials, copy/print
+Admin Admissions page gets Approve/Reject/Waitlist actions and a credentials modal. Approved students appear immediately in Student Management, Class Assignment, Target Assignment, and (once class-assigned) staff & attendance lists.
 
-## Phase 3 — Students, Users, Classes, Staff
-- Student directory + profile pages, status management, archive, print
-- User management tabs (Student/Staff/Admin) with PIN reset, lock/unlock, activate
-- Classes CRUD + assignments
-- Staff panel + configurable permissions (stored in `staff_permissions` join table)
+## Phase B — Academic structure (§4, §23)
 
-## Phase 4 — Competitions
-- Competition + categories CRUD, banner upload, statuses, display date windowing
-- Landing-page competition cards (only inside display window) + Rules modal
-- Public participation form (rules gate, eligibility validation, duplicate protection)
-- Logged-in student registration with autofill
-- Competition Participants admin/staff page: approve/reject/waitlist, check-in, results
-- Competition Results (publish/hide, student sees own)
+New tables: `academic_years`, `academic_terms`, `student_class_assignments` (with `is_current`, main/assistant teacher, session).
 
-## Phase 5 — Attendance, Announcements, Rules, Reports, Settings, Audit
-- Attendance marking (staff), bulk, student/admin views, monthly/yearly reports
-- Announcements CRUD with audience targeting and date windowing
-- Rules management (versioned; agreement records store version + IP)
-- Reports with filters, CSV + print-friendly PDF layout
-- Website settings + system settings (PIN min length, etc.)
-- Audit log writing via DB triggers + admin viewer
+Admin modules:
+- Academic Years CRUD, one `is_current`
+- Terms CRUD scoped to a year (First / Second seeded), status Draft/Active/Completed/Archived, target-open + deadline + report-available dates
+- Class Assignment page: assign year/class/session/main+assistant teacher/current term to a student; historical rows preserved; teacher visibility derives from the current assignment
+
+## Phase C — Target catalog (§5, §6, §23)
+
+Tables: `target_categories`, `targets`, `badges`.
+
+Admin modules:
+- **Target Categories** — CRUD, reorder, activate, restrict to classes/terms, archive-instead-of-delete when in use. Seeded with the 13 suggested categories.
+- **Targets** — CRUD, duplicate, archive, difficulty/points/badge/display_order, CSV import/export, filtered by category/class/year/term.
+- **Badges** — CRUD, auto vs manual award, thresholds (min completed targets, min points), category/term scope.
+
+## Phase D — Target assignment & tracking (§7, §8, §9, §10, §11)
+
+Tables: `student_target_assignments` (unique on student+year+term+target), `student_target_history` (trigger-populated on status/comment/date change).
+
+Admin **Target Assignment** page:
+- filters: year, term, class, category
+- assign methods: single student, multi-select, whole class, whole year, copy from previous term, copy from another student, saved template
+
+Staff **Target Tracking** page (mobile-first card list):
+- teacher sees only students in classes where they are main/assistant teacher on the current assignment
+- statuses: Not Started / In Progress / Completed / Needs Improvement / Not Achieved / Exempted
+- quick actions + bulk actions (bulk still writes per-row completion date + updater)
+- Complete requires completion_date (default today) + teacher comment
+- optional evidence (file upload to `target-evidence` bucket), score, remarks
+
+Student **My Targets** — read-only, grouped by year → term → category, per-term progress bar.
+
+Every write goes through a server function using `requireSupabaseAuth`; DB trigger writes history and enforces teacher-scope via `has_role` + assignment lookup.
+
+## Phase E — Assessments, badges & performance (§12, §13, §14, §15)
+
+Tables: `teacher_term_assessments` (unique on student+year+term), `student_badges`, `performance_settings` (singleton row).
+
+- Teacher **Term Assessment** form (draft-save, all comment fields, overall level, signature name)
+- **Complete Term Report** action: validates all required targets have a status, required comments filled, then locks the assessment (`report_status = completed`) and creates/updates a `progress_reports` row
+- **Performance calculator** (SQL function): weights from `performance_settings`; exempted targets excluded from denominator; returns totals, %s, level
+- **Badge engine**: SQL function evaluates auto-award badges after every target status change; manual awards via teacher UI; admin approval gate before visibility
+- Admin **Performance Settings** page: weights, level thresholds, auto-publish toggle, require-admin-approval toggle
+
+## Phase F — Progress reports (§16, §17, §18, §20)
+
+Table: `progress_reports` (one per student/year/term).
+
+- Admin **Progress Reports** list with filters (year/term/class/teacher/status) + review actions: Approve, Return for Correction, Publish/Unpublish, Archive, Print, Export PDF
+- Report renderer: parent-friendly A4 print layout — header (logo, student, class), performance summary, targets grouped by category with status icons, teacher comments block, achievements/badges, signature areas
+- Student **My Progress**: current year, first-term + second-term cards, only shows a term once its report `status = published`; View / Print / Download PDF
+- Status flow: Draft → In Review → Completed → Published (or Returned for Correction / Archived); teachers write draft & submit; admins publish
+- PDF generated server-side on publish (stored in `progress-reports` bucket) so download is instant and stable
+
+## Phase G — Notifications & analytics (§21, §22)
+
+- `notifications` table + in-dashboard bell for teachers/admins/students with the event set from §21
+- Admin analytics tiles: completion by class/term/category, top performers, students needing support, teacher report progress, badge counts — with year/term/class/teacher/category filters
 
 ## Technical details
 
-### Stack
-TanStack Start + React 19 + Tailwind v4 + shadcn/ui + Lovable Cloud (Supabase). Server logic via `createServerFn` with `requireSupabaseAuth`; public webhooks n/a.
+- **RLS everywhere.** Student rows scoped to `auth.uid() = students.user_id`. Teacher rows scoped through `student_class_assignments` where teacher is main/assistant AND `is_current`. Admin via `has_role(auth.uid(),'admin')`. History and audit tables: admin-only SELECT; teachers see rows for students in their scope; students never see history.
+- **All mutating logic in `createServerFn` handlers with `requireSupabaseAuth`.** SQL functions used for: `approve_admission_request`, `recalculate_student_performance(student, year, term)`, `evaluate_auto_badges(student, year, term)`, and target-history trigger.
+- **Storage buckets** (created via storage tool, not SQL): `target-evidence` (private, teacher/admin/student-owner read), `progress-reports` (private, admin write, student-owner read on publish), `badge-icons` (public read).
+- **Uniqueness constraints** as in §23: `(student, year, term, target)` on assignments and `(student, year, term)` on assessments.
+- **Term separation.** Every performance query, badge query, and report row is keyed by `(academic_year_id, term_id)` — no cross-term aggregation.
+- **Grants.** Every new public-schema table gets explicit GRANTs to `authenticated` and `service_role` in the same migration.
+- **Types.** All new enums added as Postgres `enum`s (`target_status`, `target_difficulty`, `term_status`, `report_status`, `performance_level`, `badge_award_method`, `badge_approval_status`).
 
-### Key tables & security
-- Roles: `app_role` enum (`admin`,`staff`,`student`), `user_roles(user_id, role)`, `has_role(uuid, app_role)` SECURITY DEFINER
-- All tables in spec section 22 created with explicit `GRANT` to `authenticated`/`service_role` (+ narrow `anon SELECT` only on: published announcements within date window, competitions within display window + their categories, admission_settings, website_settings)
-- RLS: students see only their own rows via `auth.uid() = students.user_id`; staff limited via assigned classes; admin via `has_role(auth.uid(),'admin')`
-- PIN hashing: `pgcrypto` `crypt()` with bcrypt in a `verify_student_pin` SECURITY DEFINER function; PIN never returned after creation
-- Uploaded files: Supabase Storage buckets `admission-docs`, `competition-docs`, `student-photos`, `announcement-images`, `competition-banners` with size/type restrictions and RLS
+## Delivery pace
 
-### File additions (Phase 1)
-- `src/styles.css` — new tokens
-- `src/routes/__root.tsx` — real metadata + font `<link>`
-- `src/routes/index.tsx` — landing page
-- `src/routes/admin.tsx`, `src/routes/staff.tsx`, `src/routes/student-login.tsx` — login pages
-- `src/routes/_authenticated/route.tsx` (integration-managed)
-- `src/routes/_authenticated/_admin/route.tsx`, `.../dashboard.tsx`, plus stubs for each admin module
-- `src/routes/_authenticated/_staff/route.tsx`, `.../dashboard.tsx`
-- `src/routes/_authenticated/_student/route.tsx`, `.../dashboard.tsx`
-- `src/lib/auth.functions.ts` (student PIN login server fn, role lookup)
-- `src/components/app-sidebar.tsx`, header/footer, landing sections
-- Migrations: `roles`, `profiles`, all spec tables, seed data
+Ship phases in order; each phase ends in a working, testable slice. Phases A–B and C are prerequisites for D onward. Estimated iterations: A (1 turn), B (1), C (1–2), D (2), E (1–2), F (1–2), G (1).
 
-### Questions I'll assume unless you say otherwise
-- Admin/Staff use email+password (not username); Student uses username+PIN
-- Default PIN length = 4 (configurable in settings)
-- Bootstrap admin: I'll add a one-time server fn that promotes the first signed-up user with a specific email to admin, then you rotate — OR you can tell me an admin email to seed
-- Language: English only for now
-- Currency for registration fees: MVR (Maldivian Rufiyaa) since spec mentions atoll/island
+## Open questions (I'll assume these unless you say otherwise)
 
-## Deliverable pace
-I'll ship **Phase 1 first** end-to-end (working landing page + all three logins + role redirects + DB schema + admin dashboard shell), confirm it works, then proceed phase by phase. Each phase ends with a working, testable slice.
+1. **Default academic year** — I'll seed `2026–2027` as current; edit anytime.
+2. **PDF renderer** — server-side HTML → PDF via a Worker-compatible library (no Chromium). Layout will match §16 exactly. If you'd rather use browser print-to-PDF from the student view, say so.
+3. **Publishing** — default `require_admin_approval = true`, `auto_publish_after_teacher_completion = false`. Toggle in Performance Settings.
+4. **Attendance %** — pulled from the existing `attendance` table filtered by term dates. If you want a different formula, tell me.
+5. **Notifications delivery** — in-app only for now (per §21 "display inside the dashboard"). Email/SMS can come later.
 
-Reply "approve" to start Phase 1, or tell me what to change (scope, order, assumptions).
+Reply "approve" to start Phase A, or tell me which phase to start with / what to change.
