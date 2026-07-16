@@ -30,6 +30,8 @@ import {
   Cog,
   ListChecks,
   ClipboardList,
+  CalendarRange,
+  School,
   LogOut,
   Shield,
 } from "lucide-react";
@@ -48,6 +50,8 @@ const menus: Record<Role, { label: string; to: string; icon: React.ElementType }
     { label: "Staff", to: "/admin/staff", icon: Users },
     { label: "Users", to: "/admin/users", icon: UserCog },
     { label: "Classes", to: "/admin/classes", icon: BookOpen },
+    { label: "Academic Years", to: "/admin/academic", icon: CalendarRange },
+    { label: "Class Assignments", to: "/admin/class-assignments", icon: School },
     { label: "Attendance", to: "/admin/attendance", icon: CalendarCheck },
     { label: "Competitions", to: "/admin/competitions", icon: Trophy },
     { label: "Participants", to: "/admin/participants", icon: ListChecks },

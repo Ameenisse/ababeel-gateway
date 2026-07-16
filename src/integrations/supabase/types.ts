@@ -14,6 +14,101 @@ export type Database = {
   }
   public: {
     Tables: {
+      academic_terms: {
+        Row: {
+          academic_year_id: string
+          created_at: string
+          created_by: string | null
+          end_date: string
+          id: string
+          notes: string | null
+          report_available_date: string | null
+          start_date: string
+          status: Database["public"]["Enums"]["term_status"]
+          target_deadline: string | null
+          target_open_date: string | null
+          term_name: string
+          term_sequence: number
+          updated_at: string
+        }
+        Insert: {
+          academic_year_id: string
+          created_at?: string
+          created_by?: string | null
+          end_date: string
+          id?: string
+          notes?: string | null
+          report_available_date?: string | null
+          start_date: string
+          status?: Database["public"]["Enums"]["term_status"]
+          target_deadline?: string | null
+          target_open_date?: string | null
+          term_name: string
+          term_sequence: number
+          updated_at?: string
+        }
+        Update: {
+          academic_year_id?: string
+          created_at?: string
+          created_by?: string | null
+          end_date?: string
+          id?: string
+          notes?: string | null
+          report_available_date?: string | null
+          start_date?: string
+          status?: Database["public"]["Enums"]["term_status"]
+          target_deadline?: string | null
+          target_open_date?: string | null
+          term_name?: string
+          term_sequence?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "academic_terms_academic_year_id_fkey"
+            columns: ["academic_year_id"]
+            isOneToOne: false
+            referencedRelation: "academic_years"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      academic_years: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          end_date: string
+          id: string
+          is_current: boolean
+          notes: string | null
+          start_date: string
+          updated_at: string
+          year_name: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          end_date: string
+          id?: string
+          is_current?: boolean
+          notes?: string | null
+          start_date: string
+          updated_at?: string
+          year_name: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          end_date?: string
+          id?: string
+          is_current?: boolean
+          notes?: string | null
+          start_date?: string
+          updated_at?: string
+          year_name?: string
+        }
+        Relationships: []
+      }
       admission_requests: {
         Row: {
           address: string | null
@@ -806,6 +901,100 @@ export type Database = {
           },
         ]
       }
+      student_class_assignments: {
+        Row: {
+          academic_year_id: string
+          assigned_at: string
+          assigned_by: string | null
+          assistant_teacher_id: string | null
+          class_id: string
+          created_at: string
+          id: string
+          is_current: boolean
+          main_teacher_id: string | null
+          notes: string | null
+          session: string | null
+          student_id: string
+          term_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          academic_year_id: string
+          assigned_at?: string
+          assigned_by?: string | null
+          assistant_teacher_id?: string | null
+          class_id: string
+          created_at?: string
+          id?: string
+          is_current?: boolean
+          main_teacher_id?: string | null
+          notes?: string | null
+          session?: string | null
+          student_id: string
+          term_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          academic_year_id?: string
+          assigned_at?: string
+          assigned_by?: string | null
+          assistant_teacher_id?: string | null
+          class_id?: string
+          created_at?: string
+          id?: string
+          is_current?: boolean
+          main_teacher_id?: string | null
+          notes?: string | null
+          session?: string | null
+          student_id?: string
+          term_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_class_assignments_academic_year_id_fkey"
+            columns: ["academic_year_id"]
+            isOneToOne: false
+            referencedRelation: "academic_years"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_class_assignments_assistant_teacher_id_fkey"
+            columns: ["assistant_teacher_id"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_class_assignments_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_class_assignments_main_teacher_id_fkey"
+            columns: ["main_teacher_id"]
+            isOneToOne: false
+            referencedRelation: "staff"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_class_assignments_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_class_assignments_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "academic_terms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       students: {
         Row: {
           address: string | null
@@ -1003,6 +1192,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "staff" | "student"
+      term_status: "draft" | "active" | "completed" | "archived"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1131,6 +1321,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "staff", "student"],
+      term_status: ["draft", "active", "completed", "archived"],
     },
   },
 } as const

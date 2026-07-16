@@ -16,7 +16,9 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as StudentDashboardRouteImport } from './routes/student.dashboard'
 import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
+import { Route as AdminClassAssignmentsRouteImport } from './routes/admin.class-assignments'
 import { Route as AdminAdmissionsRouteImport } from './routes/admin.admissions'
+import { Route as AdminAcademicRouteImport } from './routes/admin.academic'
 
 const StudentLoginRoute = StudentLoginRouteImport.update({
   id: '/student-login',
@@ -53,16 +55,28 @@ const AdminDashboardRoute = AdminDashboardRouteImport.update({
   path: '/admin/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminClassAssignmentsRoute = AdminClassAssignmentsRouteImport.update({
+  id: '/admin/class-assignments',
+  path: '/admin/class-assignments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAdmissionsRoute = AdminAdmissionsRouteImport.update({
   id: '/admin/admissions',
   path: '/admin/admissions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAcademicRoute = AdminAcademicRouteImport.update({
+  id: '/admin/academic',
+  path: '/admin/academic',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/student-login': typeof StudentLoginRoute
+  '/admin/academic': typeof AdminAcademicRoute
   '/admin/admissions': typeof AdminAdmissionsRoute
+  '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
@@ -72,7 +86,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/student-login': typeof StudentLoginRoute
+  '/admin/academic': typeof AdminAcademicRoute
   '/admin/admissions': typeof AdminAdmissionsRoute
+  '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
@@ -83,7 +99,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/student-login': typeof StudentLoginRoute
+  '/admin/academic': typeof AdminAcademicRoute
   '/admin/admissions': typeof AdminAdmissionsRoute
+  '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
@@ -95,7 +113,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/student-login'
+    | '/admin/academic'
     | '/admin/admissions'
+    | '/admin/class-assignments'
     | '/admin/dashboard'
     | '/staff/dashboard'
     | '/student/dashboard'
@@ -105,7 +125,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/student-login'
+    | '/admin/academic'
     | '/admin/admissions'
+    | '/admin/class-assignments'
     | '/admin/dashboard'
     | '/staff/dashboard'
     | '/student/dashboard'
@@ -115,7 +137,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/student-login'
+    | '/admin/academic'
     | '/admin/admissions'
+    | '/admin/class-assignments'
     | '/admin/dashboard'
     | '/staff/dashboard'
     | '/student/dashboard'
@@ -126,7 +150,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   StudentLoginRoute: typeof StudentLoginRoute
+  AdminAcademicRoute: typeof AdminAcademicRoute
   AdminAdmissionsRoute: typeof AdminAdmissionsRoute
+  AdminClassAssignmentsRoute: typeof AdminClassAssignmentsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   StaffDashboardRoute: typeof StaffDashboardRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
@@ -185,11 +211,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/class-assignments': {
+      id: '/admin/class-assignments'
+      path: '/admin/class-assignments'
+      fullPath: '/admin/class-assignments'
+      preLoaderRoute: typeof AdminClassAssignmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/admissions': {
       id: '/admin/admissions'
       path: '/admin/admissions'
       fullPath: '/admin/admissions'
       preLoaderRoute: typeof AdminAdmissionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/academic': {
+      id: '/admin/academic'
+      path: '/admin/academic'
+      fullPath: '/admin/academic'
+      preLoaderRoute: typeof AdminAcademicRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -198,7 +238,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   StudentLoginRoute: StudentLoginRoute,
+  AdminAcademicRoute: AdminAcademicRoute,
   AdminAdmissionsRoute: AdminAdmissionsRoute,
+  AdminClassAssignmentsRoute: AdminClassAssignmentsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   StaffDashboardRoute: StaffDashboardRoute,
   StudentDashboardRoute: StudentDashboardRoute,
