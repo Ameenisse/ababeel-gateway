@@ -15,6 +15,7 @@ import { Route as StaffIndexRouteImport } from './routes/staff.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as StudentDashboardRouteImport } from './routes/student.dashboard'
 import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
+import { Route as AdminTargetsRouteImport } from './routes/admin.targets'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminClassAssignmentsRouteImport } from './routes/admin.class-assignments'
 import { Route as AdminAdmissionsRouteImport } from './routes/admin.admissions'
@@ -50,6 +51,11 @@ const StaffDashboardRoute = StaffDashboardRouteImport.update({
   path: '/staff/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminTargetsRoute = AdminTargetsRouteImport.update({
+  id: '/admin/targets',
+  path: '/admin/targets',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin/dashboard',
   path: '/admin/dashboard',
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/targets': typeof AdminTargetsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
   '/admin/': typeof AdminIndexRoute
@@ -90,6 +97,7 @@ export interface FileRoutesByTo {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/targets': typeof AdminTargetsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
   '/admin': typeof AdminIndexRoute
@@ -103,6 +111,7 @@ export interface FileRoutesById {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/targets': typeof AdminTargetsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
   '/admin/': typeof AdminIndexRoute
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/targets'
     | '/staff/dashboard'
     | '/student/dashboard'
     | '/admin/'
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/targets'
     | '/staff/dashboard'
     | '/student/dashboard'
     | '/admin'
@@ -141,6 +152,7 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/targets'
     | '/staff/dashboard'
     | '/student/dashboard'
     | '/admin/'
@@ -154,6 +166,7 @@ export interface RootRouteChildren {
   AdminAdmissionsRoute: typeof AdminAdmissionsRoute
   AdminClassAssignmentsRoute: typeof AdminClassAssignmentsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminTargetsRoute: typeof AdminTargetsRoute
   StaffDashboardRoute: typeof StaffDashboardRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -204,6 +217,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/targets': {
+      id: '/admin/targets'
+      path: '/admin/targets'
+      fullPath: '/admin/targets'
+      preLoaderRoute: typeof AdminTargetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/admin/dashboard'
@@ -242,6 +262,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAdmissionsRoute: AdminAdmissionsRoute,
   AdminClassAssignmentsRoute: AdminClassAssignmentsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminTargetsRoute: AdminTargetsRoute,
   StaffDashboardRoute: StaffDashboardRoute,
   StudentDashboardRoute: StudentDashboardRoute,
   AdminIndexRoute: AdminIndexRoute,
