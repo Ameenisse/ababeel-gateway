@@ -400,6 +400,45 @@ export type Database = {
         }
         Relationships: []
       }
+      badges: {
+        Row: {
+          code: string
+          color: string | null
+          created_at: string
+          criteria: Json
+          description: string | null
+          icon: string | null
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          color?: string | null
+          created_at?: string
+          criteria?: Json
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          color?: string | null
+          created_at?: string
+          criteria?: Json
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       classes: {
         Row: {
           assistant_teacher_id: string | null
@@ -1081,6 +1120,95 @@ export type Database = {
             columns: ["class_id"]
             isOneToOne: false
             referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      target_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          sort_order: number
+          updated_at: string
+          weight_percent: number
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          sort_order?: number
+          updated_at?: string
+          weight_percent?: number
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          sort_order?: number
+          updated_at?: string
+          weight_percent?: number
+        }
+        Relationships: []
+      }
+      targets: {
+        Row: {
+          category_id: string
+          code: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          max_value: number | null
+          sort_order: number
+          term_scope: string
+          title: string
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          category_id: string
+          code?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          max_value?: number | null
+          sort_order?: number
+          term_scope?: string
+          title: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string
+          code?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          max_value?: number | null
+          sort_order?: number
+          term_scope?: string
+          title?: string
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "targets_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "target_categories"
             referencedColumns: ["id"]
           },
         ]
