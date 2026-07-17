@@ -52,6 +52,7 @@ const menus: Record<Role, { label: string; to: string; icon: React.ElementType }
     { label: "Classes", to: "/admin/classes", icon: BookOpen },
     { label: "Academic Years", to: "/admin/academic", icon: CalendarRange },
     { label: "Class Assignments", to: "/admin/class-assignments", icon: School },
+    { label: "Targets & Badges", to: "/admin/targets", icon: ListChecks },
     { label: "Attendance", to: "/admin/attendance", icon: CalendarCheck },
     { label: "Competitions", to: "/admin/competitions", icon: Trophy },
     { label: "Participants", to: "/admin/participants", icon: ListChecks },
