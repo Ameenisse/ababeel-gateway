@@ -14,7 +14,7 @@ export default defineTool({
     const supabase = supabaseForUser(ctx);
     const [{ data: roles }, { data: profile }] = await Promise.all([
       supabase.from("user_roles").select("role").eq("user_id", userId),
-      supabase.from("profiles").select("full_name").eq("user_id", ctx.getUserId()).maybeSingle(),
+      supabase.from("profiles").select("full_name").eq("user_id", userId).maybeSingle(),
     ]);
     const roleList = (roles ?? []).map((r) => r.role);
     const primary = roleList.includes("admin") ? "admin" : roleList.includes("staff") ? "staff" : roleList.includes("student") ? "student" : null;
