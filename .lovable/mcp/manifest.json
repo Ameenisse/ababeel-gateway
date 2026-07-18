@@ -1,0 +1,250 @@
+{
+  "version": 1,
+  "sdk_version": "0.23.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://tyohxodzetsdmuztjlei.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "ababeel-quran-class-mcp",
+      "version": "0.1.0",
+      "title": "Ababeel Quran Class"
+    },
+    "tools": [
+      {
+        "name": "whoami",
+        "title": "Who am I",
+        "description": "Returns the signed-in user's ID, email, role (admin/staff/student), and profile name.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_students",
+        "title": "List students",
+        "description": "List students visible to the signed-in user (scoped by RLS). Supports search by name or student number and a result limit.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "search": {
+              "type": "string",
+              "description": "Optional case-insensitive name or student number match."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "description": "Maximum number of rows to return (default 50)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_student",
+        "title": "Get student",
+        "description": "Fetch a single student's full profile by their UUID. RLS applies to the signed-in user.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "student_id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "The student's UUID (students.id)."
+            }
+          },
+          "required": [
+            "student_id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_admission_requests",
+        "title": "List admission requests",
+        "description": "List admission requests visible to the signed-in user (admin sees all). Filter by status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "approved",
+                "rejected",
+                "waitlisted"
+              ],
+              "description": "Optional status filter."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "description": "Maximum rows to return (default 50)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_classes",
+        "title": "List classes",
+        "description": "List classes visible to the signed-in user.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "description": "Maximum rows (default 100)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_announcements",
+        "title": "List announcements",
+        "description": "List announcements visible to the signed-in user, newest first.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Maximum rows (default 20)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_competitions",
+        "title": "List competitions",
+        "description": "List Quran class competitions with their status and dates.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "Maximum rows (default 20)."
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_announcement",
+        "title": "Create announcement",
+        "description": "Publish a new announcement. Requires admin or staff role; RLS enforces this.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Announcement title."
+            },
+            "description": {
+              "type": "string",
+              "description": "Announcement body / description text."
+            },
+            "audience": {
+              "type": "string",
+              "enum": [
+                "public",
+                "staff",
+                "students",
+                "all"
+              ],
+              "description": "Who should see this announcement (default 'all')."
+            },
+            "priority": {
+              "type": "string",
+              "enum": [
+                "low",
+                "normal",
+                "high",
+                "urgent"
+              ],
+              "description": "Priority label (default 'normal')."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "draft",
+                "published",
+                "archived"
+              ],
+              "description": "Publish status (default 'published')."
+            }
+          },
+          "required": [
+            "title"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
