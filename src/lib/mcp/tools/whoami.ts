@@ -19,8 +19,8 @@ export default defineTool({
     const roleList = (roles ?? []).map((r) => r.role);
     const primary = roleList.includes("admin") ? "admin" : roleList.includes("staff") ? "staff" : roleList.includes("student") ? "student" : null;
     const info = {
-      userId: ctx.getUserId(),
-      email: ctx.getUserEmail(),
+      userId,
+      email: ctx.getUserEmail() ?? null,
       role: primary,
       roles: roleList,
       fullName: profile?.full_name ?? null,
