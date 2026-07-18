@@ -24,6 +24,7 @@ export const Route = createFileRoute("/staff/")({
 
 function StaffLogin() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -43,6 +44,10 @@ function StaffLogin() {
         await supabase.auth.signOut();
         toast.error("This account does not have staff access.");
         setLoading(false);
+        return;
+      }
+      if (next) {
+        window.location.href = next;
         return;
       }
       navigate({ to: r.role === "admin" ? "/admin/dashboard" : "/staff/dashboard" });
