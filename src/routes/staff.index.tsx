@@ -10,6 +10,9 @@ import { Users, ArrowLeft } from "lucide-react";
 import { getMyRole } from "@/lib/auth.functions";
 
 export const Route = createFileRoute("/staff/")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : "",
+  }),
   head: () => ({
     meta: [
       { title: "Staff Login — Ababeel Quran Class" },
