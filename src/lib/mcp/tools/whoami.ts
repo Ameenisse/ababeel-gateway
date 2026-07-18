@@ -9,9 +9,11 @@ export default defineTool({
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async (_input, ctx) => {
     if (!ctx.isAuthenticated()) return unauthenticated();
+    const userId = ctx.getUserId();
+    if (!userId) return errorResult("No user ID in token");
     const supabase = supabaseForUser(ctx);
     const [{ data: roles }, { data: profile }] = await Promise.all([
-      supabase.from("user_roles").select("role").eq("user_id", ctx.getUserId()),
+      supabase.from("user_roles").select("role").eq("user_id", userId),
       supabase.from("profiles").select("full_name").eq("user_id", ctx.getUserId()).maybeSingle(),
     ]);
     const roleList = (roles ?? []).map((r) => r.role);
