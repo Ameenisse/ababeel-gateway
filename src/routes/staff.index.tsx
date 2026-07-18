@@ -10,6 +10,9 @@ import { Users, ArrowLeft } from "lucide-react";
 import { getMyRole } from "@/lib/auth.functions";
 
 export const Route = createFileRoute("/staff/")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//") ? s.next : "",
+  }),
   head: () => ({
     meta: [
       { title: "Staff Login — Ababeel Quran Class" },
@@ -21,6 +24,7 @@ export const Route = createFileRoute("/staff/")({
 
 function StaffLogin() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -40,6 +44,10 @@ function StaffLogin() {
         await supabase.auth.signOut();
         toast.error("This account does not have staff access.");
         setLoading(false);
+        return;
+      }
+      if (next) {
+        window.location.href = next;
         return;
       }
       navigate({ to: r.role === "admin" ? "/admin/dashboard" : "/staff/dashboard" });
