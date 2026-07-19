@@ -66,6 +66,7 @@ const menus: Record<Role, { label: string; to: string; icon: React.ElementType }
   staff: [
     { label: "Dashboard", to: "/staff/dashboard", icon: LayoutDashboard },
     { label: "My Classes", to: "/staff/classes", icon: BookOpen },
+    { label: "Check Requests", to: "/staff/check-requests", icon: ClipboardList },
     { label: "Attendance", to: "/staff/attendance", icon: CalendarCheck },
     { label: "Competitions", to: "/staff/competitions", icon: Trophy },
     { label: "Announcements", to: "/staff/announcements", icon: Megaphone },
@@ -73,6 +74,7 @@ const menus: Record<Role, { label: string; to: string; icon: React.ElementType }
   student: [
     { label: "Dashboard", to: "/student/dashboard", icon: LayoutDashboard },
     { label: "My Profile", to: "/student/profile", icon: GraduationCap },
+    { label: "My Targets", to: "/student/targets", icon: ListChecks },
     { label: "Attendance", to: "/student/attendance", icon: CalendarCheck },
     { label: "Competitions", to: "/student/competitions", icon: Trophy },
     { label: "Announcements", to: "/student/announcements", icon: Megaphone },
