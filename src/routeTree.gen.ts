@@ -17,6 +17,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as StudentDashboardRouteImport } from './routes/student.dashboard'
 import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
 import { Route as AdminTargetsRouteImport } from './routes/admin.targets'
+import { Route as AdminTargetTemplatesRouteImport } from './routes/admin.target-templates'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminClassAssignmentsRouteImport } from './routes/admin.class-assignments'
 import { Route as AdminAdmissionsRouteImport } from './routes/admin.admissions'
@@ -64,6 +65,11 @@ const StaffDashboardRoute = StaffDashboardRouteImport.update({
 const AdminTargetsRoute = AdminTargetsRouteImport.update({
   id: '/admin/targets',
   path: '/admin/targets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTargetTemplatesRoute = AdminTargetTemplatesRouteImport.update({
+  id: '/admin/target-templates',
+  path: '/admin/target-templates',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/target-templates'
     | '/admin/targets'
     | '/staff/dashboard'
     | '/student/dashboard'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/target-templates'
     | '/admin/targets'
     | '/staff/dashboard'
     | '/student/dashboard'
@@ -213,6 +224,7 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/target-templates'
     | '/admin/targets'
     | '/staff/dashboard'
     | '/student/dashboard'
@@ -232,6 +244,7 @@ export interface RootRouteChildren {
   AdminAdmissionsRoute: typeof AdminAdmissionsRoute
   AdminClassAssignmentsRoute: typeof AdminClassAssignmentsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminTargetTemplatesRoute: typeof AdminTargetTemplatesRoute
   AdminTargetsRoute: typeof AdminTargetsRoute
   StaffDashboardRoute: typeof StaffDashboardRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
@@ -297,6 +310,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/targets'
       fullPath: '/admin/targets'
       preLoaderRoute: typeof AdminTargetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/target-templates': {
+      id: '/admin/target-templates'
+      path: '/admin/target-templates'
+      fullPath: '/admin/target-templates'
+      preLoaderRoute: typeof AdminTargetTemplatesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/dashboard': {
@@ -369,6 +389,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAdmissionsRoute: AdminAdmissionsRoute,
   AdminClassAssignmentsRoute: AdminClassAssignmentsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminTargetTemplatesRoute: AdminTargetTemplatesRoute,
   AdminTargetsRoute: AdminTargetsRoute,
   StaffDashboardRoute: StaffDashboardRoute,
   StudentDashboardRoute: StudentDashboardRoute,
