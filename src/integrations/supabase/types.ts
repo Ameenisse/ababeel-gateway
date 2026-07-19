@@ -443,6 +443,7 @@ export type Database = {
         Row: {
           assistant_teacher_id: string | null
           class_code: string
+          class_level: Database["public"]["Enums"]["class_level"] | null
           class_name: string
           created_at: string
           id: string
@@ -456,6 +457,7 @@ export type Database = {
         Insert: {
           assistant_teacher_id?: string | null
           class_code: string
+          class_level?: Database["public"]["Enums"]["class_level"] | null
           class_name: string
           created_at?: string
           id?: string
@@ -469,6 +471,7 @@ export type Database = {
         Update: {
           assistant_teacher_id?: string | null
           class_code?: string
+          class_level?: Database["public"]["Enums"]["class_level"] | null
           class_name?: string
           created_at?: string
           id?: string
@@ -854,6 +857,72 @@ export type Database = {
         }
         Relationships: []
       }
+      progress_reports: {
+        Row: {
+          created_at: string
+          id: string
+          parent_feedback: Json | null
+          pdf_path: string | null
+          published_at: string | null
+          published_by: string | null
+          snapshot: Json | null
+          status: Database["public"]["Enums"]["report_publish_status"]
+          student_id: string
+          submitted_at: string | null
+          submitted_by: string | null
+          teacher_comment: string | null
+          term_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          parent_feedback?: Json | null
+          pdf_path?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          snapshot?: Json | null
+          status?: Database["public"]["Enums"]["report_publish_status"]
+          student_id: string
+          submitted_at?: string | null
+          submitted_by?: string | null
+          teacher_comment?: string | null
+          term_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          parent_feedback?: Json | null
+          pdf_path?: string | null
+          published_at?: string | null
+          published_by?: string | null
+          snapshot?: Json | null
+          status?: Database["public"]["Enums"]["report_publish_status"]
+          student_id?: string
+          submitted_at?: string | null
+          submitted_by?: string | null
+          teacher_comment?: string | null
+          term_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "progress_reports_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "progress_reports_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "academic_terms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       staff: {
         Row: {
           assigned_classes: string[] | null
@@ -936,6 +1005,55 @@ export type Database = {
             columns: ["student_id"]
             isOneToOne: true
             referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_badges: {
+        Row: {
+          awarded_at: string
+          awarded_by: string | null
+          badge_id: string
+          id: string
+          student_id: string
+          term_id: string
+        }
+        Insert: {
+          awarded_at?: string
+          awarded_by?: string | null
+          badge_id: string
+          id?: string
+          student_id: string
+          term_id: string
+        }
+        Update: {
+          awarded_at?: string
+          awarded_by?: string | null
+          badge_id?: string
+          id?: string
+          student_id?: string
+          term_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_badges_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_badges_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "academic_terms"
             referencedColumns: ["id"]
           },
         ]
@@ -1027,6 +1145,61 @@ export type Database = {
           },
           {
             foreignKeyName: "student_class_assignments_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "academic_terms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_target_assignments: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          status: Database["public"]["Enums"]["target_status"]
+          student_id: string
+          template_item_id: string
+          term_id: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["target_status"]
+          student_id: string
+          template_item_id: string
+          term_id: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["target_status"]
+          student_id?: string
+          template_item_id?: string
+          term_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_target_assignments_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_target_assignments_template_item_id_fkey"
+            columns: ["template_item_id"]
+            isOneToOne: false
+            referencedRelation: "target_template_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_target_assignments_term_id_fkey"
             columns: ["term_id"]
             isOneToOne: false
             referencedRelation: "academic_terms"
@@ -1159,6 +1332,148 @@ export type Database = {
           weight_percent?: number
         }
         Relationships: []
+      }
+      target_check_attempts: {
+        Row: {
+          assignment_id: string
+          created_at: string
+          id: string
+          outcome: Database["public"]["Enums"]["check_outcome"] | null
+          requested_at: string
+          requested_by: string | null
+          responded_at: string | null
+          responded_by: string | null
+          student_note: string | null
+          teacher_note: string | null
+        }
+        Insert: {
+          assignment_id: string
+          created_at?: string
+          id?: string
+          outcome?: Database["public"]["Enums"]["check_outcome"] | null
+          requested_at?: string
+          requested_by?: string | null
+          responded_at?: string | null
+          responded_by?: string | null
+          student_note?: string | null
+          teacher_note?: string | null
+        }
+        Update: {
+          assignment_id?: string
+          created_at?: string
+          id?: string
+          outcome?: Database["public"]["Enums"]["check_outcome"] | null
+          requested_at?: string
+          requested_by?: string | null
+          responded_at?: string | null
+          responded_by?: string | null
+          student_note?: string | null
+          teacher_note?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "target_check_attempts_assignment_id_fkey"
+            columns: ["assignment_id"]
+            isOneToOne: false
+            referencedRelation: "student_target_assignments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      target_template_items: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          sort_order: number
+          star_group: string | null
+          template_id: string
+          title_dv: string
+          title_en: string | null
+          updated_at: string
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          star_group?: string | null
+          template_id: string
+          title_dv: string
+          title_en?: string | null
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          star_group?: string | null
+          template_id?: string
+          title_dv?: string
+          title_en?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "target_template_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "target_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "target_template_items_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "target_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      target_templates: {
+        Row: {
+          class_level: Database["public"]["Enums"]["class_level"]
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          notes: string | null
+          term_id: string
+          updated_at: string
+        }
+        Insert: {
+          class_level: Database["public"]["Enums"]["class_level"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          term_id: string
+          updated_at?: string
+        }
+        Update: {
+          class_level?: Database["public"]["Enums"]["class_level"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          term_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "target_templates_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "academic_terms"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       targets: {
         Row: {
@@ -1317,9 +1632,17 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_teacher_of_student: {
+        Args: { _student: string; _teacher: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "admin" | "staff" | "student"
+      check_outcome: "completed" | "needs_improvement"
+      class_level: "baby" | "nursery" | "lkg" | "ukg" | "ks1" | "ks2_3"
+      report_publish_status: "draft" | "published"
+      target_status: "assigned" | "in_review" | "completed"
       term_status: "draft" | "active" | "completed" | "archived"
     }
     CompositeTypes: {
@@ -1449,6 +1772,10 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "staff", "student"],
+      check_outcome: ["completed", "needs_improvement"],
+      class_level: ["baby", "nursery", "lkg", "ukg", "ks1", "ks2_3"],
+      report_publish_status: ["draft", "published"],
+      target_status: ["assigned", "in_review", "completed"],
       term_status: ["draft", "active", "completed", "archived"],
     },
   },
