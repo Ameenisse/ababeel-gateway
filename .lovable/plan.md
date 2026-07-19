@@ -1,102 +1,91 @@
 
-# Academic Progress, Targets & Reports — Build Plan
+# Simplified Targets & Report Card Module
 
-This is a very large spec (13 new tables, 6 new modules, 3 role workflows). I'll ship it in phases so each is testable before moving on. All work respects the existing Phase 1 foundation (roles, RLS, `has_role`, `_authenticated` layout) and the still-pending Phase 2 admissions module from the original plan.
+Rebuild the Targets + Report Card modules to match the uploaded artifacts exactly, and make the day-to-day flow as light as possible for admin, teacher, and student.
 
-Because the spec depends on admission approval creating a student, **Phase A wraps the outstanding admission-approval workflow first** — otherwise there is no student to target.
+## What the uploads tell us
 
-## Phase A — Approved admission → student (spec §1, §25)
+- **6 class-level checklists** (Baby, Nursery, LKG, UKG, KS1, KS2–3) + a generic `check_list.pdf`. Each is a Dhivehi RTL list of ~10–25 target items grouped by theme (Quran reading, memorisation, duas, tajweed, surahs, akhlaq, etc.), used per term.
+- **Sample report card is 5 A4 pages, Dhivehi RTL:**
+  1. Cover — logo + student name + year
+  2. Quran letters/duas grid — each item has a **red star = achieved**, empty circle = not yet
+  3. Awards page — 6 fixed ribbon badges (Best All Round, Best Reciter, Discipline, Attendance, Best Handwriter, Best Book)
+  4. Parent/guardian feedback + staff & guardian signatures
+  5. Lessons list + Surahs to learn (per term)
 
-Server-side approval RPC (`approve_admission_request`) runs in one transaction:
-- guard: request must be `pending` and not already linked
-- create auth user (synthetic email), row in `students` (copying admission fields), `student_accounts` (username + hashed PIN via `pgcrypto`), `user_roles`
-- write `linked_student_id` on the admission request to enforce single-use
-- return generated username + one-time PIN for the admin UI to copy/print
+The current spec's weighted % / performance-level engine is heavier than the sample card actually shows. The sample is a **binary star chart + fixed awards + signatures** — no numeric grades on the printed card.
 
-Admin Admissions page gets Approve/Reject/Waitlist actions and a credentials modal. Approved students appear immediately in Student Management, Class Assignment, Target Assignment, and (once class-assigned) staff & attendance lists.
+## Simplification decisions
 
-## Phase B — Academic structure (§4, §23)
+1. **Drop weighted-% performance engine from the printed report.** Keep it as an optional internal analytic only. The published PDF shows stars + awards + comments, matching the sample.
+2. **Target status collapses to 3 values only:** `assigned` · `in_review` · `completed`. (Plus `needs_improvement` as an internal flag on the latest check attempt, not a target state.) No "Not Started / In Progress / Exempted / Not Achieved" — the sample doesn't need them.
+3. **One check-request loop** (see §Flow) replaces the current teacher tracking UI. Same UI for teacher and student, different actions.
+4. **Class-level target templates** — one template per class level (Baby / Nursery / LKG / UKG / KS1 / KS2–3) per term. Assigning a student to a class auto-assigns that class's template for the current term. No per-student bulk assign wizard needed for the common case; admin can still override individual targets.
+5. **Badges = the 6 fixed ribbons from the sample**, seeded. Teachers tick which of the 6 the student earned this term; no complex auto-award rules.
+6. **Report generation is one click.** When the term closes, admin hits "Generate Report" for a class → PDF is built from: completed targets (stars), teacher-selected badges, teacher/parent comments, term surahs list. No draft/review/return workflow — teacher fills comments in one form, admin publishes.
 
-New tables: `academic_years`, `academic_terms`, `student_class_assignments` (with `is_current`, main/assistant teacher, session).
+## Flow: student ↔ teacher check-request loop
 
-Admin modules:
-- Academic Years CRUD, one `is_current`
-- Terms CRUD scoped to a year (First / Second seeded), status Draft/Active/Completed/Archived, target-open + deadline + report-available dates
-- Class Assignment page: assign year/class/session/main+assistant teacher/current term to a student; historical rows preserved; teacher visibility derives from the current assignment
+```text
+ assigned  ──student "Request check"──▶  in_review
+                                            │
+                     teacher opens request  │
+                                            ▼
+                    ┌───────────────────────┴──────────────────────┐
+                    │                                              │
+        "Needs improvement" + comment           "Mark completed" + optional comment
+                    │                                              │
+                    ▼                                              ▼
+              assigned (again)                                completed  ★
+        (student can request check again,
+         history of attempts kept)
+```
 
-## Phase C — Target catalog (§5, §6, §23)
+- Every request → response is one `target_check_attempts` row (student_note, teacher_note, outcome, timestamps). Full history visible to both sides on the target row.
+- `student_target_assignments.status` is derived from the latest attempt.
+- Completed targets flow straight into the report card as red stars.
 
-Tables: `target_categories`, `targets`, `badges`.
+## Screens (final set)
 
-Admin modules:
-- **Target Categories** — CRUD, reorder, activate, restrict to classes/terms, archive-instead-of-delete when in use. Seeded with the 13 suggested categories.
-- **Targets** — CRUD, duplicate, archive, difficulty/points/badge/display_order, CSV import/export, filtered by category/class/year/term.
-- **Badges** — CRUD, auto vs manual award, thresholds (min completed targets, min points), category/term scope.
+**Student**
+- `student/my-targets` — grouped by term → category, each row: title (Dhivehi), status pill, "Request check" button (disabled while `in_review`), attempt history drawer.
 
-## Phase D — Target assignment & tracking (§7, §8, §9, §10, §11)
+**Teacher**
+- `staff/check-requests` — inbox of `in_review` targets across their students, oldest first. One-tap Complete / Needs improvement + comment.
+- `staff/term-report/:studentId` — per student per term: auto-filled star grid (read-only from completed targets), 6 badge checkboxes, teacher comment field, parent feedback fields, submit.
 
-Tables: `student_target_assignments` (unique on student+year+term+target), `student_target_history` (trigger-populated on status/comment/date change).
+**Admin**
+- `admin/target-templates` — 6 class-level templates × 2 terms. CRUD target items (Dhivehi title, category, order). This replaces the current "Targets" catalog UI.
+- `admin/reports` — list by class/term, buttons: Generate PDF, Publish, Unpublish. No return-for-correction step.
 
-Admin **Target Assignment** page:
-- filters: year, term, class, category
-- assign methods: single student, multi-select, whole class, whole year, copy from previous term, copy from another student, saved template
+## Data model changes (delta on current schema)
 
-Staff **Target Tracking** page (mobile-first card list):
-- teacher sees only students in classes where they are main/assistant teacher on the current assignment
-- statuses: Not Started / In Progress / Completed / Needs Improvement / Not Achieved / Exempted
-- quick actions + bulk actions (bulk still writes per-row completion date + updater)
-- Complete requires completion_date (default today) + teacher comment
-- optional evidence (file upload to `target-evidence` bucket), score, remarks
+- **New:** `target_templates` (class_level, term_id, name), `target_template_items` (template_id, category_id, title_dv, order, star_grid_group nullable), `target_check_attempts` (assignment_id, student_note, teacher_note, outcome enum `completed`|`needs_improvement`, created_by, created_at).
+- **Modify:** `targets` becomes a thin catalog referenced by template items (or drop `targets` and let template items be the source of truth — recommended, less indirection). `student_target_assignments`: keep, but derive `status` from latest attempt via a view/trigger. Drop `difficulty`, `points`, `evidence_url`, `score` from the assignment (unused by the sample).
+- **New:** `progress_reports` snapshot JSON keyed by `(student_id, term_id)` — frozen on publish. Stores stars grid, badges array, comments, surahs list.
+- **Seed:** 6 ribbon badges from page 3 of the sample; 6 class-level templates from the uploaded PDFs (I'll transcribe the Dhivehi target lists from each PDF during Phase 1).
 
-Student **My Targets** — read-only, grouped by year → term → category, per-term progress bar.
+## PDF renderer
 
-Every write goes through a server function using `requireSupabaseAuth`; DB trigger writes history and enforces teacher-scope via `has_role` + assignment lookup.
+- Server-side via `@react-pdf/renderer` inside a `createServerFn`. Faruma + Amiri fonts registered from Lovable Assets.
+- 5-page layout mirrors the sample 1:1. Red star SVG for achieved, hollow circle for pending.
+- Output stored in a private `progress-reports` bucket; student sees a "Download" button once published.
 
-## Phase E — Assessments, badges & performance (§12, §13, §14, §15)
+## Phased delivery
 
-Tables: `teacher_term_assessments` (unique on student+year+term), `student_badges`, `performance_settings` (singleton row).
+- **P1 — Schema + seed templates from PDFs.** Migration; transcribe the 6 checklists as template items; seed 6 ribbon badges. Retire unused columns from current tables.
+- **P2 — Student My Targets + check-request action.**
+- **P3 — Teacher check-requests inbox + mark completed/needs-improvement.**
+- **P4 — Admin target-template editor.**
+- **P5 — Term report form (teacher) + PDF renderer + publish.**
+- **P6 — Student view of published report + PDF download.**
 
-- Teacher **Term Assessment** form (draft-save, all comment fields, overall level, signature name)
-- **Complete Term Report** action: validates all required targets have a status, required comments filled, then locks the assessment (`report_status = completed`) and creates/updates a `progress_reports` row
-- **Performance calculator** (SQL function): weights from `performance_settings`; exempted targets excluded from denominator; returns totals, %s, level
-- **Badge engine**: SQL function evaluates auto-award badges after every target status change; manual awards via teacher UI; admin approval gate before visibility
-- Admin **Performance Settings** page: weights, level thresholds, auto-publish toggle, require-admin-approval toggle
+## Open questions (assumed unless you say otherwise)
 
-## Phase F — Progress reports (§16, §17, §18, §20)
+1. **Drop the weighted % engine from the printed card** — kept as internal analytic only. OK?
+2. **Auto-assign template on class assignment** — student inherits the current term's template for their class level, admin can override. OK?
+3. **Awards are the 6 fixed ribbons only** (no custom badges for now). OK?
+4. **Report publish is one step** (no "in review → return for correction"). OK?
+5. I'll transcribe Dhivehi target text from the 6 uploaded PDFs during P1 seeding — say if you'd rather paste a clean list.
 
-Table: `progress_reports` (one per student/year/term).
-
-- Admin **Progress Reports** list with filters (year/term/class/teacher/status) + review actions: Approve, Return for Correction, Publish/Unpublish, Archive, Print, Export PDF
-- Report renderer: parent-friendly A4 print layout — header (logo, student, class), performance summary, targets grouped by category with status icons, teacher comments block, achievements/badges, signature areas
-- Student **My Progress**: current year, first-term + second-term cards, only shows a term once its report `status = published`; View / Print / Download PDF
-- Status flow: Draft → In Review → Completed → Published (or Returned for Correction / Archived); teachers write draft & submit; admins publish
-- PDF generated server-side on publish (stored in `progress-reports` bucket) so download is instant and stable
-
-## Phase G — Notifications & analytics (§21, §22)
-
-- `notifications` table + in-dashboard bell for teachers/admins/students with the event set from §21
-- Admin analytics tiles: completion by class/term/category, top performers, students needing support, teacher report progress, badge counts — with year/term/class/teacher/category filters
-
-## Technical details
-
-- **RLS everywhere.** Student rows scoped to `auth.uid() = students.user_id`. Teacher rows scoped through `student_class_assignments` where teacher is main/assistant AND `is_current`. Admin via `has_role(auth.uid(),'admin')`. History and audit tables: admin-only SELECT; teachers see rows for students in their scope; students never see history.
-- **All mutating logic in `createServerFn` handlers with `requireSupabaseAuth`.** SQL functions used for: `approve_admission_request`, `recalculate_student_performance(student, year, term)`, `evaluate_auto_badges(student, year, term)`, and target-history trigger.
-- **Storage buckets** (created via storage tool, not SQL): `target-evidence` (private, teacher/admin/student-owner read), `progress-reports` (private, admin write, student-owner read on publish), `badge-icons` (public read).
-- **Uniqueness constraints** as in §23: `(student, year, term, target)` on assignments and `(student, year, term)` on assessments.
-- **Term separation.** Every performance query, badge query, and report row is keyed by `(academic_year_id, term_id)` — no cross-term aggregation.
-- **Grants.** Every new public-schema table gets explicit GRANTs to `authenticated` and `service_role` in the same migration.
-- **Types.** All new enums added as Postgres `enum`s (`target_status`, `target_difficulty`, `term_status`, `report_status`, `performance_level`, `badge_award_method`, `badge_approval_status`).
-
-## Delivery pace
-
-Ship phases in order; each phase ends in a working, testable slice. Phases A–B and C are prerequisites for D onward. Estimated iterations: A (1 turn), B (1), C (1–2), D (2), E (1–2), F (1–2), G (1).
-
-## Open questions (I'll assume these unless you say otherwise)
-
-1. **Default academic year** — I'll seed `2026–2027` as current; edit anytime.
-2. **PDF renderer** — server-side HTML → PDF via a Worker-compatible library (no Chromium). Layout will match §16 exactly. If you'd rather use browser print-to-PDF from the student view, say so.
-3. **Publishing** — default `require_admin_approval = true`, `auto_publish_after_teacher_completion = false`. Toggle in Performance Settings.
-4. **Attendance %** — pulled from the existing `attendance` table filtered by term dates. If you want a different formula, tell me.
-5. **Notifications delivery** — in-app only for now (per §21 "display inside the dashboard"). Email/SMS can come later.
-
-Reply "approve" to start Phase A, or tell me which phase to start with / what to change.
+Reply "approve" to start P1, or tell me which of the four assumptions to change.

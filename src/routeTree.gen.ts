@@ -14,9 +14,12 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StaffIndexRouteImport } from './routes/staff.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as StudentTargetsRouteImport } from './routes/student.targets'
 import { Route as StudentDashboardRouteImport } from './routes/student.dashboard'
 import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
+import { Route as StaffCheckRequestsRouteImport } from './routes/staff.check-requests'
 import { Route as AdminTargetsRouteImport } from './routes/admin.targets'
+import { Route as AdminTargetTemplatesRouteImport } from './routes/admin.target-templates'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminClassAssignmentsRouteImport } from './routes/admin.class-assignments'
 import { Route as AdminAdmissionsRouteImport } from './routes/admin.admissions'
@@ -51,6 +54,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentTargetsRoute = StudentTargetsRouteImport.update({
+  id: '/student/targets',
+  path: '/student/targets',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudentDashboardRoute = StudentDashboardRouteImport.update({
   id: '/student/dashboard',
   path: '/student/dashboard',
@@ -61,9 +69,19 @@ const StaffDashboardRoute = StaffDashboardRouteImport.update({
   path: '/staff/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaffCheckRequestsRoute = StaffCheckRequestsRouteImport.update({
+  id: '/staff/check-requests',
+  path: '/staff/check-requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminTargetsRoute = AdminTargetsRouteImport.update({
   id: '/admin/targets',
   path: '/admin/targets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminTargetTemplatesRoute = AdminTargetTemplatesRouteImport.update({
+  id: '/admin/target-templates',
+  path: '/admin/target-templates',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
@@ -120,9 +138,12 @@ export interface FileRoutesByFullPath {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
+  '/staff/check-requests': typeof StaffCheckRequestsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/targets': typeof StudentTargetsRoute
   '/admin/': typeof AdminIndexRoute
   '/staff/': typeof StaffIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -138,9 +159,12 @@ export interface FileRoutesByTo {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
+  '/staff/check-requests': typeof StaffCheckRequestsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/targets': typeof StudentTargetsRoute
   '/admin': typeof AdminIndexRoute
   '/staff': typeof StaffIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -157,9 +181,12 @@ export interface FileRoutesById {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
+  '/staff/check-requests': typeof StaffCheckRequestsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/targets': typeof StudentTargetsRoute
   '/admin/': typeof AdminIndexRoute
   '/staff/': typeof StaffIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -177,9 +204,12 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/target-templates'
     | '/admin/targets'
+    | '/staff/check-requests'
     | '/staff/dashboard'
     | '/student/dashboard'
+    | '/student/targets'
     | '/admin/'
     | '/staff/'
     | '/.lovable/oauth/consent'
@@ -195,9 +225,12 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/target-templates'
     | '/admin/targets'
+    | '/staff/check-requests'
     | '/staff/dashboard'
     | '/student/dashboard'
+    | '/student/targets'
     | '/admin'
     | '/staff'
     | '/.lovable/oauth/consent'
@@ -213,9 +246,12 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/target-templates'
     | '/admin/targets'
+    | '/staff/check-requests'
     | '/staff/dashboard'
     | '/student/dashboard'
+    | '/student/targets'
     | '/admin/'
     | '/staff/'
     | '/.lovable/oauth/consent'
@@ -232,9 +268,12 @@ export interface RootRouteChildren {
   AdminAdmissionsRoute: typeof AdminAdmissionsRoute
   AdminClassAssignmentsRoute: typeof AdminClassAssignmentsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminTargetTemplatesRoute: typeof AdminTargetTemplatesRoute
   AdminTargetsRoute: typeof AdminTargetsRoute
+  StaffCheckRequestsRoute: typeof StaffCheckRequestsRoute
   StaffDashboardRoute: typeof StaffDashboardRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
+  StudentTargetsRoute: typeof StudentTargetsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   StaffIndexRoute: typeof StaffIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -278,6 +317,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/student/targets': {
+      id: '/student/targets'
+      path: '/student/targets'
+      fullPath: '/student/targets'
+      preLoaderRoute: typeof StudentTargetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/student/dashboard': {
       id: '/student/dashboard'
       path: '/student/dashboard'
@@ -292,11 +338,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/staff/check-requests': {
+      id: '/staff/check-requests'
+      path: '/staff/check-requests'
+      fullPath: '/staff/check-requests'
+      preLoaderRoute: typeof StaffCheckRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/targets': {
       id: '/admin/targets'
       path: '/admin/targets'
       fullPath: '/admin/targets'
       preLoaderRoute: typeof AdminTargetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/target-templates': {
+      id: '/admin/target-templates'
+      path: '/admin/target-templates'
+      fullPath: '/admin/target-templates'
+      preLoaderRoute: typeof AdminTargetTemplatesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/dashboard': {
@@ -369,9 +429,12 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAdmissionsRoute: AdminAdmissionsRoute,
   AdminClassAssignmentsRoute: AdminClassAssignmentsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminTargetTemplatesRoute: AdminTargetTemplatesRoute,
   AdminTargetsRoute: AdminTargetsRoute,
+  StaffCheckRequestsRoute: StaffCheckRequestsRoute,
   StaffDashboardRoute: StaffDashboardRoute,
   StudentDashboardRoute: StudentDashboardRoute,
+  StudentTargetsRoute: StudentTargetsRoute,
   AdminIndexRoute: AdminIndexRoute,
   StaffIndexRoute: StaffIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,

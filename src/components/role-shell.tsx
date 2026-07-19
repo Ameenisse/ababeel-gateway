@@ -53,6 +53,7 @@ const menus: Record<Role, { label: string; to: string; icon: React.ElementType }
     { label: "Academic Years", to: "/admin/academic", icon: CalendarRange },
     { label: "Class Assignments", to: "/admin/class-assignments", icon: School },
     { label: "Targets & Badges", to: "/admin/targets", icon: ListChecks },
+    { label: "Target Templates", to: "/admin/target-templates", icon: ClipboardList },
     { label: "Attendance", to: "/admin/attendance", icon: CalendarCheck },
     { label: "Competitions", to: "/admin/competitions", icon: Trophy },
     { label: "Participants", to: "/admin/participants", icon: ListChecks },
@@ -65,6 +66,7 @@ const menus: Record<Role, { label: string; to: string; icon: React.ElementType }
   staff: [
     { label: "Dashboard", to: "/staff/dashboard", icon: LayoutDashboard },
     { label: "My Classes", to: "/staff/classes", icon: BookOpen },
+    { label: "Check Requests", to: "/staff/check-requests", icon: ClipboardList },
     { label: "Attendance", to: "/staff/attendance", icon: CalendarCheck },
     { label: "Competitions", to: "/staff/competitions", icon: Trophy },
     { label: "Announcements", to: "/staff/announcements", icon: Megaphone },
@@ -72,6 +74,7 @@ const menus: Record<Role, { label: string; to: string; icon: React.ElementType }
   student: [
     { label: "Dashboard", to: "/student/dashboard", icon: LayoutDashboard },
     { label: "My Profile", to: "/student/profile", icon: GraduationCap },
+    { label: "My Targets", to: "/student/targets", icon: ListChecks },
     { label: "Attendance", to: "/student/attendance", icon: CalendarCheck },
     { label: "Competitions", to: "/student/competitions", icon: Trophy },
     { label: "Announcements", to: "/student/announcements", icon: Megaphone },
