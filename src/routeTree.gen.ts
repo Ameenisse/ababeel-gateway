@@ -14,6 +14,7 @@ import { Route as McpRouteImport } from './routes/mcp'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StaffIndexRouteImport } from './routes/staff.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as StudentTargetsRouteImport } from './routes/student.targets'
 import { Route as StudentDashboardRouteImport } from './routes/student.dashboard'
 import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
 import { Route as AdminTargetsRouteImport } from './routes/admin.targets'
@@ -50,6 +51,11 @@ const StaffIndexRoute = StaffIndexRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
   path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentTargetsRoute = StudentTargetsRouteImport.update({
+  id: '/student/targets',
+  path: '/student/targets',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StudentDashboardRoute = StudentDashboardRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/targets': typeof StudentTargetsRoute
   '/admin/': typeof AdminIndexRoute
   '/staff/': typeof StaffIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -149,6 +156,7 @@ export interface FileRoutesByTo {
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/targets': typeof StudentTargetsRoute
   '/admin': typeof AdminIndexRoute
   '/staff': typeof StaffIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/targets': typeof StudentTargetsRoute
   '/admin/': typeof AdminIndexRoute
   '/staff/': typeof StaffIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
@@ -190,6 +199,7 @@ export interface FileRouteTypes {
     | '/admin/targets'
     | '/staff/dashboard'
     | '/student/dashboard'
+    | '/student/targets'
     | '/admin/'
     | '/staff/'
     | '/.lovable/oauth/consent'
@@ -209,6 +219,7 @@ export interface FileRouteTypes {
     | '/admin/targets'
     | '/staff/dashboard'
     | '/student/dashboard'
+    | '/student/targets'
     | '/admin'
     | '/staff'
     | '/.lovable/oauth/consent'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/admin/targets'
     | '/staff/dashboard'
     | '/student/dashboard'
+    | '/student/targets'
     | '/admin/'
     | '/staff/'
     | '/.lovable/oauth/consent'
@@ -248,6 +260,7 @@ export interface RootRouteChildren {
   AdminTargetsRoute: typeof AdminTargetsRoute
   StaffDashboardRoute: typeof StaffDashboardRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
+  StudentTargetsRoute: typeof StudentTargetsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   StaffIndexRoute: typeof StaffIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
@@ -289,6 +302,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student/targets': {
+      id: '/student/targets'
+      path: '/student/targets'
+      fullPath: '/student/targets'
+      preLoaderRoute: typeof StudentTargetsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/student/dashboard': {
@@ -393,6 +413,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminTargetsRoute: AdminTargetsRoute,
   StaffDashboardRoute: StaffDashboardRoute,
   StudentDashboardRoute: StudentDashboardRoute,
+  StudentTargetsRoute: StudentTargetsRoute,
   AdminIndexRoute: AdminIndexRoute,
   StaffIndexRoute: StaffIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
