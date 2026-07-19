@@ -29,7 +29,7 @@ const LEVELS = [
 
 type Template = { id: string; class_level: string; term_id: string; name: string };
 type Item = { id: string; template_id: string; title_dv: string; title_en: string | null; star_group: string | null; sort_order: number; is_active: boolean };
-type Term = { id: string; name: string; academic_year_id: string };
+type Term = { id: string; term_name: string; academic_year_id: string };
 
 function Page() {
   const [terms, setTerms] = useState<Term[]>([]);
@@ -46,7 +46,7 @@ function Page() {
 
   useEffect(() => {
     (async () => {
-      const { data: t } = await supabase.from("academic_terms").select("id, name, academic_year_id").order("created_at");
+      const { data: t } = await supabase.from("academic_terms").select("id, term_name, academic_year_id").order("created_at");
       setTerms(t ?? []);
       await refresh();
     })();
@@ -109,8 +109,8 @@ function Page() {
               return (
                 <button key={t.id} onClick={() => loadItems(t)}
                   className={`w-full rounded-md border px-3 py-2 text-left text-sm hover:bg-accent ${selected?.id === t.id ? "border-primary bg-accent" : "border-border/60"}`}>
-                  <div className="font-medium">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.class_level.toUpperCase()} · {term?.name ?? "—"}</div>
+                  <div className="font-medium">{t.term_name}</div>
+                  <div className="text-xs text-muted-foreground">{t.class_level.toUpperCase()} · {term?.term_name ?? "—"}</div>
                 </button>
               );
             })}
@@ -169,7 +169,7 @@ function Page() {
               <Label>Term</Label>
               <Select value={newTerm} onValueChange={setNewTerm}>
                 <SelectTrigger><SelectValue placeholder="Select term" /></SelectTrigger>
-                <SelectContent>{terms.map((t) => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}</SelectContent>
+                <SelectContent>{terms.map((t) => <SelectItem key={t.id} value={t.id}>{t.term_name}</SelectItem>)}</SelectContent>
               </Select>
             </div>
           </div>
