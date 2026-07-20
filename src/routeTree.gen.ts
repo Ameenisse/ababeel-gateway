@@ -15,17 +15,20 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as StaffIndexRouteImport } from './routes/staff.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as StudentTargetsRouteImport } from './routes/student.targets'
+import { Route as StudentReportsRouteImport } from './routes/student.reports'
 import { Route as StudentDashboardRouteImport } from './routes/student.dashboard'
 import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
 import { Route as StaffCheckRequestsRouteImport } from './routes/staff.check-requests'
 import { Route as AdminTargetsRouteImport } from './routes/admin.targets'
 import { Route as AdminTargetTemplatesRouteImport } from './routes/admin.target-templates'
+import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminClassAssignmentsRouteImport } from './routes/admin.class-assignments'
 import { Route as AdminAdmissionsRouteImport } from './routes/admin.admissions'
 import { Route as AdminAcademicRouteImport } from './routes/admin.academic'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as StaffTermReportStudentIdRouteImport } from './routes/staff.term-report.$studentId'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
@@ -59,6 +62,11 @@ const StudentTargetsRoute = StudentTargetsRouteImport.update({
   path: '/student/targets',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentReportsRoute = StudentReportsRouteImport.update({
+  id: '/student/reports',
+  path: '/student/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudentDashboardRoute = StudentDashboardRouteImport.update({
   id: '/student/dashboard',
   path: '/student/dashboard',
@@ -82,6 +90,11 @@ const AdminTargetsRoute = AdminTargetsRouteImport.update({
 const AdminTargetTemplatesRoute = AdminTargetTemplatesRouteImport.update({
   id: '/admin/target-templates',
   path: '/admin/target-templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminReportsRoute = AdminReportsRouteImport.update({
+  id: '/admin/reports',
+  path: '/admin/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
@@ -116,6 +129,12 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const StaffTermReportStudentIdRoute =
+  StaffTermReportStudentIdRouteImport.update({
+    id: '/staff/term-report/$studentId',
+    path: '/staff/term-report/$studentId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
     id: '/.mcp/invoke-tool/$tool',
@@ -138,16 +157,19 @@ export interface FileRoutesByFullPath {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/reports': typeof StudentReportsRoute
   '/student/targets': typeof StudentTargetsRoute
   '/admin/': typeof AdminIndexRoute
   '/staff/': typeof StaffIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/staff/term-report/$studentId': typeof StaffTermReportStudentIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -159,16 +181,19 @@ export interface FileRoutesByTo {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/reports': typeof StudentReportsRoute
   '/student/targets': typeof StudentTargetsRoute
   '/admin': typeof AdminIndexRoute
   '/staff': typeof StaffIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/staff/term-report/$studentId': typeof StaffTermReportStudentIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -181,16 +206,19 @@ export interface FileRoutesById {
   '/admin/admissions': typeof AdminAdmissionsRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/reports': typeof AdminReportsRoute
   '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/reports': typeof StudentReportsRoute
   '/student/targets': typeof StudentTargetsRoute
   '/admin/': typeof AdminIndexRoute
   '/staff/': typeof StaffIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
+  '/staff/term-report/$studentId': typeof StaffTermReportStudentIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -204,16 +232,19 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/reports'
     | '/admin/target-templates'
     | '/admin/targets'
     | '/staff/check-requests'
     | '/staff/dashboard'
     | '/student/dashboard'
+    | '/student/reports'
     | '/student/targets'
     | '/admin/'
     | '/staff/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/staff/term-report/$studentId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -225,16 +256,19 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/reports'
     | '/admin/target-templates'
     | '/admin/targets'
     | '/staff/check-requests'
     | '/staff/dashboard'
     | '/student/dashboard'
+    | '/student/reports'
     | '/student/targets'
     | '/admin'
     | '/staff'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/staff/term-report/$studentId'
   id:
     | '__root__'
     | '/'
@@ -246,16 +280,19 @@ export interface FileRouteTypes {
     | '/admin/admissions'
     | '/admin/class-assignments'
     | '/admin/dashboard'
+    | '/admin/reports'
     | '/admin/target-templates'
     | '/admin/targets'
     | '/staff/check-requests'
     | '/staff/dashboard'
     | '/student/dashboard'
+    | '/student/reports'
     | '/student/targets'
     | '/admin/'
     | '/staff/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
+    | '/staff/term-report/$studentId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -268,16 +305,19 @@ export interface RootRouteChildren {
   AdminAdmissionsRoute: typeof AdminAdmissionsRoute
   AdminClassAssignmentsRoute: typeof AdminClassAssignmentsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminReportsRoute: typeof AdminReportsRoute
   AdminTargetTemplatesRoute: typeof AdminTargetTemplatesRoute
   AdminTargetsRoute: typeof AdminTargetsRoute
   StaffCheckRequestsRoute: typeof StaffCheckRequestsRoute
   StaffDashboardRoute: typeof StaffDashboardRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
+  StudentReportsRoute: typeof StudentReportsRoute
   StudentTargetsRoute: typeof StudentTargetsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   StaffIndexRoute: typeof StaffIndexRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  StaffTermReportStudentIdRoute: typeof StaffTermReportStudentIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -324,6 +364,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentTargetsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/student/reports': {
+      id: '/student/reports'
+      path: '/student/reports'
+      fullPath: '/student/reports'
+      preLoaderRoute: typeof StudentReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/student/dashboard': {
       id: '/student/dashboard'
       path: '/student/dashboard'
@@ -357,6 +404,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/target-templates'
       fullPath: '/admin/target-templates'
       preLoaderRoute: typeof AdminTargetTemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/reports': {
+      id: '/admin/reports'
+      path: '/admin/reports'
+      fullPath: '/admin/reports'
+      preLoaderRoute: typeof AdminReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/dashboard': {
@@ -401,6 +455,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/staff/term-report/$studentId': {
+      id: '/staff/term-report/$studentId'
+      path: '/staff/term-report/$studentId'
+      fullPath: '/staff/term-report/$studentId'
+      preLoaderRoute: typeof StaffTermReportStudentIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
       path: '/.mcp/invoke-tool/$tool'
@@ -429,16 +490,19 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAdmissionsRoute: AdminAdmissionsRoute,
   AdminClassAssignmentsRoute: AdminClassAssignmentsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminReportsRoute: AdminReportsRoute,
   AdminTargetTemplatesRoute: AdminTargetTemplatesRoute,
   AdminTargetsRoute: AdminTargetsRoute,
   StaffCheckRequestsRoute: StaffCheckRequestsRoute,
   StaffDashboardRoute: StaffDashboardRoute,
   StudentDashboardRoute: StudentDashboardRoute,
+  StudentReportsRoute: StudentReportsRoute,
   StudentTargetsRoute: StudentTargetsRoute,
   AdminIndexRoute: AdminIndexRoute,
   StaffIndexRoute: StaffIndexRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  StaffTermReportStudentIdRoute: StaffTermReportStudentIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
