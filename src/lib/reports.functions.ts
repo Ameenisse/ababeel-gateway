@@ -28,17 +28,19 @@ async function buildSnapshot(supabase: ReturnType<typeof import("@supabase/supab
     (groupsMap[g] ||= []).push({ title_dv: it.title_dv, title_en: it.title_en, completed: status === "completed", teacher_note: null });
   }
   const groups = Object.entries(groupsMap).map(([name, items]) => ({ name, items }));
+  const s = student as unknown as { id: string; full_name: string; student_number: string | null; photo_url: string | null; classes: { class_name: string | null; class_level: string | null } | null } | null;
+  const tm = term as unknown as { term_name: string; academic_years: { year_label: string } | null } | null;
   return {
     student: {
-      id: (student as { id: string }).id,
-      full_name: (student as { full_name: string }).full_name,
-      student_number: (student as { student_number: string | null }).student_number,
-      photo_url: (student as { photo_url: string | null }).photo_url,
+      id: s?.id ?? studentId,
+      full_name: s?.full_name ?? "",
+      student_number: s?.student_number ?? null,
+      photo_url: s?.photo_url ?? null,
     },
-    class: (student as { classes: { class_name: string | null; class_level: string | null } | null }).classes,
+    class: s?.classes ?? null,
     term: {
-      term_name: (term as { term_name: string }).term_name,
-      academic_year: (term as { academic_years: { year_label: string } | null } | null)?.academic_years?.year_label ?? null,
+      term_name: tm?.term_name ?? "",
+      academic_year: tm?.academic_years?.year_label ?? null,
     },
     groups,
     badges: [],
@@ -132,9 +134,9 @@ export const publishReport = createServerFn({ method: "POST" })
       student_id: data.student_id,
       term_id: data.term_id,
       status: "published",
-      snapshot: snap as unknown as Record<string, unknown>,
+      snapshot: snap as never,
       teacher_comment: snap.teacher_comment,
-      parent_feedback: snap.parent_feedback as unknown as Record<string, unknown>,
+      parent_feedback: snap.parent_feedback as never,
       published_by: context.userId,
       published_at: new Date().toISOString(),
     }, { onConflict: "student_id,term_id" });
