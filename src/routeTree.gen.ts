@@ -19,8 +19,15 @@ import { Route as StudentTargetsRouteImport } from './routes/student.targets'
 import { Route as StudentReportsRouteImport } from './routes/student.reports'
 import { Route as StudentProfileRouteImport } from './routes/student.profile'
 import { Route as StudentDashboardRouteImport } from './routes/student.dashboard'
+import { Route as StudentCompetitionsRouteImport } from './routes/student.competitions'
+import { Route as StudentAttendanceRouteImport } from './routes/student.attendance'
+import { Route as StudentAnnouncementsRouteImport } from './routes/student.announcements'
 import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
+import { Route as StaffCompetitionsRouteImport } from './routes/staff.competitions'
+import { Route as StaffClassesRouteImport } from './routes/staff.classes'
 import { Route as StaffCheckRequestsRouteImport } from './routes/staff.check-requests'
+import { Route as StaffAttendanceRouteImport } from './routes/staff.attendance'
+import { Route as StaffAnnouncementsRouteImport } from './routes/staff.announcements'
 import { Route as AdminWebsiteRouteImport } from './routes/admin.website'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTargetsRouteImport } from './routes/admin.targets'
@@ -94,14 +101,49 @@ const StudentDashboardRoute = StudentDashboardRouteImport.update({
   path: '/student/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentCompetitionsRoute = StudentCompetitionsRouteImport.update({
+  id: '/student/competitions',
+  path: '/student/competitions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentAttendanceRoute = StudentAttendanceRouteImport.update({
+  id: '/student/attendance',
+  path: '/student/attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentAnnouncementsRoute = StudentAnnouncementsRouteImport.update({
+  id: '/student/announcements',
+  path: '/student/announcements',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffDashboardRoute = StaffDashboardRouteImport.update({
   id: '/staff/dashboard',
   path: '/staff/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaffCompetitionsRoute = StaffCompetitionsRouteImport.update({
+  id: '/staff/competitions',
+  path: '/staff/competitions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffClassesRoute = StaffClassesRouteImport.update({
+  id: '/staff/classes',
+  path: '/staff/classes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffCheckRequestsRoute = StaffCheckRequestsRouteImport.update({
   id: '/staff/check-requests',
   path: '/staff/check-requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffAttendanceRoute = StaffAttendanceRouteImport.update({
+  id: '/staff/attendance',
+  path: '/staff/attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffAnnouncementsRoute = StaffAnnouncementsRouteImport.update({
+  id: '/staff/announcements',
+  path: '/staff/announcements',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminWebsiteRoute = AdminWebsiteRouteImport.update({
@@ -243,8 +285,15 @@ export interface FileRoutesByFullPath {
   '/admin/targets': typeof AdminTargetsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/website': typeof AdminWebsiteRoute
+  '/staff/announcements': typeof StaffAnnouncementsRoute
+  '/staff/attendance': typeof StaffAttendanceRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
+  '/staff/classes': typeof StaffClassesRoute
+  '/staff/competitions': typeof StaffCompetitionsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/announcements': typeof StudentAnnouncementsRoute
+  '/student/attendance': typeof StudentAttendanceRoute
+  '/student/competitions': typeof StudentCompetitionsRoute
   '/student/dashboard': typeof StudentDashboardRoute
   '/student/profile': typeof StudentProfileRoute
   '/student/reports': typeof StudentReportsRoute
@@ -279,8 +328,15 @@ export interface FileRoutesByTo {
   '/admin/targets': typeof AdminTargetsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/website': typeof AdminWebsiteRoute
+  '/staff/announcements': typeof StaffAnnouncementsRoute
+  '/staff/attendance': typeof StaffAttendanceRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
+  '/staff/classes': typeof StaffClassesRoute
+  '/staff/competitions': typeof StaffCompetitionsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/announcements': typeof StudentAnnouncementsRoute
+  '/student/attendance': typeof StudentAttendanceRoute
+  '/student/competitions': typeof StudentCompetitionsRoute
   '/student/dashboard': typeof StudentDashboardRoute
   '/student/profile': typeof StudentProfileRoute
   '/student/reports': typeof StudentReportsRoute
@@ -316,8 +372,15 @@ export interface FileRoutesById {
   '/admin/targets': typeof AdminTargetsRoute
   '/admin/users': typeof AdminUsersRoute
   '/admin/website': typeof AdminWebsiteRoute
+  '/staff/announcements': typeof StaffAnnouncementsRoute
+  '/staff/attendance': typeof StaffAttendanceRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
+  '/staff/classes': typeof StaffClassesRoute
+  '/staff/competitions': typeof StaffCompetitionsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/announcements': typeof StudentAnnouncementsRoute
+  '/student/attendance': typeof StudentAttendanceRoute
+  '/student/competitions': typeof StudentCompetitionsRoute
   '/student/dashboard': typeof StudentDashboardRoute
   '/student/profile': typeof StudentProfileRoute
   '/student/reports': typeof StudentReportsRoute
@@ -354,8 +417,15 @@ export interface FileRouteTypes {
     | '/admin/targets'
     | '/admin/users'
     | '/admin/website'
+    | '/staff/announcements'
+    | '/staff/attendance'
     | '/staff/check-requests'
+    | '/staff/classes'
+    | '/staff/competitions'
     | '/staff/dashboard'
+    | '/student/announcements'
+    | '/student/attendance'
+    | '/student/competitions'
     | '/student/dashboard'
     | '/student/profile'
     | '/student/reports'
@@ -390,8 +460,15 @@ export interface FileRouteTypes {
     | '/admin/targets'
     | '/admin/users'
     | '/admin/website'
+    | '/staff/announcements'
+    | '/staff/attendance'
     | '/staff/check-requests'
+    | '/staff/classes'
+    | '/staff/competitions'
     | '/staff/dashboard'
+    | '/student/announcements'
+    | '/student/attendance'
+    | '/student/competitions'
     | '/student/dashboard'
     | '/student/profile'
     | '/student/reports'
@@ -426,8 +503,15 @@ export interface FileRouteTypes {
     | '/admin/targets'
     | '/admin/users'
     | '/admin/website'
+    | '/staff/announcements'
+    | '/staff/attendance'
     | '/staff/check-requests'
+    | '/staff/classes'
+    | '/staff/competitions'
     | '/staff/dashboard'
+    | '/student/announcements'
+    | '/student/attendance'
+    | '/student/competitions'
     | '/student/dashboard'
     | '/student/profile'
     | '/student/reports'
@@ -463,8 +547,15 @@ export interface RootRouteChildren {
   AdminTargetsRoute: typeof AdminTargetsRoute
   AdminUsersRoute: typeof AdminUsersRoute
   AdminWebsiteRoute: typeof AdminWebsiteRoute
+  StaffAnnouncementsRoute: typeof StaffAnnouncementsRoute
+  StaffAttendanceRoute: typeof StaffAttendanceRoute
   StaffCheckRequestsRoute: typeof StaffCheckRequestsRoute
+  StaffClassesRoute: typeof StaffClassesRoute
+  StaffCompetitionsRoute: typeof StaffCompetitionsRoute
   StaffDashboardRoute: typeof StaffDashboardRoute
+  StudentAnnouncementsRoute: typeof StudentAnnouncementsRoute
+  StudentAttendanceRoute: typeof StudentAttendanceRoute
+  StudentCompetitionsRoute: typeof StudentCompetitionsRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
   StudentProfileRoute: typeof StudentProfileRoute
   StudentReportsRoute: typeof StudentReportsRoute
@@ -548,6 +639,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/student/competitions': {
+      id: '/student/competitions'
+      path: '/student/competitions'
+      fullPath: '/student/competitions'
+      preLoaderRoute: typeof StudentCompetitionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student/attendance': {
+      id: '/student/attendance'
+      path: '/student/attendance'
+      fullPath: '/student/attendance'
+      preLoaderRoute: typeof StudentAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student/announcements': {
+      id: '/student/announcements'
+      path: '/student/announcements'
+      fullPath: '/student/announcements'
+      preLoaderRoute: typeof StudentAnnouncementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/staff/dashboard': {
       id: '/staff/dashboard'
       path: '/staff/dashboard'
@@ -555,11 +667,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/staff/competitions': {
+      id: '/staff/competitions'
+      path: '/staff/competitions'
+      fullPath: '/staff/competitions'
+      preLoaderRoute: typeof StaffCompetitionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/classes': {
+      id: '/staff/classes'
+      path: '/staff/classes'
+      fullPath: '/staff/classes'
+      preLoaderRoute: typeof StaffClassesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/staff/check-requests': {
       id: '/staff/check-requests'
       path: '/staff/check-requests'
       fullPath: '/staff/check-requests'
       preLoaderRoute: typeof StaffCheckRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/attendance': {
+      id: '/staff/attendance'
+      path: '/staff/attendance'
+      fullPath: '/staff/attendance'
+      preLoaderRoute: typeof StaffAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/announcements': {
+      id: '/staff/announcements'
+      path: '/staff/announcements'
+      fullPath: '/staff/announcements'
+      preLoaderRoute: typeof StaffAnnouncementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/website': {
@@ -744,8 +884,15 @@ const rootRouteChildren: RootRouteChildren = {
   AdminTargetsRoute: AdminTargetsRoute,
   AdminUsersRoute: AdminUsersRoute,
   AdminWebsiteRoute: AdminWebsiteRoute,
+  StaffAnnouncementsRoute: StaffAnnouncementsRoute,
+  StaffAttendanceRoute: StaffAttendanceRoute,
   StaffCheckRequestsRoute: StaffCheckRequestsRoute,
+  StaffClassesRoute: StaffClassesRoute,
+  StaffCompetitionsRoute: StaffCompetitionsRoute,
   StaffDashboardRoute: StaffDashboardRoute,
+  StudentAnnouncementsRoute: StudentAnnouncementsRoute,
+  StudentAttendanceRoute: StudentAttendanceRoute,
+  StudentCompetitionsRoute: StudentCompetitionsRoute,
   StudentDashboardRoute: StudentDashboardRoute,
   StudentProfileRoute: StudentProfileRoute,
   StudentReportsRoute: StudentReportsRoute,
