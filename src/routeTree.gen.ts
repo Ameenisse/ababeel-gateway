@@ -11,19 +11,39 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StudentLoginRouteImport } from './routes/student-login'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as AdmissionRouteImport } from './routes/admission'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StaffIndexRouteImport } from './routes/staff.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as StudentTargetsRouteImport } from './routes/student.targets'
 import { Route as StudentReportsRouteImport } from './routes/student.reports'
+import { Route as StudentProfileRouteImport } from './routes/student.profile'
 import { Route as StudentDashboardRouteImport } from './routes/student.dashboard'
+import { Route as StudentCompetitionsRouteImport } from './routes/student.competitions'
+import { Route as StudentAttendanceRouteImport } from './routes/student.attendance'
+import { Route as StudentAnnouncementsRouteImport } from './routes/student.announcements'
 import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
+import { Route as StaffCompetitionsRouteImport } from './routes/staff.competitions'
+import { Route as StaffClassesRouteImport } from './routes/staff.classes'
 import { Route as StaffCheckRequestsRouteImport } from './routes/staff.check-requests'
+import { Route as StaffAttendanceRouteImport } from './routes/staff.attendance'
+import { Route as StaffAnnouncementsRouteImport } from './routes/staff.announcements'
+import { Route as AdminWebsiteRouteImport } from './routes/admin.website'
+import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as AdminTargetsRouteImport } from './routes/admin.targets'
 import { Route as AdminTargetTemplatesRouteImport } from './routes/admin.target-templates'
+import { Route as AdminSystemRouteImport } from './routes/admin.system'
+import { Route as AdminStudentsRouteImport } from './routes/admin.students'
+import { Route as AdminStaffRouteImport } from './routes/admin.staff'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
+import { Route as AdminParticipantsRouteImport } from './routes/admin.participants'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
+import { Route as AdminCompetitionsRouteImport } from './routes/admin.competitions'
+import { Route as AdminClassesRouteImport } from './routes/admin.classes'
 import { Route as AdminClassAssignmentsRouteImport } from './routes/admin.class-assignments'
+import { Route as AdminAuditRouteImport } from './routes/admin.audit'
+import { Route as AdminAttendanceRouteImport } from './routes/admin.attendance'
+import { Route as AdminAnnouncementsRouteImport } from './routes/admin.announcements'
 import { Route as AdminAdmissionsRouteImport } from './routes/admin.admissions'
 import { Route as AdminAcademicRouteImport } from './routes/admin.academic'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -40,6 +60,11 @@ const StudentLoginRoute = StudentLoginRouteImport.update({
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdmissionRoute = AdmissionRouteImport.update({
+  id: '/admission',
+  path: '/admission',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -67,9 +92,29 @@ const StudentReportsRoute = StudentReportsRouteImport.update({
   path: '/student/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudentProfileRoute = StudentProfileRouteImport.update({
+  id: '/student/profile',
+  path: '/student/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudentDashboardRoute = StudentDashboardRouteImport.update({
   id: '/student/dashboard',
   path: '/student/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentCompetitionsRoute = StudentCompetitionsRouteImport.update({
+  id: '/student/competitions',
+  path: '/student/competitions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentAttendanceRoute = StudentAttendanceRouteImport.update({
+  id: '/student/attendance',
+  path: '/student/attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StudentAnnouncementsRoute = StudentAnnouncementsRouteImport.update({
+  id: '/student/announcements',
+  path: '/student/announcements',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StaffDashboardRoute = StaffDashboardRouteImport.update({
@@ -77,9 +122,39 @@ const StaffDashboardRoute = StaffDashboardRouteImport.update({
   path: '/staff/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StaffCompetitionsRoute = StaffCompetitionsRouteImport.update({
+  id: '/staff/competitions',
+  path: '/staff/competitions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffClassesRoute = StaffClassesRouteImport.update({
+  id: '/staff/classes',
+  path: '/staff/classes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StaffCheckRequestsRoute = StaffCheckRequestsRouteImport.update({
   id: '/staff/check-requests',
   path: '/staff/check-requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffAttendanceRoute = StaffAttendanceRouteImport.update({
+  id: '/staff/attendance',
+  path: '/staff/attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StaffAnnouncementsRoute = StaffAnnouncementsRouteImport.update({
+  id: '/staff/announcements',
+  path: '/staff/announcements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminWebsiteRoute = AdminWebsiteRouteImport.update({
+  id: '/admin/website',
+  path: '/admin/website',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminUsersRoute = AdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminTargetsRoute = AdminTargetsRouteImport.update({
@@ -92,9 +167,29 @@ const AdminTargetTemplatesRoute = AdminTargetTemplatesRouteImport.update({
   path: '/admin/target-templates',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSystemRoute = AdminSystemRouteImport.update({
+  id: '/admin/system',
+  path: '/admin/system',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminStudentsRoute = AdminStudentsRouteImport.update({
+  id: '/admin/students',
+  path: '/admin/students',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminStaffRoute = AdminStaffRouteImport.update({
+  id: '/admin/staff',
+  path: '/admin/staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminReportsRoute = AdminReportsRouteImport.update({
   id: '/admin/reports',
   path: '/admin/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminParticipantsRoute = AdminParticipantsRouteImport.update({
+  id: '/admin/participants',
+  path: '/admin/participants',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
@@ -102,9 +197,34 @@ const AdminDashboardRoute = AdminDashboardRouteImport.update({
   path: '/admin/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCompetitionsRoute = AdminCompetitionsRouteImport.update({
+  id: '/admin/competitions',
+  path: '/admin/competitions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminClassesRoute = AdminClassesRouteImport.update({
+  id: '/admin/classes',
+  path: '/admin/classes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminClassAssignmentsRoute = AdminClassAssignmentsRouteImport.update({
   id: '/admin/class-assignments',
   path: '/admin/class-assignments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAuditRoute = AdminAuditRouteImport.update({
+  id: '/admin/audit',
+  path: '/admin/audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAttendanceRoute = AdminAttendanceRouteImport.update({
+  id: '/admin/attendance',
+  path: '/admin/attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAnnouncementsRoute = AdminAnnouncementsRouteImport.update({
+  id: '/admin/announcements',
+  path: '/admin/announcements',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAdmissionsRoute = AdminAdmissionsRouteImport.update({
@@ -149,20 +269,40 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admission': typeof AdmissionRoute
   '/mcp': typeof McpRoute
   '/student-login': typeof StudentLoginRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/academic': typeof AdminAcademicRoute
   '/admin/admissions': typeof AdminAdmissionsRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
+  '/admin/classes': typeof AdminClassesRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/participants': typeof AdminParticipantsRoute
   '/admin/reports': typeof AdminReportsRoute
+  '/admin/staff': typeof AdminStaffRoute
+  '/admin/students': typeof AdminStudentsRoute
+  '/admin/system': typeof AdminSystemRoute
   '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/website': typeof AdminWebsiteRoute
+  '/staff/announcements': typeof StaffAnnouncementsRoute
+  '/staff/attendance': typeof StaffAttendanceRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
+  '/staff/classes': typeof StaffClassesRoute
+  '/staff/competitions': typeof StaffCompetitionsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/announcements': typeof StudentAnnouncementsRoute
+  '/student/attendance': typeof StudentAttendanceRoute
+  '/student/competitions': typeof StudentCompetitionsRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/profile': typeof StudentProfileRoute
   '/student/reports': typeof StudentReportsRoute
   '/student/targets': typeof StudentTargetsRoute
   '/admin/': typeof AdminIndexRoute
@@ -173,20 +313,40 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admission': typeof AdmissionRoute
   '/mcp': typeof McpRoute
   '/student-login': typeof StudentLoginRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/academic': typeof AdminAcademicRoute
   '/admin/admissions': typeof AdminAdmissionsRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
+  '/admin/classes': typeof AdminClassesRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/participants': typeof AdminParticipantsRoute
   '/admin/reports': typeof AdminReportsRoute
+  '/admin/staff': typeof AdminStaffRoute
+  '/admin/students': typeof AdminStudentsRoute
+  '/admin/system': typeof AdminSystemRoute
   '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/website': typeof AdminWebsiteRoute
+  '/staff/announcements': typeof StaffAnnouncementsRoute
+  '/staff/attendance': typeof StaffAttendanceRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
+  '/staff/classes': typeof StaffClassesRoute
+  '/staff/competitions': typeof StaffCompetitionsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/announcements': typeof StudentAnnouncementsRoute
+  '/student/attendance': typeof StudentAttendanceRoute
+  '/student/competitions': typeof StudentCompetitionsRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/profile': typeof StudentProfileRoute
   '/student/reports': typeof StudentReportsRoute
   '/student/targets': typeof StudentTargetsRoute
   '/admin': typeof AdminIndexRoute
@@ -198,20 +358,40 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admission': typeof AdmissionRoute
   '/mcp': typeof McpRoute
   '/student-login': typeof StudentLoginRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/academic': typeof AdminAcademicRoute
   '/admin/admissions': typeof AdminAdmissionsRoute
+  '/admin/announcements': typeof AdminAnnouncementsRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
+  '/admin/audit': typeof AdminAuditRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
+  '/admin/classes': typeof AdminClassesRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/participants': typeof AdminParticipantsRoute
   '/admin/reports': typeof AdminReportsRoute
+  '/admin/staff': typeof AdminStaffRoute
+  '/admin/students': typeof AdminStudentsRoute
+  '/admin/system': typeof AdminSystemRoute
   '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
+  '/admin/users': typeof AdminUsersRoute
+  '/admin/website': typeof AdminWebsiteRoute
+  '/staff/announcements': typeof StaffAnnouncementsRoute
+  '/staff/attendance': typeof StaffAttendanceRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
+  '/staff/classes': typeof StaffClassesRoute
+  '/staff/competitions': typeof StaffCompetitionsRoute
   '/staff/dashboard': typeof StaffDashboardRoute
+  '/student/announcements': typeof StudentAnnouncementsRoute
+  '/student/attendance': typeof StudentAttendanceRoute
+  '/student/competitions': typeof StudentCompetitionsRoute
   '/student/dashboard': typeof StudentDashboardRoute
+  '/student/profile': typeof StudentProfileRoute
   '/student/reports': typeof StudentReportsRoute
   '/student/targets': typeof StudentTargetsRoute
   '/admin/': typeof AdminIndexRoute
@@ -224,20 +404,40 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admission'
     | '/mcp'
     | '/student-login'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/academic'
     | '/admin/admissions'
+    | '/admin/announcements'
+    | '/admin/attendance'
+    | '/admin/audit'
     | '/admin/class-assignments'
+    | '/admin/classes'
+    | '/admin/competitions'
     | '/admin/dashboard'
+    | '/admin/participants'
     | '/admin/reports'
+    | '/admin/staff'
+    | '/admin/students'
+    | '/admin/system'
     | '/admin/target-templates'
     | '/admin/targets'
+    | '/admin/users'
+    | '/admin/website'
+    | '/staff/announcements'
+    | '/staff/attendance'
     | '/staff/check-requests'
+    | '/staff/classes'
+    | '/staff/competitions'
     | '/staff/dashboard'
+    | '/student/announcements'
+    | '/student/attendance'
+    | '/student/competitions'
     | '/student/dashboard'
+    | '/student/profile'
     | '/student/reports'
     | '/student/targets'
     | '/admin/'
@@ -248,20 +448,40 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admission'
     | '/mcp'
     | '/student-login'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/academic'
     | '/admin/admissions'
+    | '/admin/announcements'
+    | '/admin/attendance'
+    | '/admin/audit'
     | '/admin/class-assignments'
+    | '/admin/classes'
+    | '/admin/competitions'
     | '/admin/dashboard'
+    | '/admin/participants'
     | '/admin/reports'
+    | '/admin/staff'
+    | '/admin/students'
+    | '/admin/system'
     | '/admin/target-templates'
     | '/admin/targets'
+    | '/admin/users'
+    | '/admin/website'
+    | '/staff/announcements'
+    | '/staff/attendance'
     | '/staff/check-requests'
+    | '/staff/classes'
+    | '/staff/competitions'
     | '/staff/dashboard'
+    | '/student/announcements'
+    | '/student/attendance'
+    | '/student/competitions'
     | '/student/dashboard'
+    | '/student/profile'
     | '/student/reports'
     | '/student/targets'
     | '/admin'
@@ -272,20 +492,40 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admission'
     | '/mcp'
     | '/student-login'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/admin/academic'
     | '/admin/admissions'
+    | '/admin/announcements'
+    | '/admin/attendance'
+    | '/admin/audit'
     | '/admin/class-assignments'
+    | '/admin/classes'
+    | '/admin/competitions'
     | '/admin/dashboard'
+    | '/admin/participants'
     | '/admin/reports'
+    | '/admin/staff'
+    | '/admin/students'
+    | '/admin/system'
     | '/admin/target-templates'
     | '/admin/targets'
+    | '/admin/users'
+    | '/admin/website'
+    | '/staff/announcements'
+    | '/staff/attendance'
     | '/staff/check-requests'
+    | '/staff/classes'
+    | '/staff/competitions'
     | '/staff/dashboard'
+    | '/student/announcements'
+    | '/student/attendance'
+    | '/student/competitions'
     | '/student/dashboard'
+    | '/student/profile'
     | '/student/reports'
     | '/student/targets'
     | '/admin/'
@@ -297,20 +537,40 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdmissionRoute: typeof AdmissionRoute
   McpRoute: typeof McpRoute
   StudentLoginRoute: typeof StudentLoginRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminAcademicRoute: typeof AdminAcademicRoute
   AdminAdmissionsRoute: typeof AdminAdmissionsRoute
+  AdminAnnouncementsRoute: typeof AdminAnnouncementsRoute
+  AdminAttendanceRoute: typeof AdminAttendanceRoute
+  AdminAuditRoute: typeof AdminAuditRoute
   AdminClassAssignmentsRoute: typeof AdminClassAssignmentsRoute
+  AdminClassesRoute: typeof AdminClassesRoute
+  AdminCompetitionsRoute: typeof AdminCompetitionsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminParticipantsRoute: typeof AdminParticipantsRoute
   AdminReportsRoute: typeof AdminReportsRoute
+  AdminStaffRoute: typeof AdminStaffRoute
+  AdminStudentsRoute: typeof AdminStudentsRoute
+  AdminSystemRoute: typeof AdminSystemRoute
   AdminTargetTemplatesRoute: typeof AdminTargetTemplatesRoute
   AdminTargetsRoute: typeof AdminTargetsRoute
+  AdminUsersRoute: typeof AdminUsersRoute
+  AdminWebsiteRoute: typeof AdminWebsiteRoute
+  StaffAnnouncementsRoute: typeof StaffAnnouncementsRoute
+  StaffAttendanceRoute: typeof StaffAttendanceRoute
   StaffCheckRequestsRoute: typeof StaffCheckRequestsRoute
+  StaffClassesRoute: typeof StaffClassesRoute
+  StaffCompetitionsRoute: typeof StaffCompetitionsRoute
   StaffDashboardRoute: typeof StaffDashboardRoute
+  StudentAnnouncementsRoute: typeof StudentAnnouncementsRoute
+  StudentAttendanceRoute: typeof StudentAttendanceRoute
+  StudentCompetitionsRoute: typeof StudentCompetitionsRoute
   StudentDashboardRoute: typeof StudentDashboardRoute
+  StudentProfileRoute: typeof StudentProfileRoute
   StudentReportsRoute: typeof StudentReportsRoute
   StudentTargetsRoute: typeof StudentTargetsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -334,6 +594,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admission': {
+      id: '/admission'
+      path: '/admission'
+      fullPath: '/admission'
+      preLoaderRoute: typeof AdmissionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -371,11 +638,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudentReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/student/profile': {
+      id: '/student/profile'
+      path: '/student/profile'
+      fullPath: '/student/profile'
+      preLoaderRoute: typeof StudentProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/student/dashboard': {
       id: '/student/dashboard'
       path: '/student/dashboard'
       fullPath: '/student/dashboard'
       preLoaderRoute: typeof StudentDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student/competitions': {
+      id: '/student/competitions'
+      path: '/student/competitions'
+      fullPath: '/student/competitions'
+      preLoaderRoute: typeof StudentCompetitionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student/attendance': {
+      id: '/student/attendance'
+      path: '/student/attendance'
+      fullPath: '/student/attendance'
+      preLoaderRoute: typeof StudentAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/student/announcements': {
+      id: '/student/announcements'
+      path: '/student/announcements'
+      fullPath: '/student/announcements'
+      preLoaderRoute: typeof StudentAnnouncementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/staff/dashboard': {
@@ -385,11 +680,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StaffDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/staff/competitions': {
+      id: '/staff/competitions'
+      path: '/staff/competitions'
+      fullPath: '/staff/competitions'
+      preLoaderRoute: typeof StaffCompetitionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/classes': {
+      id: '/staff/classes'
+      path: '/staff/classes'
+      fullPath: '/staff/classes'
+      preLoaderRoute: typeof StaffClassesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/staff/check-requests': {
       id: '/staff/check-requests'
       path: '/staff/check-requests'
       fullPath: '/staff/check-requests'
       preLoaderRoute: typeof StaffCheckRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/attendance': {
+      id: '/staff/attendance'
+      path: '/staff/attendance'
+      fullPath: '/staff/attendance'
+      preLoaderRoute: typeof StaffAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/staff/announcements': {
+      id: '/staff/announcements'
+      path: '/staff/announcements'
+      fullPath: '/staff/announcements'
+      preLoaderRoute: typeof StaffAnnouncementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/website': {
+      id: '/admin/website'
+      path: '/admin/website'
+      fullPath: '/admin/website'
+      preLoaderRoute: typeof AdminWebsiteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/users': {
+      id: '/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/targets': {
@@ -406,11 +743,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTargetTemplatesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/system': {
+      id: '/admin/system'
+      path: '/admin/system'
+      fullPath: '/admin/system'
+      preLoaderRoute: typeof AdminSystemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/students': {
+      id: '/admin/students'
+      path: '/admin/students'
+      fullPath: '/admin/students'
+      preLoaderRoute: typeof AdminStudentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/staff': {
+      id: '/admin/staff'
+      path: '/admin/staff'
+      fullPath: '/admin/staff'
+      preLoaderRoute: typeof AdminStaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/reports': {
       id: '/admin/reports'
       path: '/admin/reports'
       fullPath: '/admin/reports'
       preLoaderRoute: typeof AdminReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/participants': {
+      id: '/admin/participants'
+      path: '/admin/participants'
+      fullPath: '/admin/participants'
+      preLoaderRoute: typeof AdminParticipantsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/dashboard': {
@@ -420,11 +785,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/competitions': {
+      id: '/admin/competitions'
+      path: '/admin/competitions'
+      fullPath: '/admin/competitions'
+      preLoaderRoute: typeof AdminCompetitionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/classes': {
+      id: '/admin/classes'
+      path: '/admin/classes'
+      fullPath: '/admin/classes'
+      preLoaderRoute: typeof AdminClassesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/class-assignments': {
       id: '/admin/class-assignments'
       path: '/admin/class-assignments'
       fullPath: '/admin/class-assignments'
       preLoaderRoute: typeof AdminClassAssignmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/audit': {
+      id: '/admin/audit'
+      path: '/admin/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof AdminAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/attendance': {
+      id: '/admin/attendance'
+      path: '/admin/attendance'
+      fullPath: '/admin/attendance'
+      preLoaderRoute: typeof AdminAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/announcements': {
+      id: '/admin/announcements'
+      path: '/admin/announcements'
+      fullPath: '/admin/announcements'
+      preLoaderRoute: typeof AdminAnnouncementsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/admissions': {
@@ -481,6 +881,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdmissionRoute: AdmissionRoute,
   McpRoute: McpRoute,
   StudentLoginRoute: StudentLoginRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
@@ -488,14 +889,33 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminAcademicRoute: AdminAcademicRoute,
   AdminAdmissionsRoute: AdminAdmissionsRoute,
+  AdminAnnouncementsRoute: AdminAnnouncementsRoute,
+  AdminAttendanceRoute: AdminAttendanceRoute,
+  AdminAuditRoute: AdminAuditRoute,
   AdminClassAssignmentsRoute: AdminClassAssignmentsRoute,
+  AdminClassesRoute: AdminClassesRoute,
+  AdminCompetitionsRoute: AdminCompetitionsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminParticipantsRoute: AdminParticipantsRoute,
   AdminReportsRoute: AdminReportsRoute,
+  AdminStaffRoute: AdminStaffRoute,
+  AdminStudentsRoute: AdminStudentsRoute,
+  AdminSystemRoute: AdminSystemRoute,
   AdminTargetTemplatesRoute: AdminTargetTemplatesRoute,
   AdminTargetsRoute: AdminTargetsRoute,
+  AdminUsersRoute: AdminUsersRoute,
+  AdminWebsiteRoute: AdminWebsiteRoute,
+  StaffAnnouncementsRoute: StaffAnnouncementsRoute,
+  StaffAttendanceRoute: StaffAttendanceRoute,
   StaffCheckRequestsRoute: StaffCheckRequestsRoute,
+  StaffClassesRoute: StaffClassesRoute,
+  StaffCompetitionsRoute: StaffCompetitionsRoute,
   StaffDashboardRoute: StaffDashboardRoute,
+  StudentAnnouncementsRoute: StudentAnnouncementsRoute,
+  StudentAttendanceRoute: StudentAttendanceRoute,
+  StudentCompetitionsRoute: StudentCompetitionsRoute,
   StudentDashboardRoute: StudentDashboardRoute,
+  StudentProfileRoute: StudentProfileRoute,
   StudentReportsRoute: StudentReportsRoute,
   StudentTargetsRoute: StudentTargetsRoute,
   AdminIndexRoute: AdminIndexRoute,
