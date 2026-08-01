@@ -25,6 +25,7 @@ import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminClassAssignmentsRouteImport } from './routes/admin.class-assignments'
+import { Route as AdminAttendanceRouteImport } from './routes/admin.attendance'
 import { Route as AdminAdmissionsRouteImport } from './routes/admin.admissions'
 import { Route as AdminAcademicRouteImport } from './routes/admin.academic'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -113,6 +114,11 @@ const AdminClassAssignmentsRoute = AdminClassAssignmentsRouteImport.update({
   path: '/admin/class-assignments',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAttendanceRoute = AdminAttendanceRouteImport.update({
+  id: '/admin/attendance',
+  path: '/admin/attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAdmissionsRoute = AdminAdmissionsRouteImport.update({
   id: '/admin/admissions',
   path: '/admin/admissions',
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/academic': typeof AdminAcademicRoute
   '/admin/admissions': typeof AdminAdmissionsRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/reports': typeof AdminReportsRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/academic': typeof AdminAcademicRoute
   '/admin/admissions': typeof AdminAdmissionsRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/reports': typeof AdminReportsRoute
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin/academic': typeof AdminAcademicRoute
   '/admin/admissions': typeof AdminAdmissionsRoute
+  '/admin/attendance': typeof AdminAttendanceRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/reports': typeof AdminReportsRoute
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/academic'
     | '/admin/admissions'
+    | '/admin/attendance'
     | '/admin/class-assignments'
     | '/admin/dashboard'
     | '/admin/reports'
@@ -264,6 +274,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/academic'
     | '/admin/admissions'
+    | '/admin/attendance'
     | '/admin/class-assignments'
     | '/admin/dashboard'
     | '/admin/reports'
@@ -289,6 +300,7 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/admin/academic'
     | '/admin/admissions'
+    | '/admin/attendance'
     | '/admin/class-assignments'
     | '/admin/dashboard'
     | '/admin/reports'
@@ -315,6 +327,7 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AdminAcademicRoute: typeof AdminAcademicRoute
   AdminAdmissionsRoute: typeof AdminAdmissionsRoute
+  AdminAttendanceRoute: typeof AdminAttendanceRoute
   AdminClassAssignmentsRoute: typeof AdminClassAssignmentsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminReportsRoute: typeof AdminReportsRoute
@@ -447,6 +460,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminClassAssignmentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/attendance': {
+      id: '/admin/attendance'
+      path: '/admin/attendance'
+      fullPath: '/admin/attendance'
+      preLoaderRoute: typeof AdminAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/admissions': {
       id: '/admin/admissions'
       path: '/admin/admissions'
@@ -508,6 +528,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AdminAcademicRoute: AdminAcademicRoute,
   AdminAdmissionsRoute: AdminAdmissionsRoute,
+  AdminAttendanceRoute: AdminAttendanceRoute,
   AdminClassAssignmentsRoute: AdminClassAssignmentsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminReportsRoute: AdminReportsRoute,
