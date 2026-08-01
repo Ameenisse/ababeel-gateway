@@ -21,6 +21,7 @@ import { Route as StaffDashboardRouteImport } from './routes/staff.dashboard'
 import { Route as StaffCheckRequestsRouteImport } from './routes/staff.check-requests'
 import { Route as AdminTargetsRouteImport } from './routes/admin.targets'
 import { Route as AdminTargetTemplatesRouteImport } from './routes/admin.target-templates'
+import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminClassAssignmentsRouteImport } from './routes/admin.class-assignments'
@@ -92,6 +93,11 @@ const AdminTargetTemplatesRoute = AdminTargetTemplatesRouteImport.update({
   path: '/admin/target-templates',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminStudentsRoute = AdminStudentsRouteImport.update({
+  id: '/admin/students',
+  path: '/admin/students',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminReportsRoute = AdminReportsRouteImport.update({
   id: '/admin/reports',
   path: '/admin/reports',
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/reports': typeof AdminReportsRoute
+  '/admin/students': typeof AdminStudentsRoute
   '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/reports': typeof AdminReportsRoute
+  '/admin/students': typeof AdminStudentsRoute
   '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/reports': typeof AdminReportsRoute
+  '/admin/students': typeof AdminStudentsRoute
   '/admin/target-templates': typeof AdminTargetTemplatesRoute
   '/admin/targets': typeof AdminTargetsRoute
   '/staff/check-requests': typeof StaffCheckRequestsRoute
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/admin/class-assignments'
     | '/admin/dashboard'
     | '/admin/reports'
+    | '/admin/students'
     | '/admin/target-templates'
     | '/admin/targets'
     | '/staff/check-requests'
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/admin/class-assignments'
     | '/admin/dashboard'
     | '/admin/reports'
+    | '/admin/students'
     | '/admin/target-templates'
     | '/admin/targets'
     | '/staff/check-requests'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/admin/class-assignments'
     | '/admin/dashboard'
     | '/admin/reports'
+    | '/admin/students'
     | '/admin/target-templates'
     | '/admin/targets'
     | '/staff/check-requests'
@@ -306,6 +318,7 @@ export interface RootRouteChildren {
   AdminClassAssignmentsRoute: typeof AdminClassAssignmentsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminReportsRoute: typeof AdminReportsRoute
+  AdminStudentsRoute: typeof AdminStudentsRoute
   AdminTargetTemplatesRoute: typeof AdminTargetTemplatesRoute
   AdminTargetsRoute: typeof AdminTargetsRoute
   StaffCheckRequestsRoute: typeof StaffCheckRequestsRoute
@@ -406,6 +419,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminTargetTemplatesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/students': {
+      id: '/admin/students'
+      path: '/admin/students'
+      fullPath: '/admin/students'
+      preLoaderRoute: typeof AdminStudentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/reports': {
       id: '/admin/reports'
       path: '/admin/reports'
@@ -491,6 +511,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminClassAssignmentsRoute: AdminClassAssignmentsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminReportsRoute: AdminReportsRoute,
+  AdminStudentsRoute: AdminStudentsRoute,
   AdminTargetTemplatesRoute: AdminTargetTemplatesRoute,
   AdminTargetsRoute: AdminTargetsRoute,
   StaffCheckRequestsRoute: StaffCheckRequestsRoute,
