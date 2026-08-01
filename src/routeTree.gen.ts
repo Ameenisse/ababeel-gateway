@@ -36,6 +36,7 @@ import { Route as AdminSystemRouteImport } from './routes/admin.system'
 import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminStaffRouteImport } from './routes/admin.staff'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
+import { Route as AdminParticipantsRouteImport } from './routes/admin.participants'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminCompetitionsRouteImport } from './routes/admin.competitions'
 import { Route as AdminClassesRouteImport } from './routes/admin.classes'
@@ -186,6 +187,11 @@ const AdminReportsRoute = AdminReportsRouteImport.update({
   path: '/admin/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminParticipantsRoute = AdminParticipantsRouteImport.update({
+  id: '/admin/participants',
+  path: '/admin/participants',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminDashboardRoute = AdminDashboardRouteImport.update({
   id: '/admin/dashboard',
   path: '/admin/dashboard',
@@ -277,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/admin/classes': typeof AdminClassesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/participants': typeof AdminParticipantsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/students': typeof AdminStudentsRoute
@@ -320,6 +327,7 @@ export interface FileRoutesByTo {
   '/admin/classes': typeof AdminClassesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/participants': typeof AdminParticipantsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/students': typeof AdminStudentsRoute
@@ -364,6 +372,7 @@ export interface FileRoutesById {
   '/admin/classes': typeof AdminClassesRoute
   '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
+  '/admin/participants': typeof AdminParticipantsRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/students': typeof AdminStudentsRoute
@@ -409,6 +418,7 @@ export interface FileRouteTypes {
     | '/admin/classes'
     | '/admin/competitions'
     | '/admin/dashboard'
+    | '/admin/participants'
     | '/admin/reports'
     | '/admin/staff'
     | '/admin/students'
@@ -452,6 +462,7 @@ export interface FileRouteTypes {
     | '/admin/classes'
     | '/admin/competitions'
     | '/admin/dashboard'
+    | '/admin/participants'
     | '/admin/reports'
     | '/admin/staff'
     | '/admin/students'
@@ -495,6 +506,7 @@ export interface FileRouteTypes {
     | '/admin/classes'
     | '/admin/competitions'
     | '/admin/dashboard'
+    | '/admin/participants'
     | '/admin/reports'
     | '/admin/staff'
     | '/admin/students'
@@ -539,6 +551,7 @@ export interface RootRouteChildren {
   AdminClassesRoute: typeof AdminClassesRoute
   AdminCompetitionsRoute: typeof AdminCompetitionsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
+  AdminParticipantsRoute: typeof AdminParticipantsRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminStaffRoute: typeof AdminStaffRoute
   AdminStudentsRoute: typeof AdminStudentsRoute
@@ -758,6 +771,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminReportsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/participants': {
+      id: '/admin/participants'
+      path: '/admin/participants'
+      fullPath: '/admin/participants'
+      preLoaderRoute: typeof AdminParticipantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/dashboard': {
       id: '/admin/dashboard'
       path: '/admin/dashboard'
@@ -876,6 +896,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminClassesRoute: AdminClassesRoute,
   AdminCompetitionsRoute: AdminCompetitionsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
+  AdminParticipantsRoute: AdminParticipantsRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminStaffRoute: AdminStaffRoute,
   AdminStudentsRoute: AdminStudentsRoute,
