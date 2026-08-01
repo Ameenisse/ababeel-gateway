@@ -30,6 +30,7 @@ import { Route as AdminStudentsRouteImport } from './routes/admin.students'
 import { Route as AdminStaffRouteImport } from './routes/admin.staff'
 import { Route as AdminReportsRouteImport } from './routes/admin.reports'
 import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
+import { Route as AdminCompetitionsRouteImport } from './routes/admin.competitions'
 import { Route as AdminClassesRouteImport } from './routes/admin.classes'
 import { Route as AdminClassAssignmentsRouteImport } from './routes/admin.class-assignments'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
@@ -148,6 +149,11 @@ const AdminDashboardRoute = AdminDashboardRouteImport.update({
   path: '/admin/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCompetitionsRoute = AdminCompetitionsRouteImport.update({
+  id: '/admin/competitions',
+  path: '/admin/competitions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminClassesRoute = AdminClassesRouteImport.update({
   id: '/admin/classes',
   path: '/admin/classes',
@@ -227,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/classes': typeof AdminClassesRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/staff': typeof AdminStaffRoute
@@ -262,6 +269,7 @@ export interface FileRoutesByTo {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/classes': typeof AdminClassesRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/staff': typeof AdminStaffRoute
@@ -298,6 +306,7 @@ export interface FileRoutesById {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/class-assignments': typeof AdminClassAssignmentsRoute
   '/admin/classes': typeof AdminClassesRoute
+  '/admin/competitions': typeof AdminCompetitionsRoute
   '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/staff': typeof AdminStaffRoute
@@ -335,6 +344,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/class-assignments'
     | '/admin/classes'
+    | '/admin/competitions'
     | '/admin/dashboard'
     | '/admin/reports'
     | '/admin/staff'
@@ -370,6 +380,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/class-assignments'
     | '/admin/classes'
+    | '/admin/competitions'
     | '/admin/dashboard'
     | '/admin/reports'
     | '/admin/staff'
@@ -405,6 +416,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/class-assignments'
     | '/admin/classes'
+    | '/admin/competitions'
     | '/admin/dashboard'
     | '/admin/reports'
     | '/admin/staff'
@@ -441,6 +453,7 @@ export interface RootRouteChildren {
   AdminAuditRoute: typeof AdminAuditRoute
   AdminClassAssignmentsRoute: typeof AdminClassAssignmentsRoute
   AdminClassesRoute: typeof AdminClassesRoute
+  AdminCompetitionsRoute: typeof AdminCompetitionsRoute
   AdminDashboardRoute: typeof AdminDashboardRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminStaffRoute: typeof AdminStaffRoute
@@ -612,6 +625,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/competitions': {
+      id: '/admin/competitions'
+      path: '/admin/competitions'
+      fullPath: '/admin/competitions'
+      preLoaderRoute: typeof AdminCompetitionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/classes': {
       id: '/admin/classes'
       path: '/admin/classes'
@@ -714,6 +734,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAuditRoute: AdminAuditRoute,
   AdminClassAssignmentsRoute: AdminClassAssignmentsRoute,
   AdminClassesRoute: AdminClassesRoute,
+  AdminCompetitionsRoute: AdminCompetitionsRoute,
   AdminDashboardRoute: AdminDashboardRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminStaffRoute: AdminStaffRoute,
