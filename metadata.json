@@ -1,6 +1,6 @@
 {
   "name": "Ababeel Gateway",
-  "description": "Ababeel Quran Class target practice, teacher checking, and term progress report system",
+  "description": "Ababeel Quran Class academic tracking, targets, term reports, student fee dues, self-payment submissions, and admin approval workflows",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

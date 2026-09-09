@@ -79,16 +79,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Ababeel Quran Class — Learn, Recite, Grow" },
+      { title: "Ababeel Gateway — Quran Class & Student Services" },
       {
         name: "description",
         content:
-          "Ababeel Quran Class — admissions, competitions, and student services for our Quran learning community.",
+          "Ababeel Quran Class academic tracking, targets, term reports, student fee dues, self-payment submissions, and admin approval workflows.",
       },
-      { property: "og:title", content: "Ababeel Quran Class" },
+      { property: "og:title", content: "Ababeel Gateway" },
       {
         property: "og:description",
-        content: "Admissions, competitions, and student services for our Quran learning community.",
+        content:
+          "Ababeel Quran Class academic tracking, targets, term reports, student fee dues, self-payment submissions, and admin approval workflows.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -34,7 +34,9 @@ import {
   School,
   LogOut,
   Shield,
+  Receipt,
 } from "lucide-react";
+import { FeeDueDialog } from "@/components/fee-due-dialog";
 import { getMyRole } from "@/lib/auth.functions";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -58,6 +60,7 @@ const menus: Record<Role, { label: string; to: string; icon: React.ElementType }
     { label: "Competitions", to: "/admin/competitions", icon: Trophy },
     { label: "Participants", to: "/admin/participants", icon: ListChecks },
     { label: "Announcements", to: "/admin/announcements", icon: Megaphone },
+    { label: "Fee Management", to: "/admin/fees", icon: Receipt },
     { label: "Reports", to: "/admin/reports", icon: FileText },
     { label: "Website Settings", to: "/admin/website", icon: Settings },
     { label: "System Settings", to: "/admin/system", icon: Cog },
@@ -75,6 +78,7 @@ const menus: Record<Role, { label: string; to: string; icon: React.ElementType }
   student: [
     { label: "Dashboard", to: "/student/dashboard", icon: LayoutDashboard },
     { label: "My Profile", to: "/student/profile", icon: GraduationCap },
+    { label: "My Fees", to: "/student/fees", icon: Receipt },
     { label: "My Targets", to: "/student/targets", icon: ListChecks },
     { label: "My Reports", to: "/student/reports", icon: FileText },
     { label: "Attendance", to: "/student/attendance", icon: CalendarCheck },
@@ -215,6 +219,7 @@ export function RoleShell({
           <main className="flex-1 p-4 sm:p-6">{children}</main>
         </div>
       </div>
+      {role === "student" && <FeeDueDialog />}
     </SidebarProvider>
   );
 }
