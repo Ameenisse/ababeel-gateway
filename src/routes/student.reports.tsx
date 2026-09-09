@@ -9,11 +9,19 @@ import { ReportCardView, type ReportSnapshot } from "@/components/report-card-vi
 
 export const Route = createFileRoute("/student/reports")({
   ssr: false,
-  head: () => ({ meta: [{ title: "My Reports — Student" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [{ title: "My Reports — Student" }, { name: "robots", content: "noindex" }],
+  }),
   component: Page,
 });
 
-type Report = { id: string; term_id: string; published_at: string; snapshot: ReportSnapshot; academic_terms: { term_name: string } };
+type Report = {
+  id: string;
+  term_id: string;
+  published_at: string;
+  snapshot: ReportSnapshot;
+  academic_terms: { term_name: string };
+};
 
 function Page() {
   const [reports, setReports] = useState<Report[]>([]);
@@ -37,8 +45,13 @@ function Page() {
     return (
       <RoleShell role="student" title="Progress Report">
         <div className="mb-3 flex items-center justify-between no-print">
-          <Button variant="ghost" size="sm" onClick={() => setActive(null)}>← Back</Button>
-          <Button size="sm" onClick={() => window.print()}><Printer className="h-4 w-4 mr-1" />Print / Save PDF</Button>
+          <Button variant="ghost" size="sm" onClick={() => setActive(null)}>
+            ← Back
+          </Button>
+          <Button size="sm" onClick={() => window.print()}>
+            <Printer className="h-4 w-4 mr-1" />
+            Print / Save PDF
+          </Button>
         </div>
         <ReportCardView snap={active.snapshot} />
       </RoleShell>
@@ -49,7 +62,11 @@ function Page() {
     <RoleShell role="student" title="My Reports">
       <div className="grid gap-3 sm:grid-cols-2">
         {reports.map((r) => (
-          <Card key={r.id} className="cursor-pointer transition hover:shadow-md" onClick={() => setActive(r)}>
+          <Card
+            key={r.id}
+            className="cursor-pointer transition hover:shadow-md"
+            onClick={() => setActive(r)}
+          >
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <FileText className="h-4 w-4 text-primary" />
@@ -62,7 +79,11 @@ function Page() {
           </Card>
         ))}
         {reports.length === 0 && (
-          <Card className="sm:col-span-2"><CardContent className="p-6 text-sm text-muted-foreground">No published reports yet.</CardContent></Card>
+          <Card className="sm:col-span-2">
+            <CardContent className="p-6 text-sm text-muted-foreground">
+              No published reports yet.
+            </CardContent>
+          </Card>
         )}
       </div>
     </RoleShell>

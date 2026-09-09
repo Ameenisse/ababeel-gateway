@@ -5,10 +5,20 @@ import { errorResult, supabaseForUser, textResult, unauthenticated } from "../sh
 export default defineTool({
   name: "list_students",
   title: "List students",
-  description: "List students visible to the signed-in user (scoped by RLS). Supports search by name or student number and a result limit.",
+  description:
+    "List students visible to the signed-in user (scoped by RLS). Supports search by name or student number and a result limit.",
   inputSchema: {
-    search: z.string().describe("Optional case-insensitive name or student number match.").optional(),
-    limit: z.number().int().min(1).max(200).describe("Maximum number of rows to return (default 50).").optional(),
+    search: z
+      .string()
+      .describe("Optional case-insensitive name or student number match.")
+      .optional(),
+    limit: z
+      .number()
+      .int()
+      .min(1)
+      .max(200)
+      .describe("Maximum number of rows to return (default 50).")
+      .optional(),
   },
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async ({ search, limit }, ctx) => {
@@ -25,6 +35,9 @@ export default defineTool({
     }
     const { data, error } = await query;
     if (error) return errorResult(error.message);
-    return textResult(JSON.stringify(data ?? [], null, 2), { students: data ?? [], count: data?.length ?? 0 });
+    return textResult(JSON.stringify(data ?? [], null, 2), {
+      students: data ?? [],
+      count: data?.length ?? 0,
+    });
   },
 });

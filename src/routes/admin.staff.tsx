@@ -37,10 +37,7 @@ import { Plus, Pencil, Trash2 } from "lucide-react";
 export const Route = createFileRoute("/admin/staff")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "Staff — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "Staff — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: StaffPage,
 });
@@ -92,7 +89,10 @@ function StaffPage() {
   const classes = useQuery({
     queryKey: ["classes_lite"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("classes").select("id, class_name").order("class_name");
+      const { data, error } = await supabase
+        .from("classes")
+        .select("id, class_name")
+        .order("class_name");
       if (error) throw error;
       return (data ?? []) as ClassRow[];
     },

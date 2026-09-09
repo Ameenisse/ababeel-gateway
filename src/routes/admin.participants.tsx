@@ -147,10 +147,16 @@ function ParticipantsPage() {
               <TabsTrigger value="results">Results</TabsTrigger>
             </TabsList>
             <TabsContent value="approvals" className="mt-4">
-              <ApprovalsPanel competitionId={activeCompetitionId} categories={categories.data ?? []} />
+              <ApprovalsPanel
+                competitionId={activeCompetitionId}
+                categories={categories.data ?? []}
+              />
             </TabsContent>
             <TabsContent value="results" className="mt-4">
-              <ResultsPanel competitionId={activeCompetitionId} categories={categories.data ?? []} />
+              <ResultsPanel
+                competitionId={activeCompetitionId}
+                categories={categories.data ?? []}
+              />
             </TabsContent>
           </Tabs>
         )}
@@ -381,9 +387,9 @@ function ResultsPanel({
     return map;
   }, [results.data]);
 
-  const [editing, setEditing] = useState<null | Partial<ResultRow> & { participant: Participant }>(
-    null
-  );
+  const [editing, setEditing] = useState<
+    null | (Partial<ResultRow> & { participant: Participant })
+  >(null);
 
   const saveMut = useMutation({
     mutationFn: async (r: Partial<ResultRow> & { participant: Participant }) => {
@@ -435,8 +441,12 @@ function ResultsPanel({
                   <div className="flex flex-wrap items-center gap-2">
                     <Award className="h-4 w-4 text-primary" />
                     <span className="font-display text-base font-semibold">{p.full_name}</span>
-                    {r?.rank != null && <Badge className="bg-primary text-primary-foreground">Rank {r.rank}</Badge>}
-                    {r?.is_published && <Badge className="bg-success/15 text-success">Published</Badge>}
+                    {r?.rank != null && (
+                      <Badge className="bg-primary text-primary-foreground">Rank {r.rank}</Badge>
+                    )}
+                    {r?.is_published && (
+                      <Badge className="bg-success/15 text-success">Published</Badge>
+                    )}
                   </div>
                   <div className="mt-1 text-xs text-muted-foreground">
                     Score: {r?.score ?? "—"} · Grade: {r?.grade ?? "—"} · Certificate:{" "}
@@ -476,7 +486,10 @@ function ResultsPanel({
                     type="number"
                     value={editing.rank ?? ""}
                     onChange={(e) =>
-                      setEditing({ ...editing, rank: e.target.value ? Number(e.target.value) : null })
+                      setEditing({
+                        ...editing,
+                        rank: e.target.value ? Number(e.target.value) : null,
+                      })
                     }
                   />
                 </div>
@@ -486,7 +499,10 @@ function ResultsPanel({
                     type="number"
                     value={editing.score ?? ""}
                     onChange={(e) =>
-                      setEditing({ ...editing, score: e.target.value ? Number(e.target.value) : null })
+                      setEditing({
+                        ...editing,
+                        score: e.target.value ? Number(e.target.value) : null,
+                      })
                     }
                   />
                 </div>

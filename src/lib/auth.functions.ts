@@ -47,3 +47,56 @@ export const resolveStudentLogin = createServerFn({ method: "POST" })
     if (userErr || !userData.user?.email) return { email: null, reason: "not_found" as const };
     return { email: userData.user.email, reason: null };
   });
+
+/**
+ * Ensure default admin user (ababeel.mv@gmail.com) exists with password and admin role
+ */
+export const ensureAdminAccount = createServerFn({ method: "POST" })
+  .inputValidator((input: { email: string }) =>
+    z.object({ email: z.string().email() }).parse(input),
+  )
+  .handler(async ({ data }) => {
+    const targetEmail = data.email.trim().toLowerCase();
+    if (targetEmail === "ababeel.mv@gmail.com") {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      try {
+        const { data: usersData } = await supabaseAdmin.auth.admin.listUsers();
+        let user = usersData?.users?.find((u) => u.email?.toLowerCase() === targetEmail);
+
+        if (!user) {
+          const { data: created, error: createErr } = await supabaseAdmin.auth.admin.createUser({
+            email: targetEmail,
+            password: "Ababil2613",
+            email_confirm: true,
+            user_metadata: { full_name: "Admin" },
+          });
+          if (createErr) console.error("Error creating admin account:", createErr);
+          if (created?.user) user = created.user;
+        } else {
+          await supabaseAdmin.auth.admin.updateUserById(user.id, {
+            password: "Ababil2613",
+            email_confirm: true,
+          });
+        }
+
+        if (user) {
+          const { data: roleRow } = await supabaseAdmin
+            .from("user_roles")
+            .select("id")
+            .eq("user_id", user.id)
+            .eq("role", "admin")
+            .maybeSingle();
+
+          if (!roleRow) {
+            await supabaseAdmin.from("user_roles").insert({
+              user_id: user.id,
+              role: "admin",
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Failed in ensureAdminAccount:", e);
+      }
+    }
+    return { ok: true };
+  });

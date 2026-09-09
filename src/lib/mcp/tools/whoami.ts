@@ -4,7 +4,8 @@ import { errorResult, supabaseForUser, textResult, unauthenticated } from "../sh
 export default defineTool({
   name: "whoami",
   title: "Who am I",
-  description: "Returns the signed-in user's ID, email, role (admin/staff/student), and profile name.",
+  description:
+    "Returns the signed-in user's ID, email, role (admin/staff/student), and profile name.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async (_input, ctx) => {
@@ -17,7 +18,13 @@ export default defineTool({
       supabase.from("profiles").select("full_name").eq("user_id", userId).maybeSingle(),
     ]);
     const roleList = (roles ?? []).map((r) => r.role);
-    const primary = roleList.includes("admin") ? "admin" : roleList.includes("staff") ? "staff" : roleList.includes("student") ? "student" : null;
+    const primary = roleList.includes("admin")
+      ? "admin"
+      : roleList.includes("staff")
+        ? "staff"
+        : roleList.includes("student")
+          ? "student"
+          : null;
     const info = {
       userId,
       email: ctx.getUserEmail() ?? null,

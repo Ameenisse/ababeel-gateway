@@ -3,14 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { RoleShell } from "@/components/role-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Users,
-  GraduationCap,
-  ClipboardList,
-  Trophy,
-  Megaphone,
-  ListChecks,
-} from "lucide-react";
+import { Users, GraduationCap, ClipboardList, Trophy, Megaphone, ListChecks } from "lucide-react";
 
 export const Route = createFileRoute("/admin/dashboard")({
   ssr: false,
@@ -51,7 +44,9 @@ function StatCard({
           <Icon className="h-5 w-5" />
         </div>
         <div className="min-w-0">
-          <div className="truncate text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
+          <div className="truncate text-xs uppercase tracking-wider text-muted-foreground">
+            {label}
+          </div>
           <div className="font-display text-2xl font-bold">{value}</div>
         </div>
       </CardContent>
@@ -63,15 +58,31 @@ function AdminDashboard() {
   const stats = useQuery({
     queryKey: ["admin_dashboard_stats"],
     queryFn: async () => {
-      const [students, staff, pending, approved, comps, participants, announcements] = await Promise.all([
-        supabase.from("students").select("*", { count: "exact", head: true }),
-        supabase.from("staff").select("*", { count: "exact", head: true }),
-        supabase.from("admission_requests").select("*", { count: "exact", head: true }).eq("status", "pending"),
-        supabase.from("admission_requests").select("*", { count: "exact", head: true }).eq("status", "approved"),
-        supabase.from("competitions").select("*", { count: "exact", head: true }).in("status", ["published", "registration_open"]),
-        supabase.from("competition_participants").select("*", { count: "exact", head: true }).eq("approval_status", "pending"),
-        supabase.from("announcements").select("*", { count: "exact", head: true }).eq("status", "published"),
-      ]);
+      const [students, staff, pending, approved, comps, participants, announcements] =
+        await Promise.all([
+          supabase.from("students").select("*", { count: "exact", head: true }),
+          supabase.from("staff").select("*", { count: "exact", head: true }),
+          supabase
+            .from("admission_requests")
+            .select("*", { count: "exact", head: true })
+            .eq("status", "pending"),
+          supabase
+            .from("admission_requests")
+            .select("*", { count: "exact", head: true })
+            .eq("status", "approved"),
+          supabase
+            .from("competitions")
+            .select("*", { count: "exact", head: true })
+            .in("status", ["published", "registration_open"]),
+          supabase
+            .from("competition_participants")
+            .select("*", { count: "exact", head: true })
+            .eq("approval_status", "pending"),
+          supabase
+            .from("announcements")
+            .select("*", { count: "exact", head: true })
+            .eq("status", "published"),
+        ]);
       return {
         students: students.count ?? 0,
         staff: staff.count ?? 0,
@@ -89,13 +100,38 @@ function AdminDashboard() {
   return (
     <RoleShell role="admin" title="Admin Dashboard">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <StatCard label="Total Students" value={s?.students ?? "—"} icon={GraduationCap} tone="primary" />
+        <StatCard
+          label="Total Students"
+          value={s?.students ?? "—"}
+          icon={GraduationCap}
+          tone="primary"
+        />
         <StatCard label="Total Staff" value={s?.staff ?? "—"} icon={Users} tone="info" />
-        <StatCard label="Pending Admissions" value={s?.pending ?? "—"} icon={ClipboardList} tone="warning" />
-        <StatCard label="Approved Admissions" value={s?.approved ?? "—"} icon={GraduationCap} tone="success" />
+        <StatCard
+          label="Pending Admissions"
+          value={s?.pending ?? "—"}
+          icon={ClipboardList}
+          tone="warning"
+        />
+        <StatCard
+          label="Approved Admissions"
+          value={s?.approved ?? "—"}
+          icon={GraduationCap}
+          tone="success"
+        />
         <StatCard label="Active Competitions" value={s?.comps ?? "—"} icon={Trophy} tone="gold" />
-        <StatCard label="Pending Participants" value={s?.participants ?? "—"} icon={ListChecks} tone="warning" />
-        <StatCard label="Announcements" value={s?.announcements ?? "—"} icon={Megaphone} tone="primary" />
+        <StatCard
+          label="Pending Participants"
+          value={s?.participants ?? "—"}
+          icon={ListChecks}
+          tone="warning"
+        />
+        <StatCard
+          label="Announcements"
+          value={s?.announcements ?? "—"}
+          icon={Megaphone}
+          tone="primary"
+        />
       </div>
 
       <div className="mt-8 grid gap-4 lg:grid-cols-2">
@@ -105,9 +141,9 @@ function AdminDashboard() {
           </CardHeader>
           <CardContent className="text-sm text-muted-foreground">
             <p>
-              This is the foundation of your admin panel. Modules in the sidebar are stubbed and will
-              be built out in the next phases: admissions, students, users, competitions, attendance,
-              announcements, reports, and settings.
+              This is the foundation of your admin panel. Modules in the sidebar are stubbed and
+              will be built out in the next phases: admissions, students, users, competitions,
+              attendance, announcements, reports, and settings.
             </p>
             <p className="mt-3">
               To bootstrap: create the first admin auth user (Users tab in Cloud), then grant the{" "}

@@ -1,0 +1,6 @@
+{
+  "name": "Ababeel Gateway",
+  "description": "Ababeel Quran Class target practice, teacher checking, and term progress report system",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

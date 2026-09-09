@@ -43,10 +43,11 @@ export const approveAdmissionRequest = createServerFn({ method: "POST" })
     if (req.status === "rejected") throw new Error("Cannot approve a rejected request");
 
     // Generate credentials
-    const baseUsername = (req.full_name as string)
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "")
-      .slice(0, 12) || "student";
+    const baseUsername =
+      (req.full_name as string)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "")
+        .slice(0, 12) || "student";
     let username = baseUsername + Math.floor(1000 + Math.random() * 9000).toString();
     // Ensure uniqueness
     for (let i = 0; i < 5; i++) {
@@ -153,14 +154,19 @@ export const approveAdmissionRequest = createServerFn({ method: "POST" })
 /** Reject or waitlist an admission request (with optional admin note). */
 export const setAdmissionStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { requestId: string; status: "rejected" | "waitlisted" | "pending"; adminNote?: string }) =>
-    z
-      .object({
-        requestId: z.string().uuid(),
-        status: z.enum(["rejected", "waitlisted", "pending"]),
-        adminNote: z.string().max(2000).optional(),
-      })
-      .parse(input),
+  .inputValidator(
+    (input: {
+      requestId: string;
+      status: "rejected" | "waitlisted" | "pending";
+      adminNote?: string;
+    }) =>
+      z
+        .object({
+          requestId: z.string().uuid(),
+          status: z.enum(["rejected", "waitlisted", "pending"]),
+          adminNote: z.string().max(2000).optional(),
+        })
+        .parse(input),
   )
   .handler(async ({ data, context }) => {
     const { data: isAdmin } = await context.supabase.rpc("has_role", {

@@ -95,7 +95,10 @@ function RoleSidebar({ role }: { role: Role }) {
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: role === "student" ? "/student-login" : role === "staff" ? "/staff" : "/admin", replace: true });
+    navigate({
+      to: role === "student" ? "/student-login" : role === "staff" ? "/staff" : "/admin",
+      replace: true,
+    });
   }
 
   return (
@@ -162,7 +165,8 @@ export function RoleShell({
     (async () => {
       const { data: sess } = await supabase.auth.getSession();
       if (!sess.session) {
-        const loginPath = role === "student" ? "/student-login" : role === "staff" ? "/staff" : "/admin";
+        const loginPath =
+          role === "student" ? "/student-login" : role === "staff" ? "/staff" : "/admin";
         navigate({ to: loginPath, replace: true });
         return;
       }
@@ -170,7 +174,14 @@ export function RoleShell({
         const r = await getMyRole();
         if (r.role !== role && !(role === "staff" && r.role === "admin")) {
           toast.error("You don't have access to this area.");
-          const path = r.role === "admin" ? "/admin/dashboard" : r.role === "staff" ? "/staff/dashboard" : r.role === "student" ? "/student/dashboard" : "/";
+          const path =
+            r.role === "admin"
+              ? "/admin/dashboard"
+              : r.role === "staff"
+                ? "/staff/dashboard"
+                : r.role === "student"
+                  ? "/student/dashboard"
+                  : "/";
           navigate({ to: path, replace: true });
           return;
         }

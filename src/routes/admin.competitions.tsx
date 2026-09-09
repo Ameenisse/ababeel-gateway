@@ -30,10 +30,7 @@ import { Trophy, Plus, Pencil, Trash2, Layers } from "lucide-react";
 export const Route = createFileRoute("/admin/competitions")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "Competitions — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "Competitions — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: CompetitionsPage,
 });
@@ -171,7 +168,7 @@ function CompetitionsPage() {
 
   const selected = useMemo(
     () => (competitions.data ?? []).find((c) => c.id === selectedId) ?? null,
-    [competitions.data, selectedId]
+    [competitions.data, selectedId],
   );
 
   return (
@@ -372,7 +369,9 @@ function CompetitionsPage() {
                     <Input
                       type="date"
                       value={editing.display_start_date ?? ""}
-                      onChange={(e) => setEditing({ ...editing, display_start_date: e.target.value })}
+                      onChange={(e) =>
+                        setEditing({ ...editing, display_start_date: e.target.value })
+                      }
                     />
                   </div>
                   <div>
@@ -448,7 +447,9 @@ function CompetitionsPage() {
                     <Label className="text-sm">Public registration</Label>
                     <Switch
                       checked={editing.public_registration_enabled ?? false}
-                      onCheckedChange={(v) => setEditing({ ...editing, public_registration_enabled: v })}
+                      onCheckedChange={(v) =>
+                        setEditing({ ...editing, public_registration_enabled: v })
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between rounded-md border p-2">
@@ -553,7 +554,10 @@ function CategoriesPanel({ competition }: { competition: Competition }) {
         status: cat.status ?? "active",
       };
       if (cat.id) {
-        const { error } = await supabase.from("competition_categories").update(payload).eq("id", cat.id);
+        const { error } = await supabase
+          .from("competition_categories")
+          .update(payload)
+          .eq("id", cat.id);
         if (error) throw error;
       } else {
         const { error } = await supabase.from("competition_categories").insert(payload);

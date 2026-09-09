@@ -14,10 +14,7 @@ import { Plus, Trash2 } from "lucide-react";
 export const Route = createFileRoute("/admin/website")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "Website Settings — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "Website Settings — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: WebsiteSettingsPage,
 });
@@ -126,11 +123,17 @@ function WebsiteSettingsPage() {
             </div>
             <div>
               <Label>Theme</Label>
-              <Input value={form.theme ?? ""} onChange={(e) => setForm({ ...form, theme: e.target.value })} />
+              <Input
+                value={form.theme ?? ""}
+                onChange={(e) => setForm({ ...form, theme: e.target.value })}
+              />
             </div>
             <div>
               <Label>Logo URL</Label>
-              <Input value={form.logo_url ?? ""} onChange={(e) => setForm({ ...form, logo_url: e.target.value })} />
+              <Input
+                value={form.logo_url ?? ""}
+                onChange={(e) => setForm({ ...form, logo_url: e.target.value })}
+              />
             </div>
             <div>
               <Label>Favicon URL</Label>
@@ -149,7 +152,10 @@ function WebsiteSettingsPage() {
           <CardContent className="grid gap-3">
             <div>
               <Label>Hero title</Label>
-              <Input value={form.hero_title ?? ""} onChange={(e) => setForm({ ...form, hero_title: e.target.value })} />
+              <Input
+                value={form.hero_title ?? ""}
+                onChange={(e) => setForm({ ...form, hero_title: e.target.value })}
+              />
             </div>
             <div>
               <Label>Hero description</Label>
@@ -199,7 +205,11 @@ function WebsiteSettingsPage() {
             </div>
             <div className="sm:col-span-2">
               <Label>Address</Label>
-              <Textarea rows={2} value={form.address ?? ""} onChange={(e) => setForm({ ...form, address: e.target.value })} />
+              <Textarea
+                rows={2}
+                value={form.address ?? ""}
+                onChange={(e) => setForm({ ...form, address: e.target.value })}
+              />
             </div>
             <div>
               <Label>Facebook URL</Label>
@@ -252,12 +262,17 @@ function WebsiteSettingsPage() {
             ) : (
               <div className="grid gap-2 sm:grid-cols-2">
                 {images.map((url, i) => (
-                  <div key={`${url}-${i}`} className="flex items-center gap-2 rounded-md border border-border/60 p-2">
+                  <div
+                    key={`${url}-${i}`}
+                    className="flex items-center gap-2 rounded-md border border-border/60 p-2"
+                  >
                     <span className="min-w-0 flex-1 truncate text-xs">{url}</span>
                     <Button
                       size="sm"
                       variant="ghost"
-                      onClick={() => setForm({ ...form, landing_images: images.filter((_, idx) => idx !== i) })}
+                      onClick={() =>
+                        setForm({ ...form, landing_images: images.filter((_, idx) => idx !== i) })
+                      }
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

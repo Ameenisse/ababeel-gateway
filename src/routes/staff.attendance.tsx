@@ -6,13 +6,21 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import { Save } from "lucide-react";
 
 export const Route = createFileRoute("/staff/attendance")({
   ssr: false,
-  head: () => ({ meta: [{ title: "Attendance — Staff" }, { name: "robots", content: "noindex,nofollow" }] }),
+  head: () => ({
+    meta: [{ title: "Attendance — Staff" }, { name: "robots", content: "noindex,nofollow" }],
+  }),
   component: Page,
 });
 
@@ -68,7 +76,11 @@ function Page() {
     const sMap: Record<string, Status> = {};
     const nMap: Record<string, string> = {};
     for (const s of list) sMap[s.id] = "present";
-    for (const e of (existing ?? []) as { student_id: string; status: string; notes: string | null }[]) {
+    for (const e of (existing ?? []) as {
+      student_id: string;
+      status: string;
+      notes: string | null;
+    }[]) {
       sMap[e.student_id] = e.status as Status;
       if (e.notes) nMap[e.student_id] = e.notes;
     }
@@ -76,7 +88,9 @@ function Page() {
     setNotesMap(nMap);
   }, [classId, date]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    load();
+  }, [load]);
 
   async function submit() {
     if (!classId || !date) return;
@@ -92,7 +106,9 @@ function Page() {
         notes: notesMap[s.id] ?? null,
         recorded_by: uid,
       }));
-      const { error } = await supabase.from("attendance").upsert(rows, { onConflict: "student_id,class_id,attendance_date" });
+      const { error } = await supabase
+        .from("attendance")
+        .upsert(rows, { onConflict: "student_id,class_id,attendance_date" });
       if (error) throw error;
       toast.success("Attendance saved");
     } catch (e: unknown) {
@@ -109,9 +125,15 @@ function Page() {
           <div className="flex-1">
             <label className="mb-1 block text-xs text-muted-foreground">Class</label>
             <Select value={classId} onValueChange={setClassId}>
-              <SelectTrigger><SelectValue placeholder="Select class" /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue placeholder="Select class" />
+              </SelectTrigger>
               <SelectContent>
-                {classes.map((c) => <SelectItem key={c.id} value={c.id}>{c.class_name} · {c.class_code}</SelectItem>)}
+                {classes.map((c) => (
+                  <SelectItem key={c.id} value={c.id}>
+                    {c.class_name} · {c.class_code}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -119,15 +141,23 @@ function Page() {
             <label className="mb-1 block text-xs text-muted-foreground">Date</label>
             <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           </div>
-          <Button onClick={submit} disabled={busy || !classId}><Save className="h-4 w-4 mr-1" />Save</Button>
+          <Button onClick={submit} disabled={busy || !classId}>
+            <Save className="h-4 w-4 mr-1" />
+            Save
+          </Button>
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader><CardTitle className="text-base">Students</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle className="text-base">Students</CardTitle>
+        </CardHeader>
         <CardContent className="space-y-2">
           {students.map((s) => (
-            <div key={s.id} className="flex flex-col gap-2 rounded-md border border-border/60 p-3 sm:flex-row sm:items-center">
+            <div
+              key={s.id}
+              className="flex flex-col gap-2 rounded-md border border-border/60 p-3 sm:flex-row sm:items-center"
+            >
               <div className="flex-1">
                 <div className="text-sm font-medium">{s.full_name}</div>
                 <div className="text-xs text-muted-foreground">{s.student_number}</div>
@@ -152,7 +182,11 @@ function Page() {
               />
             </div>
           ))}
-          {students.length === 0 && <div className="p-4 text-sm text-muted-foreground">Select a class to mark attendance.</div>}
+          {students.length === 0 && (
+            <div className="p-4 text-sm text-muted-foreground">
+              Select a class to mark attendance.
+            </div>
+          )}
         </CardContent>
       </Card>
     </RoleShell>

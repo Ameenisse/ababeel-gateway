@@ -9,7 +9,9 @@ import { Megaphone } from "lucide-react";
 
 export const Route = createFileRoute("/student/announcements")({
   ssr: false,
-  head: () => ({ meta: [{ title: "Announcements — Student" }, { name: "robots", content: "noindex,nofollow" }] }),
+  head: () => ({
+    meta: [{ title: "Announcements — Student" }, { name: "robots", content: "noindex,nofollow" }],
+  }),
   component: Page,
 });
 
@@ -48,34 +50,55 @@ function Page() {
     <RoleShell role="student" title="Announcements">
       <div className="space-y-2">
         {rows.map((a) => (
-          <Card key={a.id} className="cursor-pointer transition hover:shadow-md" onClick={() => setActive(a)}>
+          <Card
+            key={a.id}
+            className="cursor-pointer transition hover:shadow-md"
+            onClick={() => setActive(a)}
+          >
             <CardHeader>
               <CardTitle className="flex items-center justify-between text-base">
-                <span className="flex items-center gap-2"><Megaphone className="h-4 w-4 text-primary" />{a.title}</span>
-                <Badge variant={a.priority === "high" ? "destructive" : "secondary"}>{a.priority}</Badge>
+                <span className="flex items-center gap-2">
+                  <Megaphone className="h-4 w-4 text-primary" />
+                  {a.title}
+                </span>
+                <Badge variant={a.priority === "high" ? "destructive" : "secondary"}>
+                  {a.priority}
+                </Badge>
               </CardTitle>
             </CardHeader>
             {a.description && (
-              <CardContent className="line-clamp-2 text-sm text-muted-foreground">{a.description}</CardContent>
+              <CardContent className="line-clamp-2 text-sm text-muted-foreground">
+                {a.description}
+              </CardContent>
             )}
           </Card>
         ))}
         {rows.length === 0 && (
-          <Card><CardContent className="p-6 text-sm text-muted-foreground">No announcements right now.</CardContent></Card>
+          <Card>
+            <CardContent className="p-6 text-sm text-muted-foreground">
+              No announcements right now.
+            </CardContent>
+          </Card>
         )}
       </div>
 
       <Dialog open={!!active} onOpenChange={(o) => !o && setActive(null)}>
         <DialogContent>
-          <DialogHeader><DialogTitle>{active?.title}</DialogTitle></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>{active?.title}</DialogTitle>
+          </DialogHeader>
           <div className="space-y-2 text-sm">
             <div className="flex gap-2">
               <Badge variant="outline">{active?.audience}</Badge>
-              <Badge variant={active?.priority === "high" ? "destructive" : "secondary"}>{active?.priority}</Badge>
+              <Badge variant={active?.priority === "high" ? "destructive" : "secondary"}>
+                {active?.priority}
+              </Badge>
             </div>
             <p className="whitespace-pre-wrap text-muted-foreground">{active?.description}</p>
             {active?.publish_date && (
-              <div className="text-xs text-muted-foreground">Published {new Date(active.publish_date).toLocaleDateString()}</div>
+              <div className="text-xs text-muted-foreground">
+                Published {new Date(active.publish_date).toLocaleDateString()}
+              </div>
             )}
           </div>
         </DialogContent>

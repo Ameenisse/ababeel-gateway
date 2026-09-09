@@ -29,10 +29,7 @@ import { Megaphone, Plus, Pencil, Trash2 } from "lucide-react";
 export const Route = createFileRoute("/admin/announcements")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "Announcements — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "Announcements — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: AnnouncementsPage,
 });
@@ -80,7 +77,10 @@ function AnnouncementsPage() {
   const announcements = useQuery({
     queryKey: ["announcements", statusFilter],
     queryFn: async () => {
-      let q = supabase.from("announcements").select("*").order("publish_date", { ascending: false });
+      let q = supabase
+        .from("announcements")
+        .select("*")
+        .order("publish_date", { ascending: false });
       if (statusFilter !== "all") q = q.eq("status", statusFilter);
       const { data, error } = await q;
       if (error) throw error;
@@ -182,7 +182,9 @@ function AnnouncementsPage() {
                       {priorityBadge(a.priority)}
                     </div>
                     {a.description && (
-                      <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">{a.description}</p>
+                      <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                        {a.description}
+                      </p>
                     )}
                     <div className="mt-1 text-xs text-muted-foreground">
                       Audience: {a.audience}
@@ -263,7 +265,9 @@ function AnnouncementsPage() {
                     <Input
                       placeholder="e.g. class id/name"
                       value={editing.audience_reference ?? ""}
-                      onChange={(e) => setEditing({ ...editing, audience_reference: e.target.value })}
+                      onChange={(e) =>
+                        setEditing({ ...editing, audience_reference: e.target.value })
+                      }
                     />
                   </div>
                 </div>

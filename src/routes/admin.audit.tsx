@@ -15,21 +15,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Eye } from "lucide-react";
 
 export const Route = createFileRoute("/admin/audit")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "Audit Logs — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "Audit Logs — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: AuditLogsPage,
 });
@@ -100,7 +92,9 @@ function AuditLogsPage() {
             {query.isLoading ? (
               <div className="p-8 text-center text-sm text-muted-foreground">Loading…</div>
             ) : rows.length === 0 ? (
-              <div className="p-8 text-center text-sm text-muted-foreground">No audit logs found.</div>
+              <div className="p-8 text-center text-sm text-muted-foreground">
+                No audit logs found.
+              </div>
             ) : (
               <Table>
                 <TableHeader>
@@ -147,7 +141,12 @@ function AuditLogsPage() {
             Page {page + 1} of {totalPages} · {total} logs
           </span>
           <div className="flex gap-2">
-            <Button size="sm" variant="outline" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={page === 0}
+              onClick={() => setPage((p) => p - 1)}
+            >
               Previous
             </Button>
             <Button

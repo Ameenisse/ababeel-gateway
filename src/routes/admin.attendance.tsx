@@ -16,17 +16,21 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { toast } from "sonner";
 import { CalendarCheck, Save } from "lucide-react";
 
 export const Route = createFileRoute("/admin/attendance")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "Attendance — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "Attendance — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: AttendancePage,
 });
@@ -131,7 +135,9 @@ function MarkPanel() {
     },
   });
 
-  const [draft, setDraft] = useState<Record<string, { status: AttendanceStatus; notes: string }>>({});
+  const [draft, setDraft] = useState<Record<string, { status: AttendanceStatus; notes: string }>>(
+    {},
+  );
 
   const rows = useMemo(() => {
     const map: Record<string, { status: AttendanceStatus; notes: string }> = {};
@@ -142,10 +148,15 @@ function MarkPanel() {
   }, [existing.data]);
 
   function getValue(studentId: string) {
-    return draft[studentId] ?? rows[studentId] ?? { status: "present" as AttendanceStatus, notes: "" };
+    return (
+      draft[studentId] ?? rows[studentId] ?? { status: "present" as AttendanceStatus, notes: "" }
+    );
   }
 
-  function setValue(studentId: string, patch: Partial<{ status: AttendanceStatus; notes: string }>) {
+  function setValue(
+    studentId: string,
+    patch: Partial<{ status: AttendanceStatus; notes: string }>,
+  ) {
     setDraft((d) => ({ ...d, [studentId]: { ...getValue(studentId), ...patch } }));
   }
 
@@ -246,7 +257,9 @@ function MarkPanel() {
                       <TableCell>
                         <Select
                           value={v.status}
-                          onValueChange={(val) => setValue(s.id, { status: val as AttendanceStatus })}
+                          onValueChange={(val) =>
+                            setValue(s.id, { status: val as AttendanceStatus })
+                          }
                         >
                           <SelectTrigger className="w-36">
                             <SelectValue />
@@ -399,8 +412,8 @@ function SummaryPanel() {
                             pct >= 90
                               ? "bg-success/15 text-success"
                               : pct >= 75
-                              ? "bg-warning/15 text-warning"
-                              : "bg-destructive/15 text-destructive"
+                                ? "bg-warning/15 text-warning"
+                                : "bg-destructive/15 text-destructive"
                           }
                         >
                           {pct}%

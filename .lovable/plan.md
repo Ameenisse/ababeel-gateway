@@ -1,4 +1,3 @@
-
 # Simplified Targets & Report Card Module
 
 Rebuild the Targets + Report Card modules to match the uploaded artifacts exactly, and make the day-to-day flow as light as possible for admin, teacher, and student.
@@ -48,13 +47,16 @@ The current spec's weighted % / performance-level engine is heavier than the sam
 ## Screens (final set)
 
 **Student**
+
 - `student/my-targets` — grouped by term → category, each row: title (Dhivehi), status pill, "Request check" button (disabled while `in_review`), attempt history drawer.
 
 **Teacher**
+
 - `staff/check-requests` — inbox of `in_review` targets across their students, oldest first. One-tap Complete / Needs improvement + comment.
 - `staff/term-report/:studentId` — per student per term: auto-filled star grid (read-only from completed targets), 6 badge checkboxes, teacher comment field, parent feedback fields, submit.
 
 **Admin**
+
 - `admin/target-templates` — 6 class-level templates × 2 terms. CRUD target items (Dhivehi title, category, order). This replaces the current "Targets" catalog UI.
 - `admin/reports` — list by class/term, buttons: Generate PDF, Publish, Unpublish. No return-for-correction step.
 

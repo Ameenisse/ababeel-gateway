@@ -98,16 +98,25 @@ function Consent() {
           </div>
           <CardTitle className="font-display text-2xl">Connect {clientName}</CardTitle>
           <CardDescription>
-            This lets {clientName} use Ababeel Quran Class as you. It does not bypass this app&apos;s
-            permissions — role-based access still applies.
+            This lets {clientName} use Ababeel Quran Class as you. It does not bypass this
+            app&apos;s permissions — role-based access still applies.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+          {error && (
+            <p role="alert" className="text-sm text-destructive">
+              {error}
+            </p>
+          )}
           <Button className="w-full" disabled={busy} onClick={() => decide(true)}>
             {busy ? "Working…" : "Approve"}
           </Button>
-          <Button variant="outline" className="w-full" disabled={busy} onClick={() => decide(false)}>
+          <Button
+            variant="outline"
+            className="w-full"
+            disabled={busy}
+            onClick={() => decide(false)}
+          >
             Cancel connection
           </Button>
         </CardContent>

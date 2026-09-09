@@ -28,6 +28,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { AdminProgressMonitor } from "@/components/admin-progress-monitor";
 
 export const Route = createFileRoute("/admin/targets")({
   ssr: false,
@@ -78,10 +79,14 @@ function TargetsPage() {
     <RoleShell role="admin" title="Targets & Badges">
       <Tabs defaultValue="categories" className="w-full">
         <TabsList>
+          <TabsTrigger value="monitoring">Progress Monitor</TabsTrigger>
           <TabsTrigger value="categories">Categories</TabsTrigger>
           <TabsTrigger value="targets">Targets</TabsTrigger>
           <TabsTrigger value="badges">Badges</TabsTrigger>
         </TabsList>
+        <TabsContent value="monitoring" className="mt-4">
+          <AdminProgressMonitor />
+        </TabsContent>
         <TabsContent value="categories" className="mt-4">
           <CategoriesTab />
         </TabsContent>
@@ -175,10 +180,15 @@ function CategoriesTab() {
         <div>
           <CardTitle className="font-display">Target Categories</CardTitle>
           <div className="mt-1 text-xs text-muted-foreground">
-            Active weight total: <span className={totalWeight === 100 ? "text-success" : "text-warning-foreground"}>{totalWeight.toFixed(1)}%</span>
+            Active weight total:{" "}
+            <span className={totalWeight === 100 ? "text-success" : "text-warning-foreground"}>
+              {totalWeight.toFixed(1)}%
+            </span>
           </div>
         </div>
-        <Button onClick={startNew}><Plus className="mr-1 h-4 w-4" /> New</Button>
+        <Button onClick={startNew}>
+          <Plus className="mr-1 h-4 w-4" /> New
+        </Button>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -197,34 +207,57 @@ function CategoriesTab() {
                 <tr key={c.id} className="border-t border-border/60">
                   <td className="py-2">
                     <div className="flex items-center gap-2">
-                      <span className="inline-block h-3 w-3 rounded-full" style={{ background: c.color ?? "#94a3b8" }} />
+                      <span
+                        className="inline-block h-3 w-3 rounded-full"
+                        style={{ background: c.color ?? "#94a3b8" }}
+                      />
                       <span className="font-medium">{c.name}</span>
                     </div>
-                    {c.description && <div className="text-xs text-muted-foreground">{c.description}</div>}
+                    {c.description && (
+                      <div className="text-xs text-muted-foreground">{c.description}</div>
+                    )}
                   </td>
                   <td>{Number(c.weight_percent).toFixed(1)}%</td>
                   <td>{c.sort_order}</td>
                   <td>
                     {c.is_active ? (
-                      <Badge variant="secondary" className="bg-success/15 text-success">Active</Badge>
+                      <Badge variant="secondary" className="bg-success/15 text-success">
+                        Active
+                      </Badge>
                     ) : (
                       <Badge variant="secondary">Inactive</Badge>
                     )}
                   </td>
                   <td className="text-right">
-                    <Button variant="ghost" size="sm" onClick={() => { setEditing(c); setOpen(true); }}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setEditing(c);
+                        setOpen(true);
+                      }}
+                    >
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => {
-                      if (confirm(`Delete "${c.name}"? Targets in it must be removed first.`)) remove.mutate(c.id);
-                    }}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        if (confirm(`Delete "${c.name}"? Targets in it must be removed first.`))
+                          remove.mutate(c.id);
+                      }}
+                    >
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
                   </td>
                 </tr>
               ))}
               {items.length === 0 && (
-                <tr><td colSpan={5} className="py-6 text-center text-muted-foreground">No categories yet.</td></tr>
+                <tr>
+                  <td colSpan={5} className="py-6 text-center text-muted-foreground">
+                    No categories yet.
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
@@ -235,41 +268,73 @@ function CategoriesTab() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{editing?.id ? "Edit Category" : "New Category"}</DialogTitle>
-            <DialogDescription>Categories group targets and hold a weight used in performance calculations.</DialogDescription>
+            <DialogDescription>
+              Categories group targets and hold a weight used in performance calculations.
+            </DialogDescription>
           </DialogHeader>
           {editing && (
             <div className="grid gap-3">
               <div>
                 <Label>Name</Label>
-                <Input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} />
+                <Input
+                  value={editing.name}
+                  onChange={(e) => setEditing({ ...editing, name: e.target.value })}
+                />
               </div>
               <div>
                 <Label>Description</Label>
-                <Textarea rows={2} value={editing.description ?? ""} onChange={(e) => setEditing({ ...editing, description: e.target.value })} />
+                <Textarea
+                  rows={2}
+                  value={editing.description ?? ""}
+                  onChange={(e) => setEditing({ ...editing, description: e.target.value })}
+                />
               </div>
               <div className="grid grid-cols-3 gap-3">
                 <div>
                   <Label>Weight %</Label>
-                  <Input type="number" step="0.1" value={editing.weight_percent} onChange={(e) => setEditing({ ...editing, weight_percent: Number(e.target.value) })} />
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={editing.weight_percent}
+                    onChange={(e) =>
+                      setEditing({ ...editing, weight_percent: Number(e.target.value) })
+                    }
+                  />
                 </div>
                 <div>
                   <Label>Order</Label>
-                  <Input type="number" value={editing.sort_order} onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })} />
+                  <Input
+                    type="number"
+                    value={editing.sort_order}
+                    onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })}
+                  />
                 </div>
                 <div>
                   <Label>Color</Label>
-                  <Input type="color" value={editing.color ?? "#3b82f6"} onChange={(e) => setEditing({ ...editing, color: e.target.value })} />
+                  <Input
+                    type="color"
+                    value={editing.color ?? "#3b82f6"}
+                    onChange={(e) => setEditing({ ...editing, color: e.target.value })}
+                  />
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Switch checked={editing.is_active} onCheckedChange={(v) => setEditing({ ...editing, is_active: v })} />
+                <Switch
+                  checked={editing.is_active}
+                  onCheckedChange={(v) => setEditing({ ...editing, is_active: v })}
+                />
                 <Label>Active</Label>
               </div>
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button disabled={!editing?.name || save.isPending} onClick={() => editing && save.mutate(editing)}>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              disabled={!editing?.name || save.isPending}
+              onClick={() => editing && save.mutate(editing)}
+            >
               {save.isPending ? "Saving…" : "Save"}
             </Button>
           </DialogFooter>
@@ -285,7 +350,10 @@ function TargetsTab() {
   const { data: categories = [] } = useQuery({
     queryKey: ["target_categories"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("target_categories").select("*").order("sort_order");
+      const { data, error } = await supabase
+        .from("target_categories")
+        .select("*")
+        .order("sort_order");
       if (error) throw error;
       return (data ?? []) as Category[];
     },
@@ -369,7 +437,9 @@ function TargetsTab() {
     <Card className="border-border/60">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="font-display">Targets</CardTitle>
-        <Button onClick={startNew}><Plus className="mr-1 h-4 w-4" /> New</Button>
+        <Button onClick={startNew}>
+          <Plus className="mr-1 h-4 w-4" /> New
+        </Button>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -393,28 +463,48 @@ function TargetsTab() {
                   <tr key={t.id} className="border-t border-border/60">
                     <td className="py-2">
                       <div className="font-medium">{t.title}</div>
-                      {t.description && <div className="text-xs text-muted-foreground">{t.description}</div>}
+                      {t.description && (
+                        <div className="text-xs text-muted-foreground">{t.description}</div>
+                      )}
                     </td>
                     <td>
                       {c ? (
                         <span className="inline-flex items-center gap-1">
-                          <span className="inline-block h-2 w-2 rounded-full" style={{ background: c.color ?? "#94a3b8" }} />
+                          <span
+                            className="inline-block h-2 w-2 rounded-full"
+                            style={{ background: c.color ?? "#94a3b8" }}
+                          />
                           {c.name}
                         </span>
-                      ) : "—"}
+                      ) : (
+                        "—"
+                      )}
                     </td>
                     <td className="font-mono text-xs">{t.code ?? "—"}</td>
                     <td>{t.unit ?? "—"}</td>
                     <td>{t.max_value ?? "—"}</td>
-                    <td><Badge variant="secondary">{t.term_scope}</Badge></td>
+                    <td>
+                      <Badge variant="secondary">{t.term_scope}</Badge>
+                    </td>
                     <td>{t.is_active ? "Yes" : "No"}</td>
                     <td className="text-right">
-                      <Button variant="ghost" size="sm" onClick={() => { setEditing(t); setOpen(true); }}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setEditing(t);
+                          setOpen(true);
+                        }}
+                      >
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => {
-                        if (confirm(`Delete "${t.title}"?`)) remove.mutate(t.id);
-                      }}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          if (confirm(`Delete "${t.title}"?`)) remove.mutate(t.id);
+                        }}
+                      >
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </td>
@@ -422,7 +512,11 @@ function TargetsTab() {
                 );
               })}
               {items.length === 0 && (
-                <tr><td colSpan={8} className="py-6 text-center text-muted-foreground">No targets yet.</td></tr>
+                <tr>
+                  <td colSpan={8} className="py-6 text-center text-muted-foreground">
+                    No targets yet.
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
@@ -438,45 +532,87 @@ function TargetsTab() {
             <div className="grid gap-3">
               <div>
                 <Label>Title</Label>
-                <Input value={editing.title} onChange={(e) => setEditing({ ...editing, title: e.target.value })} />
+                <Input
+                  value={editing.title}
+                  onChange={(e) => setEditing({ ...editing, title: e.target.value })}
+                />
               </div>
               <div>
                 <Label>Category</Label>
-                <Select value={editing.category_id} onValueChange={(v) => setEditing({ ...editing, category_id: v })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                <Select
+                  value={editing.category_id}
+                  onValueChange={(v) => setEditing({ ...editing, category_id: v })}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
                     {categories.map((c) => (
-                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
                 <Label>Description</Label>
-                <Textarea rows={2} value={editing.description ?? ""} onChange={(e) => setEditing({ ...editing, description: e.target.value })} />
+                <Textarea
+                  rows={2}
+                  value={editing.description ?? ""}
+                  onChange={(e) => setEditing({ ...editing, description: e.target.value })}
+                />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label>Code</Label>
-                  <Input value={editing.code ?? ""} onChange={(e) => setEditing({ ...editing, code: e.target.value })} />
+                  <Input
+                    value={editing.code ?? ""}
+                    onChange={(e) => setEditing({ ...editing, code: e.target.value })}
+                  />
                 </div>
                 <div>
                   <Label>Unit</Label>
-                  <Input placeholder="pages, verses, %…" value={editing.unit ?? ""} onChange={(e) => setEditing({ ...editing, unit: e.target.value })} />
+                  <Input
+                    placeholder="pages, verses, %…"
+                    value={editing.unit ?? ""}
+                    onChange={(e) => setEditing({ ...editing, unit: e.target.value })}
+                  />
                 </div>
                 <div>
                   <Label>Max value</Label>
-                  <Input type="number" step="0.01" value={editing.max_value ?? ""} onChange={(e) => setEditing({ ...editing, max_value: e.target.value === "" ? null : Number(e.target.value) })} />
+                  <Input
+                    type="number"
+                    step="0.01"
+                    value={editing.max_value ?? ""}
+                    onChange={(e) =>
+                      setEditing({
+                        ...editing,
+                        max_value: e.target.value === "" ? null : Number(e.target.value),
+                      })
+                    }
+                  />
                 </div>
                 <div>
                   <Label>Order</Label>
-                  <Input type="number" value={editing.sort_order} onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })} />
+                  <Input
+                    type="number"
+                    value={editing.sort_order}
+                    onChange={(e) => setEditing({ ...editing, sort_order: Number(e.target.value) })}
+                  />
                 </div>
               </div>
               <div>
                 <Label>Term scope</Label>
-                <Select value={editing.term_scope} onValueChange={(v) => setEditing({ ...editing, term_scope: v as Target["term_scope"] })}>
-                  <SelectTrigger><SelectValue /></SelectTrigger>
+                <Select
+                  value={editing.term_scope}
+                  onValueChange={(v) =>
+                    setEditing({ ...editing, term_scope: v as Target["term_scope"] })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="term1">Term 1 only</SelectItem>
                     <SelectItem value="term2">Term 2 only</SelectItem>
@@ -485,14 +621,22 @@ function TargetsTab() {
                 </Select>
               </div>
               <div className="flex items-center gap-2">
-                <Switch checked={editing.is_active} onCheckedChange={(v) => setEditing({ ...editing, is_active: v })} />
+                <Switch
+                  checked={editing.is_active}
+                  onCheckedChange={(v) => setEditing({ ...editing, is_active: v })}
+                />
                 <Label>Active</Label>
               </div>
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button disabled={!editing?.title || save.isPending} onClick={() => editing && save.mutate(editing)}>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              disabled={!editing?.title || save.isPending}
+              onClick={() => editing && save.mutate(editing)}
+            >
               {save.isPending ? "Saving…" : "Save"}
             </Button>
           </DialogFooter>
@@ -572,12 +716,17 @@ function BadgesTab() {
     <Card className="border-border/60">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="font-display">Badges</CardTitle>
-        <Button onClick={startNew}><Plus className="mr-1 h-4 w-4" /> New</Button>
+        <Button onClick={startNew}>
+          <Plus className="mr-1 h-4 w-4" /> New
+        </Button>
       </CardHeader>
       <CardContent>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((b) => (
-            <div key={b.id} className="flex items-start gap-3 rounded-xl border border-border/60 p-3">
+            <div
+              key={b.id}
+              className="flex items-start gap-3 rounded-xl border border-border/60 p-3"
+            >
               <div
                 className="grid h-12 w-12 shrink-0 place-items-center rounded-xl text-xl"
                 style={{ background: (b.color ?? "#f5b301") + "22", color: b.color ?? "#f5b301" }}
@@ -590,14 +739,29 @@ function BadgesTab() {
                   {!b.is_active && <Badge variant="secondary">Inactive</Badge>}
                 </div>
                 <div className="font-mono text-xs text-muted-foreground">{b.code}</div>
-                {b.description && <div className="mt-1 line-clamp-2 text-xs text-muted-foreground">{b.description}</div>}
+                {b.description && (
+                  <div className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                    {b.description}
+                  </div>
+                )}
                 <div className="mt-2 flex gap-1">
-                  <Button variant="ghost" size="sm" onClick={() => { setEditing(b); setOpen(true); }}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setEditing(b);
+                      setOpen(true);
+                    }}
+                  >
                     <Pencil className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => {
-                    if (confirm(`Delete "${b.name}"?`)) remove.mutate(b.id);
-                  }}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      if (confirm(`Delete "${b.name}"?`)) remove.mutate(b.id);
+                    }}
+                  >
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
                 </div>
@@ -605,7 +769,9 @@ function BadgesTab() {
             </div>
           ))}
           {items.length === 0 && (
-            <div className="col-span-full py-6 text-center text-sm text-muted-foreground">No badges yet.</div>
+            <div className="col-span-full py-6 text-center text-sm text-muted-foreground">
+              No badges yet.
+            </div>
           )}
         </div>
       </CardContent>
@@ -620,36 +786,61 @@ function BadgesTab() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label>Code</Label>
-                  <Input value={editing.code} onChange={(e) => setEditing({ ...editing, code: e.target.value })} />
+                  <Input
+                    value={editing.code}
+                    onChange={(e) => setEditing({ ...editing, code: e.target.value })}
+                  />
                 </div>
                 <div>
                   <Label>Name</Label>
-                  <Input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} />
+                  <Input
+                    value={editing.name}
+                    onChange={(e) => setEditing({ ...editing, name: e.target.value })}
+                  />
                 </div>
               </div>
               <div>
                 <Label>Description</Label>
-                <Textarea rows={2} value={editing.description ?? ""} onChange={(e) => setEditing({ ...editing, description: e.target.value })} />
+                <Textarea
+                  rows={2}
+                  value={editing.description ?? ""}
+                  onChange={(e) => setEditing({ ...editing, description: e.target.value })}
+                />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label>Icon (emoji)</Label>
-                  <Input value={editing.icon ?? ""} onChange={(e) => setEditing({ ...editing, icon: e.target.value })} />
+                  <Input
+                    value={editing.icon ?? ""}
+                    onChange={(e) => setEditing({ ...editing, icon: e.target.value })}
+                  />
                 </div>
                 <div>
                   <Label>Color</Label>
-                  <Input type="color" value={editing.color ?? "#f5b301"} onChange={(e) => setEditing({ ...editing, color: e.target.value })} />
+                  <Input
+                    type="color"
+                    value={editing.color ?? "#f5b301"}
+                    onChange={(e) => setEditing({ ...editing, color: e.target.value })}
+                  />
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Switch checked={editing.is_active} onCheckedChange={(v) => setEditing({ ...editing, is_active: v })} />
+                <Switch
+                  checked={editing.is_active}
+                  onCheckedChange={(v) => setEditing({ ...editing, is_active: v })}
+                />
                 <Label>Active</Label>
               </div>
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-            <Button disabled={!editing?.code || !editing?.name || save.isPending} onClick={() => editing && save.mutate(editing)}>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              disabled={!editing?.code || !editing?.name || save.isPending}
+              onClick={() => editing && save.mutate(editing)}
+            >
               {save.isPending ? "Saving…" : "Save"}
             </Button>
           </DialogFooter>

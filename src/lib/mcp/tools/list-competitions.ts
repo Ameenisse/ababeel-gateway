@@ -19,6 +19,9 @@ export default defineTool({
       .order("created_at", { ascending: false })
       .limit(limit ?? 20);
     if (error) return errorResult(error.message);
-    return textResult(JSON.stringify(data ?? [], null, 2), { competitions: data ?? [], count: data?.length ?? 0 });
+    return textResult(JSON.stringify(data ?? [], null, 2), {
+      competitions: data ?? [],
+      count: data?.length ?? 0,
+    });
   },
 });

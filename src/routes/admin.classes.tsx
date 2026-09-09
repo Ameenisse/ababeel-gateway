@@ -37,10 +37,7 @@ import { Plus, Pencil, Trash2 } from "lucide-react";
 export const Route = createFileRoute("/admin/classes")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "Classes — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "Classes — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: ClassesPage,
 });
@@ -79,7 +76,10 @@ function ClassesPage() {
   const staff = useQuery({
     queryKey: ["staff_lite"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("staff").select("id, full_name").order("full_name");
+      const { data, error } = await supabase
+        .from("staff")
+        .select("id, full_name")
+        .order("full_name");
       if (error) throw error;
       return (data ?? []) as Staff[];
     },
@@ -187,7 +187,9 @@ function ClassesPage() {
                         <TableCell className="font-mono text-xs">{c.class_code}</TableCell>
                         <TableCell className="font-medium">{c.class_name}</TableCell>
                         <TableCell>{c.class_level ?? "—"}</TableCell>
-                        <TableCell>{c.teacher_id ? staffMap.get(c.teacher_id) ?? "—" : "—"}</TableCell>
+                        <TableCell>
+                          {c.teacher_id ? (staffMap.get(c.teacher_id) ?? "—") : "—"}
+                        </TableCell>
                         <TableCell>{c.session ?? "—"}</TableCell>
                         <TableCell>
                           {countByClass.get(c.id) ?? 0}
@@ -212,7 +214,8 @@ function ClassesPage() {
                             size="sm"
                             variant="ghost"
                             onClick={() => {
-                              if (confirm(`Delete class "${c.class_name}"?`)) deleteMut.mutate(c.id);
+                              if (confirm(`Delete class "${c.class_name}"?`))
+                                deleteMut.mutate(c.id);
                             }}
                           >
                             <Trash2 className="h-4 w-4" />
@@ -283,7 +286,9 @@ function ClassesPage() {
                 <Label>Teacher</Label>
                 <Select
                   value={editing.teacher_id ?? "none"}
-                  onValueChange={(v) => setEditing({ ...editing, teacher_id: v === "none" ? null : v })}
+                  onValueChange={(v) =>
+                    setEditing({ ...editing, teacher_id: v === "none" ? null : v })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select teacher" />

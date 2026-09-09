@@ -19,6 +19,9 @@ export default defineTool({
       .order("display_order", { ascending: true, nullsFirst: false })
       .limit(limit ?? 100);
     if (error) return errorResult(error.message);
-    return textResult(JSON.stringify(data ?? [], null, 2), { classes: data ?? [], count: data?.length ?? 0 });
+    return textResult(JSON.stringify(data ?? [], null, 2), {
+      classes: data ?? [],
+      count: data?.length ?? 0,
+    });
   },
 });

@@ -103,7 +103,9 @@ export function LandingFooter({
             <div className="grid h-9 w-9 place-items-center rounded-full bg-primary text-primary-foreground">
               <BookOpen className="h-4 w-4" />
             </div>
-            <div className="font-display text-lg font-bold">{siteName ?? "Ababeel Quran Class"}</div>
+            <div className="font-display text-lg font-bold">
+              {siteName ?? "Ababeel Quran Class"}
+            </div>
           </div>
           <p className="mt-3 text-sm text-muted-foreground">
             Nurturing hearts through the light of the Qur'an.
@@ -120,10 +122,26 @@ export function LandingFooter({
         <div>
           <h4 className="font-semibold text-foreground">Quick Links</h4>
           <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
-            <li><a href="/#admission" className="hover:text-foreground">Admission</a></li>
-            <li><a href="/#competitions" className="hover:text-foreground">Competitions</a></li>
-            <li><a href="/#announcements" className="hover:text-foreground">Announcements</a></li>
-            <li><Link to="/student-login" className="hover:text-foreground">Student Login</Link></li>
+            <li>
+              <a href="/#admission" className="hover:text-foreground">
+                Admission
+              </a>
+            </li>
+            <li>
+              <a href="/#competitions" className="hover:text-foreground">
+                Competitions
+              </a>
+            </li>
+            <li>
+              <a href="/#announcements" className="hover:text-foreground">
+                Announcements
+              </a>
+            </li>
+            <li>
+              <Link to="/student-login" className="hover:text-foreground">
+                Student Login
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

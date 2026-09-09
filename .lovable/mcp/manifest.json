@@ -5,9 +5,7 @@
   "auth": {
     "type": "oauth",
     "issuer": "https://tyohxodzetsdmuztjlei.supabase.co/auth/v1",
-    "accepted_audiences": [
-      "authenticated"
-    ]
+    "accepted_audiences": ["authenticated"]
   },
   "mcp": {
     "server": {
@@ -79,9 +77,7 @@
               "description": "The student's UUID (students.id)."
             }
           },
-          "required": [
-            "student_id"
-          ]
+          "required": ["student_id"]
         },
         "outputSchema": null
       },
@@ -100,12 +96,7 @@
           "properties": {
             "status": {
               "type": "string",
-              "enum": [
-                "pending",
-                "approved",
-                "rejected",
-                "waitlisted"
-              ],
+              "enum": ["pending", "approved", "rejected", "waitlisted"],
               "description": "Optional status filter."
             },
             "limit": {
@@ -211,37 +202,21 @@
             },
             "audience": {
               "type": "string",
-              "enum": [
-                "public",
-                "staff",
-                "students",
-                "all"
-              ],
+              "enum": ["public", "staff", "students", "all"],
               "description": "Who should see this announcement (default 'all')."
             },
             "priority": {
               "type": "string",
-              "enum": [
-                "low",
-                "normal",
-                "high",
-                "urgent"
-              ],
+              "enum": ["low", "normal", "high", "urgent"],
               "description": "Priority label (default 'normal')."
             },
             "status": {
               "type": "string",
-              "enum": [
-                "draft",
-                "published",
-                "archived"
-              ],
+              "enum": ["draft", "published", "archived"],
               "description": "Publish status (default 'published')."
             }
           },
-          "required": [
-            "title"
-          ]
+          "required": ["title"]
         },
         "outputSchema": null
       }

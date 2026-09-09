@@ -29,10 +29,7 @@ import { Search } from "lucide-react";
 export const Route = createFileRoute("/admin/users")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "Users & Roles — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "Users & Roles — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: UsersPage,
 });
@@ -88,7 +85,7 @@ function UsersPage() {
     const q = search.trim().toLowerCase();
     if (!q) return profiles.data ?? [];
     return (profiles.data ?? []).filter(
-      (p) => p.full_name.toLowerCase().includes(q) || (p.phone ?? "").toLowerCase().includes(q)
+      (p) => p.full_name.toLowerCase().includes(q) || (p.phone ?? "").toLowerCase().includes(q),
     );
   }, [profiles.data, search]);
 
@@ -114,7 +111,10 @@ function UsersPage() {
 
   const toggleStatusMut = useMutation({
     mutationFn: async ({ id, status }: { id: string; status: string }) => {
-      const { error } = await supabase.from("profiles").update({ account_status: status }).eq("id", id);
+      const { error } = await supabase
+        .from("profiles")
+        .update({ account_status: status })
+        .eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -170,7 +170,10 @@ function UsersPage() {
                             <Select
                               value={currentRole}
                               onValueChange={(v) =>
-                                setRoleMut.mutate({ userId: p.user_id, role: v as UserRole["role"] })
+                                setRoleMut.mutate({
+                                  userId: p.user_id,
+                                  role: v as UserRole["role"],
+                                })
                               }
                             >
                               <SelectTrigger className="w-36">

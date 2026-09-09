@@ -14,10 +14,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/admin/system")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "System Settings — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "System Settings — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: SystemSettingsPage,
 });
@@ -27,6 +24,7 @@ type AdmissionSettings = {
   title: string;
   description: string | null;
   rules: string | null;
+  rules_pdf_url: string | null;
   rules_version: number;
   opening_date: string | null;
   closing_date: string | null;
@@ -70,7 +68,8 @@ function SystemSettingsPage() {
 
   useEffect(() => {
     if (admissionQuery.data) setAdmission(admissionQuery.data);
-    else if (admissionQuery.isFetched && !admissionQuery.data) setAdmission({ title: "Admission" });
+    else if (admissionQuery.isFetched && !admissionQuery.data)
+      setAdmission({ title: "Admission", is_open: true });
   }, [admissionQuery.data, admissionQuery.isFetched]);
 
   useEffect(() => {
@@ -86,10 +85,11 @@ function SystemSettingsPage() {
         title: v.title || "Admission",
         description: v.description ?? null,
         rules: v.rules ?? null,
+        rules_pdf_url: v.rules_pdf_url ?? null,
         rules_version: v.rules_version ?? 1,
         opening_date: v.opening_date || null,
         closing_date: v.closing_date || null,
-        is_open: v.is_open ?? false,
+        is_open: v.is_open ?? true,
         minimum_age: v.minimum_age ?? null,
         maximum_age: v.maximum_age ?? null,
         success_message: v.success_message ?? null,
@@ -152,16 +152,21 @@ function SystemSettingsPage() {
             <div className="flex items-center justify-between rounded-md border border-border/60 p-3">
               <div>
                 <Label className="text-sm">Admissions open</Label>
-                <p className="text-xs text-muted-foreground">Toggle whether new applications are accepted.</p>
+                <p className="text-xs text-muted-foreground">
+                  Toggle whether new applications are accepted.
+                </p>
               </div>
               <Switch
-                checked={admission.is_open ?? false}
+                checked={admission?.is_open ?? true}
                 onCheckedChange={(c) => setAdmission({ ...admission, is_open: c })}
               />
             </div>
             <div>
               <Label>Title</Label>
-              <Input value={admission.title ?? ""} onChange={(e) => setAdmission({ ...admission, title: e.target.value })} />
+              <Input
+                value={admission.title ?? ""}
+                onChange={(e) => setAdmission({ ...admission, title: e.target.value })}
+              />
             </div>
             <div>
               <Label>Description</Label>
@@ -172,12 +177,61 @@ function SystemSettingsPage() {
               />
             </div>
             <div>
-              <Label>Rules</Label>
+              <Label>Rules text</Label>
               <Textarea
                 rows={4}
                 value={admission.rules ?? ""}
                 onChange={(e) => setAdmission({ ...admission, rules: e.target.value })}
               />
+            </div>
+            <div>
+              <Label>Rules PDF / Document</Label>
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <Input
+                  type="text"
+                  placeholder="Paste PDF URL or upload file below..."
+                  value={admission.rules_pdf_url ?? ""}
+                  onChange={(e) => setAdmission({ ...admission, rules_pdf_url: e.target.value })}
+                />
+                <Input
+                  type="file"
+                  accept="application/pdf,image/*"
+                  className="sm:w-60"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = (evt) => {
+                      setAdmission({
+                        ...admission,
+                        rules_pdf_url: evt.target?.result as string,
+                      });
+                      toast.success("Rules document uploaded");
+                    };
+                    reader.readAsDataURL(file);
+                  }}
+                />
+              </div>
+              {admission.rules_pdf_url && (
+                <div className="mt-1 flex items-center gap-2 text-xs">
+                  <span className="text-muted-foreground">Document set</span>
+                  <a
+                    href={admission.rules_pdf_url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-primary underline"
+                  >
+                    Preview current rules document
+                  </a>
+                  <button
+                    type="button"
+                    className="text-destructive hover:underline"
+                    onClick={() => setAdmission({ ...admission, rules_pdf_url: null })}
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               <div>
@@ -185,7 +239,9 @@ function SystemSettingsPage() {
                 <Input
                   type="number"
                   value={admission.rules_version ?? 1}
-                  onChange={(e) => setAdmission({ ...admission, rules_version: Number(e.target.value) })}
+                  onChange={(e) =>
+                    setAdmission({ ...admission, rules_version: Number(e.target.value) })
+                  }
                 />
               </div>
               <div>
@@ -194,7 +250,10 @@ function SystemSettingsPage() {
                   type="number"
                   value={admission.minimum_age ?? ""}
                   onChange={(e) =>
-                    setAdmission({ ...admission, minimum_age: e.target.value ? Number(e.target.value) : null })
+                    setAdmission({
+                      ...admission,
+                      minimum_age: e.target.value ? Number(e.target.value) : null,
+                    })
                   }
                 />
               </div>
@@ -204,7 +263,10 @@ function SystemSettingsPage() {
                   type="number"
                   value={admission.maximum_age ?? ""}
                   onChange={(e) =>
-                    setAdmission({ ...admission, maximum_age: e.target.value ? Number(e.target.value) : null })
+                    setAdmission({
+                      ...admission,
+                      maximum_age: e.target.value ? Number(e.target.value) : null,
+                    })
                   }
                 />
               </div>
@@ -236,7 +298,10 @@ function SystemSettingsPage() {
               />
             </div>
             <div className="flex justify-end">
-              <Button disabled={saveAdmissionMut.isPending} onClick={() => saveAdmissionMut.mutate(admission)}>
+              <Button
+                disabled={saveAdmissionMut.isPending}
+                onClick={() => saveAdmissionMut.mutate(admission)}
+              >
                 Save admission settings
               </Button>
             </div>

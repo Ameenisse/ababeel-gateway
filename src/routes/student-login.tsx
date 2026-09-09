@@ -34,8 +34,10 @@ function StudentLogin() {
       const res = await resolveStudentLogin({ data: { username } });
       if (!res.email) {
         setLoading(false);
-        if (res.reason === "inactive") toast.error("Your account is inactive. Please contact administration.");
-        else if (res.reason === "locked") toast.error("Your account is locked. Please contact administration.");
+        if (res.reason === "inactive")
+          toast.error("Your account is inactive. Please contact administration.");
+        else if (res.reason === "locked")
+          toast.error("Your account is locked. Please contact administration.");
         else toast.error("Incorrect username or PIN.");
         return;
       }

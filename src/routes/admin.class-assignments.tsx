@@ -30,10 +30,7 @@ import { Plus, School, Star, Trash2, History } from "lucide-react";
 export const Route = createFileRoute("/admin/class-assignments")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "Class Assignments — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "Class Assignments — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: ClassAssignmentsPage,
 });
@@ -151,15 +148,12 @@ function ClassAssignmentsPage() {
     if (!q) return rows.slice(0, 60);
     return rows
       .filter(
-        (s) =>
-          s.full_name.toLowerCase().includes(q) ||
-          s.student_number.toLowerCase().includes(q),
+        (s) => s.full_name.toLowerCase().includes(q) || s.student_number.toLowerCase().includes(q),
       )
       .slice(0, 60);
   }, [students.data, studentQuery]);
 
-  const selectedStudent =
-    students.data?.find((s) => s.id === selectedStudentId) ?? null;
+  const selectedStudent = students.data?.find((s) => s.id === selectedStudentId) ?? null;
 
   const [editing, setEditing] = useState<null | Partial<Assignment>>(null);
 
@@ -193,9 +187,7 @@ function ClassAssignmentsPage() {
           .eq("id", a.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase
-          .from("student_class_assignments")
-          .insert(payload);
+        const { error } = await supabase.from("student_class_assignments").insert(payload);
         if (error) throw error;
       }
       // If current, mirror onto student's primary class_id too
@@ -242,10 +234,7 @@ function ClassAssignmentsPage() {
 
   const deleteMut = useMutation({
     mutationFn: async (id: string) => {
-      const { error } = await supabase
-        .from("student_class_assignments")
-        .delete()
-        .eq("id", id);
+      const { error } = await supabase.from("student_class_assignments").delete().eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -255,22 +244,18 @@ function ClassAssignmentsPage() {
     onError: (e: unknown) => toast.error((e as Error).message),
   });
 
-  const yearName = (id: string) =>
-    years.data?.find((y) => y.id === id)?.year_name ?? "—";
+  const yearName = (id: string) => years.data?.find((y) => y.id === id)?.year_name ?? "—";
   const termName = (id: string | null) =>
-    id ? terms.data?.find((t) => t.id === id)?.term_name ?? "—" : "—";
-  const className = (id: string) =>
-    classes.data?.find((c) => c.id === id)?.class_name ?? "—";
+    id ? (terms.data?.find((t) => t.id === id)?.term_name ?? "—") : "—";
+  const className = (id: string) => classes.data?.find((c) => c.id === id)?.class_name ?? "—";
   const staffName = (id: string | null) =>
-    id ? staff.data?.find((s) => s.id === id)?.full_name ?? "—" : "—";
+    id ? (staff.data?.find((s) => s.id === id)?.full_name ?? "—") : "—";
 
   const currentYear = years.data?.find((y) => y.is_current);
 
   const filteredTermsForEditor = useMemo(() => {
     if (!editing?.academic_year_id) return [] as Term[];
-    return (terms.data ?? []).filter(
-      (t) => t.academic_year_id === editing.academic_year_id,
-    );
+    return (terms.data ?? []).filter((t) => t.academic_year_id === editing.academic_year_id);
   }, [terms.data, editing?.academic_year_id]);
 
   return (
@@ -349,9 +334,7 @@ function ClassAssignmentsPage() {
               </Card>
 
               {assignments.isLoading ? (
-                <div className="p-6 text-center text-sm text-muted-foreground">
-                  Loading…
-                </div>
+                <div className="p-6 text-center text-sm text-muted-foreground">Loading…</div>
               ) : (assignments.data ?? []).length === 0 ? (
                 <Card>
                   <CardContent className="p-8 text-center text-sm text-muted-foreground">
@@ -369,14 +352,10 @@ function ClassAssignmentsPage() {
                               {className(a.class_id)}
                             </span>
                             {a.session && (
-                              <span className="text-xs text-muted-foreground">
-                                · {a.session}
-                              </span>
+                              <span className="text-xs text-muted-foreground">· {a.session}</span>
                             )}
                             {a.is_current ? (
-                              <Badge className="bg-primary text-primary-foreground">
-                                Current
-                              </Badge>
+                              <Badge className="bg-primary text-primary-foreground">Current</Badge>
                             ) : (
                               <Badge variant="outline">
                                 <History className="mr-1 h-3 w-3" /> Past
@@ -390,9 +369,7 @@ function ClassAssignmentsPage() {
                             <span>Assistant: {staffName(a.assistant_teacher_id)}</span>
                           </div>
                           {a.notes && (
-                            <div className="mt-1 text-xs text-muted-foreground">
-                              {a.notes}
-                            </div>
+                            <div className="mt-1 text-xs text-muted-foreground">{a.notes}</div>
                           )}
                         </div>
                         <div className="flex flex-wrap gap-2">
@@ -406,19 +383,14 @@ function ClassAssignmentsPage() {
                               <Star className="mr-1 h-4 w-4" /> Set current
                             </Button>
                           )}
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => setEditing(a)}
-                          >
+                          <Button size="sm" variant="outline" onClick={() => setEditing(a)}>
                             Edit
                           </Button>
                           <Button
                             size="sm"
                             variant="ghost"
                             onClick={() => {
-                              if (confirm("Delete this assignment?"))
-                                deleteMut.mutate(a.id);
+                              if (confirm("Delete this assignment?")) deleteMut.mutate(a.id);
                             }}
                           >
                             <Trash2 className="h-4 w-4" />
@@ -438,12 +410,8 @@ function ClassAssignmentsPage() {
       <Dialog open={!!editing} onOpenChange={(o) => !o && setEditing(null)}>
         <DialogContent className="max-w-xl">
           <DialogHeader>
-            <DialogTitle>
-              {editing?.id ? "Edit" : "New"} class assignment
-            </DialogTitle>
-            <DialogDescription>
-              {selectedStudent?.full_name}
-            </DialogDescription>
+            <DialogTitle>{editing?.id ? "Edit" : "New"} class assignment</DialogTitle>
+            <DialogDescription>{selectedStudent?.full_name}</DialogDescription>
           </DialogHeader>
           {editing && (
             <div className="grid gap-3">
@@ -512,18 +480,14 @@ function ClassAssignmentsPage() {
                   <Input
                     placeholder="Morning / Evening / …"
                     value={editing.session ?? ""}
-                    onChange={(e) =>
-                      setEditing({ ...editing, session: e.target.value })
-                    }
+                    onChange={(e) => setEditing({ ...editing, session: e.target.value })}
                   />
                 </div>
                 <div>
                   <Label>Main teacher</Label>
                   <Select
                     value={editing.main_teacher_id ?? ""}
-                    onValueChange={(v) =>
-                      setEditing({ ...editing, main_teacher_id: v })
-                    }
+                    onValueChange={(v) => setEditing({ ...editing, main_teacher_id: v })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Optional" />
@@ -541,9 +505,7 @@ function ClassAssignmentsPage() {
                   <Label>Assistant teacher</Label>
                   <Select
                     value={editing.assistant_teacher_id ?? ""}
-                    onValueChange={(v) =>
-                      setEditing({ ...editing, assistant_teacher_id: v })
-                    }
+                    onValueChange={(v) => setEditing({ ...editing, assistant_teacher_id: v })}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Optional" />
@@ -562,9 +524,7 @@ function ClassAssignmentsPage() {
                 <input
                   type="checkbox"
                   checked={!!editing.is_current}
-                  onChange={(e) =>
-                    setEditing({ ...editing, is_current: e.target.checked })
-                  }
+                  onChange={(e) => setEditing({ ...editing, is_current: e.target.checked })}
                 />
                 Mark as current (unsets any other current assignment)
               </label>

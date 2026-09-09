@@ -9,11 +9,25 @@ export default defineTool({
   inputSchema: {
     title: z.string().describe("Announcement title."),
     description: z.string().describe("Announcement body / description text.").optional(),
-    audience: z.enum(["public", "staff", "students", "all"]).describe("Who should see this announcement (default 'all').").optional(),
-    priority: z.enum(["low", "normal", "high", "urgent"]).describe("Priority label (default 'normal').").optional(),
-    status: z.enum(["draft", "published", "archived"]).describe("Publish status (default 'published').").optional(),
+    audience: z
+      .enum(["public", "staff", "students", "all"])
+      .describe("Who should see this announcement (default 'all').")
+      .optional(),
+    priority: z
+      .enum(["low", "normal", "high", "urgent"])
+      .describe("Priority label (default 'normal').")
+      .optional(),
+    status: z
+      .enum(["draft", "published", "archived"])
+      .describe("Publish status (default 'published').")
+      .optional(),
   },
-  annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+  annotations: {
+    readOnlyHint: false,
+    destructiveHint: false,
+    idempotentHint: false,
+    openWorldHint: false,
+  },
   handler: async ({ title, description, audience, priority, status }, ctx) => {
     if (!ctx.isAuthenticated()) return unauthenticated();
     const userId = ctx.getUserId();
@@ -28,7 +42,10 @@ export default defineTool({
       created_by: userId,
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabase.from("announcements") as any).insert(row).select().single();
+    const { data, error } = await (supabase.from("announcements") as any)
+      .insert(row)
+      .select()
+      .single();
     if (error) return errorResult(error.message);
     return textResult(`Announcement created: ${data.id}`, { announcement: data });
   },

@@ -28,7 +28,9 @@ export function supabaseForUser(ctx: ToolContext) {
 
 export function unauthenticated() {
   return {
-    content: [{ type: "text" as const, text: "Not authenticated. Sign in to Ababeel Quran Class first." }],
+    content: [
+      { type: "text" as const, text: "Not authenticated. Sign in to Ababeel Quran Class first." },
+    ],
     isError: true as const,
   };
 }

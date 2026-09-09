@@ -8,7 +8,9 @@ import { Trophy, Users } from "lucide-react";
 
 export const Route = createFileRoute("/staff/competitions")({
   ssr: false,
-  head: () => ({ meta: [{ title: "Competitions — Staff" }, { name: "robots", content: "noindex,nofollow" }] }),
+  head: () => ({
+    meta: [{ title: "Competitions — Staff" }, { name: "robots", content: "noindex,nofollow" }],
+  }),
   component: Page,
 });
 
@@ -29,12 +31,16 @@ function Page() {
     (async () => {
       const { data, error } = await supabase
         .from("competitions")
-        .select("id, title, status, competition_date, competition_categories(id, category_name, category_code)")
+        .select(
+          "id, title, status, competition_date, competition_categories(id, category_name, category_code)",
+        )
         .order("created_at", { ascending: false });
       if (error) return;
       const list = (data ?? []) as unknown as Competition[];
       setCompetitions(list);
-      const { data: parts } = await supabase.from("competition_participants").select("competition_id");
+      const { data: parts } = await supabase
+        .from("competition_participants")
+        .select("competition_id");
       const map: Record<string, number> = {};
       for (const p of (parts ?? []) as { competition_id: string }[]) {
         map[p.competition_id] = (map[p.competition_id] ?? 0) + 1;
@@ -50,23 +56,39 @@ function Page() {
           <Card key={c.id}>
             <CardHeader>
               <CardTitle className="flex items-center justify-between text-base">
-                <span className="flex items-center gap-2"><Trophy className="h-4 w-4 text-primary" />{c.title}</span>
+                <span className="flex items-center gap-2">
+                  <Trophy className="h-4 w-4 text-primary" />
+                  {c.title}
+                </span>
                 <Badge variant="outline">{c.status}</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm">
-              {c.competition_date && <div className="text-muted-foreground">Date: {new Date(c.competition_date).toLocaleDateString()}</div>}
-              <div className="flex items-center gap-1 text-muted-foreground"><Users className="h-3.5 w-3.5" />{counts[c.id] ?? 0} participants</div>
+              {c.competition_date && (
+                <div className="text-muted-foreground">
+                  Date: {new Date(c.competition_date).toLocaleDateString()}
+                </div>
+              )}
+              <div className="flex items-center gap-1 text-muted-foreground">
+                <Users className="h-3.5 w-3.5" />
+                {counts[c.id] ?? 0} participants
+              </div>
               <div className="flex flex-wrap gap-1 pt-1">
                 {(c.competition_categories ?? []).map((cat) => (
-                  <Badge key={cat.id} variant="secondary">{cat.category_name}</Badge>
+                  <Badge key={cat.id} variant="secondary">
+                    {cat.category_name}
+                  </Badge>
                 ))}
               </div>
             </CardContent>
           </Card>
         ))}
         {competitions.length === 0 && (
-          <Card className="sm:col-span-2"><CardContent className="p-6 text-sm text-muted-foreground">No competitions yet.</CardContent></Card>
+          <Card className="sm:col-span-2">
+            <CardContent className="p-6 text-sm text-muted-foreground">
+              No competitions yet.
+            </CardContent>
+          </Card>
         )}
       </div>
     </RoleShell>

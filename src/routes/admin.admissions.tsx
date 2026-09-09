@@ -27,11 +27,19 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { Copy, Printer, CheckCircle2, XCircle, Clock } from "lucide-react";
 import {
-  approveAdmissionRequest,
-  setAdmissionStatus,
-} from "@/lib/admissions.functions";
+  Copy,
+  Printer,
+  CheckCircle2,
+  XCircle,
+  Clock,
+  FileText,
+  Eye,
+  User,
+  GraduationCap,
+  Building,
+} from "lucide-react";
+import { approveAdmissionRequest, setAdmissionStatus } from "@/lib/admissions.functions";
 
 export const Route = createFileRoute("/admin/admissions")({
   ssr: false,
@@ -45,6 +53,34 @@ export const Route = createFileRoute("/admin/admissions")({
 });
 
 type Status = "pending" | "approved" | "rejected" | "waitlisted" | "all";
+
+type AdmissionRequestDetail = {
+  id: string;
+  full_name: string;
+  request_number: string;
+  status: string;
+  submitted_at: string;
+  date_of_birth: string;
+  gender: string;
+  identity_number: string;
+  grade_studying?: string | null;
+  school?: string | null;
+  island?: string | null;
+  atoll?: string | null;
+  guardian_name: string;
+  guardian_identity_number?: string | null;
+  mobile: string;
+  alternative_mobile?: string | null;
+  address?: string | null;
+  student_id_url?: string | null;
+  photo_url?: string | null;
+  guardian_id_url?: string | null;
+  document_url?: string | null;
+  reading_level?: string | null;
+  previous_experience?: string | null;
+  medical_notes?: string | null;
+  remarks?: string | null;
+};
 
 function statusBadge(s: string) {
   const map: Record<string, string> = {
@@ -97,9 +133,14 @@ function AdminAdmissions() {
         r.full_name?.toLowerCase().includes(q) ||
         r.request_number?.toLowerCase().includes(q) ||
         r.mobile?.toLowerCase().includes(q) ||
-        r.identity_number?.toLowerCase().includes(q),
+        r.identity_number?.toLowerCase().includes(q) ||
+        r.school?.toLowerCase().includes(q) ||
+        r.grade_studying?.toLowerCase().includes(q),
     );
   }, [list.data, search]);
+
+  // ---- Details Dialog ----
+  const [viewDetail, setViewDetail] = useState<AdmissionRequestDetail | null>(null);
 
   // ---- Approve dialog ----
   const [approving, setApproving] = useState<null | { id: string; name: string }>(null);
@@ -115,13 +156,18 @@ function AdminAdmissions() {
       qc.invalidateQueries({ queryKey: ["admin_dashboard_stats"] });
       setApproving(null);
       setClassId("");
+      setViewDetail(null);
       setCredentials({ ...creds, name: approving?.name ?? "Student" });
     },
     onError: (e: unknown) => toast.error((e as Error).message ?? "Failed to approve"),
   });
 
   // ---- Reject dialog ----
-  const [rejecting, setRejecting] = useState<null | { id: string; name: string; action: "rejected" | "waitlisted" }>(null);
+  const [rejecting, setRejecting] = useState<null | {
+    id: string;
+    name: string;
+    action: "rejected" | "waitlisted";
+  }>(null);
   const [rejectNote, setRejectNote] = useState("");
   const statusFn = useServerFn(setAdmissionStatus);
   const statusMut = useMutation({
@@ -138,6 +184,7 @@ function AdminAdmissions() {
       toast.success("Updated");
       setRejecting(null);
       setRejectNote("");
+      setViewDetail(null);
     },
     onError: (e: unknown) => toast.error((e as Error).message ?? "Failed"),
   });
@@ -187,7 +234,7 @@ function AdminAdmissions() {
             </TabsList>
           </Tabs>
           <Input
-            placeholder="Search name, request #, mobile, ID…"
+            placeholder="Search name, request #, mobile, ID, grade, school…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="sm:max-w-sm"
@@ -204,83 +251,286 @@ function AdminAdmissions() {
           </Card>
         ) : (
           <div className="grid gap-3">
-            {filtered.map((r) => (
-              <Card key={r.id} className="border-border/60">
-                <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-display text-base font-semibold">{r.full_name}</span>
-                      {statusBadge(r.status)}
-                      <span className="text-xs text-muted-foreground">#{r.request_number}</span>
+            {filtered.map((r) => {
+              const studentDoc = r.student_id_url || r.photo_url;
+              const guardianDoc = r.guardian_id_url || r.document_url;
+
+              return (
+                <Card key={r.id} className="border-border/60">
+                  <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-display text-base font-semibold">{r.full_name}</span>
+                        {statusBadge(r.status)}
+                        <span className="text-xs text-muted-foreground">#{r.request_number}</span>
+                      </div>
+                      <div className="mt-1 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-muted-foreground sm:grid-cols-4">
+                        <span>DOB: {r.date_of_birth}</span>
+                        <span>Gender: {r.gender}</span>
+                        <span>ID #: {r.identity_number}</span>
+                        <span>Mobile: {r.mobile}</span>
+                        <span>Grade: {r.grade_studying ?? "—"}</span>
+                        <span>School: {r.school ?? "—"}</span>
+                        <span>Guardian: {r.guardian_name}</span>
+                        <span>Submitted: {new Date(r.submitted_at).toLocaleDateString()}</span>
+                      </div>
+
+                      {/* Documents indicators */}
+                      <div className="mt-2 flex flex-wrap gap-2 text-xs">
+                        {studentDoc ? (
+                          <a
+                            href={studentDoc}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 rounded bg-muted px-2 py-0.5 text-primary hover:underline"
+                          >
+                            <FileText className="h-3 w-3" /> Student ID Doc
+                          </a>
+                        ) : (
+                          <span className="rounded bg-muted/50 px-2 py-0.5 text-muted-foreground">
+                            No Student ID
+                          </span>
+                        )}
+
+                        {guardianDoc ? (
+                          <a
+                            href={guardianDoc}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 rounded bg-muted px-2 py-0.5 text-primary hover:underline"
+                          >
+                            <FileText className="h-3 w-3" /> Guardian ID Doc
+                          </a>
+                        ) : (
+                          <span className="rounded bg-muted/50 px-2 py-0.5 text-muted-foreground">
+                            No Guardian ID
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <div className="mt-1 grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs text-muted-foreground sm:grid-cols-4">
-                      <span>DOB: {r.date_of_birth}</span>
-                      <span>Gender: {r.gender}</span>
-                      <span>Mobile: {r.mobile}</span>
-                      <span>Guardian: {r.guardian_name}</span>
-                      <span>
-                        Class:{" "}
-                        {(r as { preferred_class?: { class_name?: string } }).preferred_class
-                          ?.class_name ?? "—"}
-                      </span>
-                      <span>Session: {r.preferred_session ?? "—"}</span>
-                      <span>Submitted: {new Date(r.submitted_at).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                  {r.status === "pending" && (
+
                     <div className="flex flex-wrap gap-2">
-                      <Button
-                        size="sm"
-                        onClick={() => {
-                          setApproving({ id: r.id, name: r.full_name });
-                          setClassId(r.preferred_class?.id ?? "");
-                        }}
-                      >
-                        <CheckCircle2 className="mr-1 h-4 w-4" /> Approve
+                      <Button size="sm" variant="outline" onClick={() => setViewDetail(r)}>
+                        <Eye className="mr-1 h-3.5 w-3.5" /> Details
                       </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() =>
-                          setRejecting({ id: r.id, name: r.full_name, action: "waitlisted" })
-                        }
-                      >
-                        <Clock className="mr-1 h-4 w-4" /> Waitlist
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="destructive"
-                        onClick={() =>
-                          setRejecting({ id: r.id, name: r.full_name, action: "rejected" })
-                        }
-                      >
-                        <XCircle className="mr-1 h-4 w-4" /> Reject
-                      </Button>
+
+                      {r.status === "pending" && (
+                        <>
+                          <Button
+                            size="sm"
+                            onClick={() => {
+                              setApproving({ id: r.id, name: r.full_name });
+                              setClassId(r.preferred_class?.id ?? "");
+                            }}
+                          >
+                            <CheckCircle2 className="mr-1 h-4 w-4" /> Approve
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() =>
+                              setRejecting({ id: r.id, name: r.full_name, action: "waitlisted" })
+                            }
+                          >
+                            <Clock className="mr-1 h-4 w-4" /> Waitlist
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() =>
+                              setRejecting({ id: r.id, name: r.full_name, action: "rejected" })
+                            }
+                          >
+                            <XCircle className="mr-1 h-4 w-4" /> Reject
+                          </Button>
+                        </>
+                      )}
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         )}
       </div>
+
+      {/* Details modal */}
+      <Dialog open={!!viewDetail} onOpenChange={(o) => !o && setViewDetail(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <span>{viewDetail?.full_name}</span>
+              {viewDetail && statusBadge(viewDetail.status)}
+            </DialogTitle>
+            <DialogDescription>
+              Application #{viewDetail?.request_number} — Submitted{" "}
+              {viewDetail?.submitted_at ? new Date(viewDetail.submitted_at).toLocaleString() : ""}
+            </DialogDescription>
+          </DialogHeader>
+
+          {viewDetail && (
+            <div className="space-y-4 text-sm">
+              <div className="grid grid-cols-2 gap-3 rounded-lg border p-3 bg-muted/30 sm:grid-cols-3">
+                <div>
+                  <span className="text-xs text-muted-foreground block">DOB</span>
+                  <span className="font-medium">{viewDetail.date_of_birth}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-muted-foreground block">Gender</span>
+                  <span className="font-medium capitalize">{viewDetail.gender}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-muted-foreground block">Student ID / Passport</span>
+                  <span className="font-medium">{viewDetail.identity_number}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-muted-foreground block">Grade Studying</span>
+                  <span className="font-medium">{viewDetail.grade_studying || "—"}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-muted-foreground block">School</span>
+                  <span className="font-medium">{viewDetail.school || "—"}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-muted-foreground block">Island / Atoll</span>
+                  <span className="font-medium">
+                    {[viewDetail.island, viewDetail.atoll].filter(Boolean).join(", ") || "—"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 rounded-lg border p-3 bg-muted/30 sm:grid-cols-3">
+                <div>
+                  <span className="text-xs text-muted-foreground block">Guardian Name</span>
+                  <span className="font-medium">{viewDetail.guardian_name}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-muted-foreground block">Guardian ID</span>
+                  <span className="font-medium">{viewDetail.guardian_identity_number || "—"}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-muted-foreground block">Mobile</span>
+                  <span className="font-medium">{viewDetail.mobile}</span>
+                </div>
+                <div>
+                  <span className="text-xs text-muted-foreground block">Alternative Mobile</span>
+                  <span className="font-medium">{viewDetail.alternative_mobile || "—"}</span>
+                </div>
+                <div className="col-span-2">
+                  <span className="text-xs text-muted-foreground block">Address</span>
+                  <span className="font-medium">{viewDetail.address || "—"}</span>
+                </div>
+              </div>
+
+              {/* Uploaded ID Documents */}
+              <div className="space-y-2">
+                <span className="font-semibold text-xs text-muted-foreground uppercase tracking-wider block">
+                  Uploaded ID Documents
+                </span>
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  {viewDetail.student_id_url || viewDetail.photo_url ? (
+                    <div className="flex items-center justify-between rounded border p-2 bg-background">
+                      <span className="text-xs font-medium">Student ID Document</span>
+                      <a
+                        href={viewDetail.student_id_url || viewDetail.photo_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                      >
+                        <Eye className="h-3.5 w-3.5" /> View / Download
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="rounded border p-2 bg-background text-xs text-muted-foreground">
+                      No Student ID uploaded
+                    </div>
+                  )}
+
+                  {viewDetail.guardian_id_url || viewDetail.document_url ? (
+                    <div className="flex items-center justify-between rounded border p-2 bg-background">
+                      <span className="text-xs font-medium">Guardian ID Document</span>
+                      <a
+                        href={viewDetail.guardian_id_url || viewDetail.document_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                      >
+                        <Eye className="h-3.5 w-3.5" /> View / Download
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="rounded border p-2 bg-background text-xs text-muted-foreground">
+                      No Guardian ID uploaded
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Additional notes */}
+              {(viewDetail.reading_level ||
+                viewDetail.previous_experience ||
+                viewDetail.medical_notes ||
+                viewDetail.remarks) && (
+                <div className="space-y-1 rounded border p-3 bg-muted/20 text-xs">
+                  {viewDetail.reading_level && (
+                    <p>
+                      <strong>Reading Level:</strong> {viewDetail.reading_level}
+                    </p>
+                  )}
+                  {viewDetail.previous_experience && (
+                    <p>
+                      <strong>Previous Experience:</strong> {viewDetail.previous_experience}
+                    </p>
+                  )}
+                  {viewDetail.medical_notes && (
+                    <p>
+                      <strong>Medical Notes:</strong> {viewDetail.medical_notes}
+                    </p>
+                  )}
+                  {viewDetail.remarks && (
+                    <p>
+                      <strong>Remarks:</strong> {viewDetail.remarks}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          <DialogFooter className="gap-2 sm:justify-between">
+            <Button variant="outline" onClick={() => setViewDetail(null)}>
+              Close
+            </Button>
+            {viewDetail?.status === "pending" && (
+              <Button
+                onClick={() => {
+                  setApproving({ id: viewDetail.id, name: viewDetail.full_name });
+                  setClassId("");
+                }}
+              >
+                <CheckCircle2 className="mr-1 h-4 w-4" /> Approve & Assign Class
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Approve dialog */}
       <Dialog open={!!approving} onOpenChange={(o) => !o && setApproving(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Approve admission</DialogTitle>
+            <DialogTitle>Approve admission & assign class</DialogTitle>
             <DialogDescription>
-              Approving <strong>{approving?.name}</strong> creates a student profile and login
-              credentials.
+              Approving <strong>{approving?.name}</strong> will create a student profile and login
+              credentials. Select the class to place the student into below.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
             <div>
-              <Label>Assign to class (optional)</Label>
+              <Label>Select Assigned Class *</Label>
               <Select value={classId} onValueChange={setClassId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Choose a class…" />
+                  <SelectValue placeholder="Select class to assign..." />
                 </SelectTrigger>
                 <SelectContent>
                   {(classes.data ?? []).map((c) => (
@@ -291,7 +541,7 @@ function AdminAdmissions() {
                 </SelectContent>
               </Select>
               <p className="mt-1 text-xs text-muted-foreground">
-                You can assign or change the class later from Student Management.
+                Assigned class can also be modified anytime from Student Management.
               </p>
             </div>
           </div>
@@ -300,7 +550,7 @@ function AdminAdmissions() {
               Cancel
             </Button>
             <Button disabled={approveMut.isPending} onClick={() => approveMut.mutate()}>
-              {approveMut.isPending ? "Approving…" : "Approve & create student"}
+              {approveMut.isPending ? "Approving…" : "Approve & Create Student"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -343,9 +593,9 @@ function AdminAdmissions() {
       <Dialog open={!!credentials} onOpenChange={(o) => !o && setCredentials(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Student created</DialogTitle>
+            <DialogTitle>Student created successfully</DialogTitle>
             <DialogDescription>
-              Copy or print these credentials now. The PIN will not be shown again.
+              Copy or print these login credentials now. The PIN will not be shown again.
             </DialogDescription>
           </DialogHeader>
           {credentials && (

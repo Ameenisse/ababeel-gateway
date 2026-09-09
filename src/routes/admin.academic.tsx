@@ -247,9 +247,7 @@ function YearsPanel() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{editing?.id ? "Edit" : "New"} academic year</DialogTitle>
-            <DialogDescription>
-              Use a clear range name like "2026-2027".
-            </DialogDescription>
+            <DialogDescription>Use a clear range name like "2026-2027".</DialogDescription>
           </DialogHeader>
           {editing && (
             <div className="grid gap-3">
@@ -398,7 +396,9 @@ function TermsPanel() {
     const s = activeYear.start_date;
     const e = activeYear.end_date;
     // rough midpoint
-    const mid = new Date(new Date(s).getTime() + (new Date(e).getTime() - new Date(s).getTime()) / 2)
+    const mid = new Date(
+      new Date(s).getTime() + (new Date(e).getTime() - new Date(s).getTime()) / 2,
+    )
       .toISOString()
       .slice(0, 10);
     saveMut.mutate({
@@ -481,14 +481,14 @@ function TermsPanel() {
               <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="font-display text-base font-semibold">
-                      {t.term_name}
-                    </span>
+                    <span className="font-display text-base font-semibold">{t.term_name}</span>
                     <span className="text-xs text-muted-foreground">#{t.term_sequence}</span>
                     {termStatusBadge(t.status)}
                   </div>
                   <div className="mt-1 grid grid-cols-2 gap-x-4 gap-y-0.5 text-xs text-muted-foreground sm:grid-cols-4">
-                    <span>Term: {t.start_date} → {t.end_date}</span>
+                    <span>
+                      Term: {t.start_date} → {t.end_date}
+                    </span>
                     <span>Targets open: {t.target_open_date ?? "—"}</span>
                     <span>Target deadline: {t.target_deadline ?? "—"}</span>
                     <span>Report available: {t.report_available_date ?? "—"}</span>
@@ -518,9 +518,7 @@ function TermsPanel() {
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>{editing?.id ? "Edit" : "New"} term</DialogTitle>
-            <DialogDescription>
-              For {activeYear?.year_name}
-            </DialogDescription>
+            <DialogDescription>For {activeYear?.year_name}</DialogDescription>
           </DialogHeader>
           {editing && (
             <div className="grid gap-3">
@@ -567,9 +565,7 @@ function TermsPanel() {
                   <Input
                     type="date"
                     value={editing.target_open_date ?? ""}
-                    onChange={(e) =>
-                      setEditing({ ...editing, target_open_date: e.target.value })
-                    }
+                    onChange={(e) => setEditing({ ...editing, target_open_date: e.target.value })}
                   />
                 </div>
                 <div>
@@ -577,9 +573,7 @@ function TermsPanel() {
                   <Input
                     type="date"
                     value={editing.target_deadline ?? ""}
-                    onChange={(e) =>
-                      setEditing({ ...editing, target_deadline: e.target.value })
-                    }
+                    onChange={(e) => setEditing({ ...editing, target_deadline: e.target.value })}
                   />
                 </div>
                 <div>
@@ -596,9 +590,7 @@ function TermsPanel() {
                   <Label>Status</Label>
                   <Select
                     value={editing.status ?? "draft"}
-                    onValueChange={(v) =>
-                      setEditing({ ...editing, status: v as Term["status"] })
-                    }
+                    onValueChange={(v) => setEditing({ ...editing, status: v as Term["status"] })}
                   >
                     <SelectTrigger>
                       <SelectValue />

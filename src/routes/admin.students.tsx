@@ -37,10 +37,7 @@ import { FileText, Search } from "lucide-react";
 export const Route = createFileRoute("/admin/students")({
   ssr: false,
   head: () => ({
-    meta: [
-      { title: "Students — Admin" },
-      { name: "robots", content: "noindex,nofollow" },
-    ],
+    meta: [{ title: "Students — Admin" }, { name: "robots", content: "noindex,nofollow" }],
   }),
   component: StudentsPage,
 });
@@ -100,10 +97,7 @@ function StudentsPage() {
   const students = useQuery({
     queryKey: ["students"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("students")
-        .select("*")
-        .order("full_name");
+      const { data, error } = await supabase.from("students").select("*").order("full_name");
       if (error) throw error;
       return (data ?? []) as Student[];
     },
@@ -231,7 +225,9 @@ function StudentsPage() {
                       <TableRow key={s.id}>
                         <TableCell className="font-mono text-xs">{s.student_number}</TableCell>
                         <TableCell className="font-medium">{s.full_name}</TableCell>
-                        <TableCell>{s.class_id ? classMap.get(s.class_id) ?? "—" : "—"}</TableCell>
+                        <TableCell>
+                          {s.class_id ? (classMap.get(s.class_id) ?? "—") : "—"}
+                        </TableCell>
                         <TableCell>{s.mobile ?? "—"}</TableCell>
                         <TableCell>{statusBadge(s.status)}</TableCell>
                         <TableCell className="flex flex-wrap justify-end gap-2 text-right">
@@ -354,7 +350,9 @@ function StudentsPage() {
                 <Label>Class</Label>
                 <Select
                   value={editing.class_id ?? "none"}
-                  onValueChange={(v) => setEditing({ ...editing, class_id: v === "none" ? null : v })}
+                  onValueChange={(v) =>
+                    setEditing({ ...editing, class_id: v === "none" ? null : v })
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select class" />

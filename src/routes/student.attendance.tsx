@@ -7,7 +7,9 @@ import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/student/attendance")({
   ssr: false,
-  head: () => ({ meta: [{ title: "My Attendance — Student" }, { name: "robots", content: "noindex,nofollow" }] }),
+  head: () => ({
+    meta: [{ title: "My Attendance — Student" }, { name: "robots", content: "noindex,nofollow" }],
+  }),
   component: Page,
 });
 
@@ -54,9 +56,13 @@ function Page() {
   return (
     <RoleShell role="student" title="My Attendance">
       <Card className="mb-4">
-        <CardHeader><CardTitle className="text-base">Overall</CardTitle></CardHeader>
+        <CardHeader>
+          <CardTitle className="text-base">Overall</CardTitle>
+        </CardHeader>
         <CardContent className="text-sm text-muted-foreground">
-          {rows.length === 0 ? "No attendance records yet." : `${overallPresent}/${rows.length} present (${overallPct}%)`}
+          {rows.length === 0
+            ? "No attendance records yet."
+            : `${overallPresent}/${rows.length} present (${overallPct}%)`}
         </CardContent>
       </Card>
 
@@ -69,13 +75,23 @@ function Page() {
             <Card key={m}>
               <CardHeader>
                 <CardTitle className="flex items-center justify-between text-base">
-                  <span>{new Date(m + "-01").toLocaleDateString(undefined, { month: "long", year: "numeric" })}</span>
-                  <span className="text-xs font-normal text-muted-foreground">{present}/{list.length} present ({pct}%)</span>
+                  <span>
+                    {new Date(m + "-01").toLocaleDateString(undefined, {
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <span className="text-xs font-normal text-muted-foreground">
+                    {present}/{list.length} present ({pct}%)
+                  </span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-1">
                 {list.map((r) => (
-                  <div key={r.id} className="flex items-center justify-between rounded-md border border-border/60 p-2 text-sm">
+                  <div
+                    key={r.id}
+                    className="flex items-center justify-between rounded-md border border-border/60 p-2 text-sm"
+                  >
                     <span>{new Date(r.attendance_date).toLocaleDateString()}</span>
                     <span className="flex items-center gap-2">
                       {r.notes && <span className="text-xs text-muted-foreground">{r.notes}</span>}
@@ -88,7 +104,11 @@ function Page() {
           );
         })}
         {months.length === 0 && (
-          <Card><CardContent className="p-6 text-sm text-muted-foreground">No attendance records yet.</CardContent></Card>
+          <Card>
+            <CardContent className="p-6 text-sm text-muted-foreground">
+              No attendance records yet.
+            </CardContent>
+          </Card>
         )}
       </div>
     </RoleShell>
